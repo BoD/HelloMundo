@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="app_name">WorldTour</string>
+
+    <!-- Menu -->
+    <string name="menu_pick">Pick webcam</string>
+    <string name="menu_refresh">Refresh wallpaper</string>
+    <string name="menu_share">Share current picture</string>
+    <string name="menu_save">Save current picture</string>
+    <string name="menu_preferences">Settings</string>
+    <string name="menu_about">About</string>
+
+</resources>

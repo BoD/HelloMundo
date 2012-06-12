@@ -9,7 +9,7 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.latoureiffel.util;
+package org.jraf.android.worldtour.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +27,9 @@ import javax.net.ssl.X509TrustManager;
 
 import android.util.Log;
 
-import org.jraf.android.latoureiffel.Config;
-import org.jraf.android.latoureiffel.Constants;
-import org.jraf.android.latoureiffel.app.Application;
+import org.jraf.android.worldtour.Config;
+import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.Application;
 
 public class HttpUtil {
     private static final String TAG = Constants.TAG + HttpUtil.class.getSimpleName();

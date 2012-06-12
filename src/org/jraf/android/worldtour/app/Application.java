@@ -9,7 +9,7 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.latoureiffel.app;
+package org.jraf.android.worldtour.app;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;

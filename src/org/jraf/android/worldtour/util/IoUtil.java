@@ -9,7 +9,7 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.latoureiffel.util;
+package org.jraf.android.worldtour.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class IoUtil {
     /**
      * Note: {@code in} and {@code out} won't be closed.
      */
-    public static long copy(final InputStream in, final OutputStream out) throws IOException {
+    public static long copy(InputStream in, OutputStream out) throws IOException {
         long res = 0;
         final byte[] buffer = new byte[1500];
         int read;
@@ -35,7 +35,7 @@ public class IoUtil {
     /**
      * Note: {@code in} won't be closed.
      */
-    public static final String inputStreamToString(final InputStream in) throws IOException {
+    public static final String inputStreamToString(InputStream in) throws IOException {
         final StringBuilder stringBuilder = new StringBuilder();
         final byte[] buffer = new byte[4096];
         int read;
@@ -48,7 +48,7 @@ public class IoUtil {
     /**
      * Silently close ignoring any exception.
      */
-    public static void close(final InputStream inputStream) {
+    public static void close(InputStream inputStream) {
         if (inputStream != null) {
             try {
                 inputStream.close();
@@ -61,7 +61,7 @@ public class IoUtil {
     /**
      * Silently close ignoring any exception.
      */
-    public static void close(final OutputStream outputStream) {
+    public static void close(OutputStream outputStream) {
         if (outputStream != null) {
             try {
                 outputStream.close();
@@ -74,7 +74,7 @@ public class IoUtil {
     /**
      * Silently close ignoring any exception.
      */
-    public static void close(final BufferedReader reader) {
+    public static void close(BufferedReader reader) {
         if (reader != null) {
             try {
                 reader.close();

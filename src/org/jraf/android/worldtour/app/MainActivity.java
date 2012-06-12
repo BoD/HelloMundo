@@ -1,4 +1,4 @@
-package org.jraf.android.latoureiffel.app;
+package org.jraf.android.worldtour.app;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,16 +7,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.latoureiffel.util.HttpUtil;
+import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.model.WebcamManager;
+import org.jraf.android.worldtour.util.HttpUtil;
+import org.jraf.android.worldtour.util.IoUtil;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
 public class MainActivity extends SherlockActivity {
+    private static final String TAG = Constants.TAG + MainActivity.class.getSimpleName();
+
     private boolean mDisplayedPreview;
 
     @Override
@@ -34,6 +40,21 @@ public class MainActivity extends SherlockActivity {
         if (!mDisplayedPreview) {
             displayPreview();
             mDisplayedPreview = true;
+
+            // TODO remove
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        WebcamManager.get().refreshDatabaseFromNetwork(MainActivity.this);
+                    } catch (final IOException e) {
+                        Log.e(TAG, "doInBackground", e);
+                    }
+                    return null;
+                }
+
+            }.execute();
         }
     }
 
@@ -57,7 +78,11 @@ public class MainActivity extends SherlockActivity {
                 final String url = "http://87.98.182.216/is/resize/www.parisrama.com/webcam9.jpg?__width=625&__height=475";
                 try {
                     final InputStream inputStream = HttpUtil.getAsStream(url);
-                    return BitmapFactory.decodeStream(inputStream);
+                    try {
+                        return BitmapFactory.decodeStream(inputStream);
+                    } finally {
+                        IoUtil.close(inputStream);
+                    }
                 } catch (final IOException e) {
                     return null;
                 }

@@ -9,10 +9,10 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.latoureiffel;
+package org.jraf.android.worldtour;
 
-public class Config {
+public class Constants {
 
-    public static final boolean LOGD_HTTP = true;
+    public static final String TAG = "WorldTour/";
 
 }

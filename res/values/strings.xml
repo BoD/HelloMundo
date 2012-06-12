@@ -9,7 +9,10 @@
     <string name="menu_refresh">Refresh wallpaper</string>
     <string name="menu_share">Share current picture</string>
     <string name="menu_save">Save current picture</string>
-    <string name="menu_preferences">Settings</string>
+    <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
+
+    <!-- Main -->
+    <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
 
 </resources>

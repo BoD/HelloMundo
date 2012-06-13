@@ -21,6 +21,8 @@ import java.util.GregorianCalendar;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.text.TextUtils;
 
 import org.jraf.android.worldtour.provider.WebcamColumns;
 import org.jraf.android.worldtour.util.Blocking;
@@ -49,22 +51,52 @@ public class WebcamManager {
     public void refreshDatabaseFromNetwork(Context context) throws IOException {
         final ArrayList<String> publicIds = new ArrayList<String>(40);
         final InputStream inputStream = HttpUtil.getAsStream(URL_DATABASE);
+        final ContentResolver contentResolver = context.getContentResolver();
         try {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            final ContentResolver contentResolver = context.getContentResolver();
             String line;
+            final ContentValues values = new ContentValues(12);
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                final ContentValues values = parseLine(line);
-                contentResolver.insert(WebcamColumns.CONTENT_URI, values);
+                parseLine(line, values);
+
+                // Already present?
+                Long id = null;
+                final String publicId = values.getAsString(WebcamColumns.PUBLIC_ID);
+                publicIds.add(publicId);
+                final String[] projection = { WebcamColumns._ID };
+                final String selection = WebcamColumns.PUBLIC_ID + "=?";
+                final String[] selectionArgs = { publicId };
+                final Cursor cursor = contentResolver.query(WebcamColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+                try {
+                    if (cursor.moveToNext()) {
+                        id = cursor.getLong(0);
+                    }
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+
+                if (id == null) {
+                    // Not found: new object
+                    contentResolver.insert(WebcamColumns.CONTENT_URI, values);
+                } else {
+                    // Found: existing object
+                    contentResolver.update(WebcamColumns.CONTENT_URI, values, selection, selectionArgs);
+                }
+                values.clear();
             }
         } finally {
             IoUtil.close(inputStream);
         }
+
+        final String publicIdList = TextUtils.join(",", publicIds);
+        final String where = WebcamColumns.TYPE + "=? and " + WebcamColumns.PUBLIC_ID + " not in (" + publicIdList + ")";
+        final String[] selectionArgs = { String.valueOf(WebcamColumns.TYPE_SERVER) };
+        // Now delete objects that exist locally but not remotely
+        contentResolver.delete(WebcamColumns.CONTENT_URI, where, selectionArgs);
     }
 
-    private ContentValues parseLine(String line) {
-        final ContentValues res = new ContentValues(12);
+    private void parseLine(String line, ContentValues res) {
         final String[] vals = line.split(";");
         res.put(WebcamColumns.PUBLIC_ID, vals[0]);
         res.put(WebcamColumns.NAME, vals[1]);
@@ -121,6 +153,7 @@ public class WebcamManager {
                 res.put(WebcamColumns.VISIBILITY_END_MIN, endMin);
             }
         }
-        return res;
+
+        res.put(WebcamColumns.TYPE, WebcamColumns.TYPE_SERVER);
     }
 }

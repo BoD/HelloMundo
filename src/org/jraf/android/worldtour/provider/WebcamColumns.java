@@ -9,6 +9,9 @@ public class WebcamColumns implements BaseColumns {
 
     public static final String _ID = BaseColumns._ID;
 
+    public static final int TYPE_SERVER = 0;
+    public static final int TYPE_USER = 1;
+
     public static final String TYPE = "type";
     public static final String PUBLIC_ID = "public_id";
     public static final String NAME = "name";

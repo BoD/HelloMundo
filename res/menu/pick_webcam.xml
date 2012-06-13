@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_newWebcam"
+        android:icon="@drawable/ic_action_new_webcam"
+        android:showAsAction="always|withText"
+        android:title="@string/menu_newWebcam"/>
+
+</menu>

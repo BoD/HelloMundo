@@ -3,6 +3,7 @@ package org.jraf.android.worldtour.app;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import org.jraf.android.worldtour.util.IoUtil;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 public class MainActivity extends SherlockActivity {
     private static final String TAG = Constants.TAG + MainActivity.class.getSimpleName();
@@ -64,12 +66,28 @@ public class MainActivity extends SherlockActivity {
         super.onSaveInstanceState(outState);
     }
 
+
+    /*
+     * Action bar.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_pick:
+                startActivity(new Intent(this, PickWebcamListActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void displayPreview() {
         new AsyncTask<Void, Void, Bitmap>() {

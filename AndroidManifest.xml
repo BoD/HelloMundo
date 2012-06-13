@@ -32,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Pick webcam -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.PickWebcamListActivity"
+            android:label="@string/menu_pick" />
     </application>
 
 </manifest>

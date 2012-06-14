@@ -41,7 +41,7 @@ public class MainActivity extends SherlockActivity {
         super.onResume();
         if (!mDisplayedPreview) {
             displayPreview();
-            mDisplayedPreview = true;
+            //            mDisplayedPreview = true;
 
             // TODO remove
             new AsyncTask<Void, Void, Void>() {
@@ -82,7 +82,7 @@ public class MainActivity extends SherlockActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pick:
-                startActivity(new Intent(this, PickWebcamListActivity.class));
+                startActivity(new Intent(this, PickWebcamActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

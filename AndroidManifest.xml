@@ -35,7 +35,7 @@
 
         <!-- Pick webcam -->
         <activity
-            android:name="org.jraf.android.worldtour.app.PickWebcamListActivity"
+            android:name="org.jraf.android.worldtour.app.PickWebcamActivity"
             android:label="@string/menu_pick" />
     </application>
 

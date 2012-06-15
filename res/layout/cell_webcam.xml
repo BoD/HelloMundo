@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="64dp" >
+    android:layout_height="64dp"
+    android:clickable="false" >
 
     <ImageView
         android:id="@+id/imgThumbnail"
@@ -18,5 +19,14 @@
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/imgThumbnail"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <org.jraf.android.worldtour.util.ui.DontPressWithParentView
+        android:layout_width="48dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/ic_arrow"
+        android:clickable="true" />
 
 </RelativeLayout>

@@ -28,7 +28,6 @@ import org.jraf.android.worldtour.provider.WebcamColumns;
 
 public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
     private WebcamAdapter mAdapter;
-    private boolean mListHeaderAdded;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,11 +40,9 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View res = super.onCreateView(inflater, container, savedInstanceState);
 
-        if (!mListHeaderAdded) {
-            final ListView listView = (ListView) res.findViewById(android.R.id.list);
-            listView.addHeaderView(getHeaderView(listView), null, true);
-            mListHeaderAdded = true;
-        }
+        // Add 'random' item
+        final ListView listView = (ListView) res.findViewById(android.R.id.list);
+        listView.addHeaderView(getHeaderView(listView), null, true);
 
         setListAdapter(mAdapter);
 
@@ -55,7 +52,9 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     private View getHeaderView(ListView listView) {
         final View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
         final ImageView imgThumbnail = (ImageView) res.findViewById(R.id.imgThumbnail);
-        imgThumbnail.setBackgroundColor(0xff00ff00);
+        imgThumbnail.setImageResource(R.drawable.ic_random);
+        final int padding = getResources().getDimensionPixelSize(R.dimen.cell_webcam_random_padding);
+        imgThumbnail.setPadding(padding, padding, padding, padding);
         return res;
     }
 

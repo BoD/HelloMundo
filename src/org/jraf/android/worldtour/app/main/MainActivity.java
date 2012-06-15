@@ -1,4 +1,4 @@
-package org.jraf.android.worldtour.app;
+package org.jraf.android.worldtour.app.main;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.util.HttpUtil;
 import org.jraf.android.worldtour.util.IoUtil;

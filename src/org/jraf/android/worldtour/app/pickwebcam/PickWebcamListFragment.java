@@ -9,7 +9,7 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.worldtour.app;
+package org.jraf.android.worldtour.app.pickwebcam;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,18 +17,46 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
 
+import org.jraf.android.latoureiffel.R;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
     private WebcamAdapter mAdapter;
+    private boolean mListHeaderAdded;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdapter = new WebcamAdapter(getActivity());
-        setListAdapter(mAdapter);
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View res = super.onCreateView(inflater, container, savedInstanceState);
+
+        if (!mListHeaderAdded) {
+            final ListView listView = (ListView) res.findViewById(android.R.id.list);
+            listView.addHeaderView(getHeaderView(listView), null, true);
+            mListHeaderAdded = true;
+        }
+
+        setListAdapter(mAdapter);
+
+        return res;
+    }
+
+    private View getHeaderView(ListView listView) {
+        final View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
+        final ImageView imgThumbnail = (ImageView) res.findViewById(R.id.imgThumbnail);
+        imgThumbnail.setBackgroundColor(0xff00ff00);
+        return res;
     }
 
 

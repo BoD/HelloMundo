@@ -24,7 +24,7 @@
 
         <!-- Main -->
         <activity
-            android:name="org.jraf.android.worldtour.app.MainActivity"
+            android:name="org.jraf.android.worldtour.app.main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
 
         <!-- Pick webcam -->
         <activity
-            android:name="org.jraf.android.worldtour.app.PickWebcamActivity"
+            android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
             android:label="@string/menu_pick" />
     </application>
 

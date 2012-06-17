@@ -45,6 +45,13 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
         final LoadingImageView imgThumbnail = (LoadingImageView) ViewHolder.get(view, R.id.imgThumbnail);
         imgThumbnail.loadBitmap(cursor.getString(2));
+
+        final TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
+        txtLocationAndTime.setText(cursor.getString(3));
+
+        final TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
+        txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, cursor.getString(4)));
+
     }
 
     private final OnClickListener mOnExtendOnClickListener = new OnClickListener() {

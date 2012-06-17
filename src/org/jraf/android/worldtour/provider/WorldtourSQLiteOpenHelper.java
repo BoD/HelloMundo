@@ -24,7 +24,7 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
             + WebcamColumns.LOCATION + " TEXT, "
             + WebcamColumns.URL + " TEXT, "
             + WebcamColumns.THUMB_URL + " TEXT, "
-            + WebcamColumns.SOURCE_NAME + " TEXT, "
+            + WebcamColumns.SOURCE_URL + " TEXT, "
             + WebcamColumns.HTTP_REFERER + " TEXT, "
             + WebcamColumns.TIMEZONE + " TEXT, "
             + WebcamColumns.RESIZE_WIDTH + " INTEGER, "

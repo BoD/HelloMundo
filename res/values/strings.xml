@@ -15,4 +15,9 @@
     <!-- Main -->
     <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
 
+    <!-- Pick webcam -->
+    <string name="pickWebcam_random">Random</string>
+    <string name="pickWebcam_subtitle">A different webcam every time</string>
+    <string name="pickWebcam_source">Source: %1$s</string>
+
 </resources>

@@ -18,7 +18,7 @@ public class WebcamColumns implements BaseColumns {
     public static final String LOCATION = "location";
     public static final String URL = "url";
     public static final String THUMB_URL = "thumb_url";
-    public static final String SOURCE_NAME = "source_name";
+    public static final String SOURCE_URL = "source_url";
     public static final String HTTP_REFERER = "http_referer";
     public static final String TIMEZONE = "timezone";
     public static final String RESIZE_WIDTH = "resize_width";

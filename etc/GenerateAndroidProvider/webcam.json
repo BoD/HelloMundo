@@ -24,7 +24,7 @@
 		"type": "text"
 	},
 	{
-		"name": "source_name",
+		"name": "source_url",
 		"type": "text"
 	},
 	{

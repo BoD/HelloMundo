@@ -15,17 +15,30 @@
             android:id="@+id/imgThumbnail"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            jraf:loadingBackground="@drawable/ic_launcher" />
+            jraf:loadingBackground="@drawable/ic_thumbnail_bg" />
 
-        <TextView
-            android:id="@+id/txtName"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:layout_toRightOf="@+id/imgThumbnail"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtLocationAndTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#888" />
+        </LinearLayout>
 
         <org.jraf.android.util.ui.DontPressWithParentView
             android:id="@+id/btnExtend"
@@ -39,10 +52,32 @@
 
     <!-- Extented item -->
 
-    <View
+    <FrameLayout
         android:id="@+id/layExtended"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:background="#888" />
+        android:background="@drawable/extended_bg" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/extended_bg_shadow" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/cell_webcam_layExtended_height" >
+
+            <TextView
+                android:id="@+id/txtSourceUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp"
+                android:autoLink="web"
+                android:maxLines="1"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColorLink="#55D" />
+        </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

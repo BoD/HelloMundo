@@ -101,7 +101,7 @@ public class WebcamManager {
         res.put(WebcamColumns.PUBLIC_ID, vals[0]);
         res.put(WebcamColumns.NAME, vals[1]);
         res.put(WebcamColumns.LOCATION, vals[2]);
-        res.put(WebcamColumns.SOURCE_NAME, vals[3]);
+        res.put(WebcamColumns.SOURCE_URL, vals[3]);
         res.put(WebcamColumns.URL, HTTP + vals[4]);
         res.put(WebcamColumns.THUMB_URL, HTTP + vals[5]);
         final String[] addedDateVals = vals[6].split("-");

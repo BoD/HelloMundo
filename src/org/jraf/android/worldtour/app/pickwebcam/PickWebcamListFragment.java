@@ -21,7 +21,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.ui.LoadingImageView;
@@ -56,10 +58,12 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     private View getHeaderView(ListView listView) {
         final View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
         final LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
-        imgThumbnail.setImageResource(R.drawable.ic_random);
+        imgThumbnail.setImageResource(R.drawable.ic_random_thumbnail);
         imgThumbnail.setLoadingBackground(0);
-        final int padding = getResources().getDimensionPixelSize(R.dimen.cell_webcam_random_padding);
-        imgThumbnail.setPadding(padding, padding, padding, padding);
+        imgThumbnail.setImageViewScaleType(ScaleType.FIT_CENTER);
+        res.findViewById(R.id.btnExtend).setVisibility(View.GONE);
+        ((TextView) res.findViewById(R.id.txtName)).setText(R.string.pickWebcam_random);
+        ((TextView) res.findViewById(R.id.txtLocationAndTime)).setText(R.string.pickWebcam_subtitle);
         return res;
     }
 
@@ -73,6 +77,8 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         final String[] projection = { WebcamColumns._ID, // 0
                 WebcamColumns.NAME, // 1
                 WebcamColumns.THUMB_URL, // 2
+                WebcamColumns.LOCATION, // 3
+                WebcamColumns.SOURCE_URL, // 4
         };
         return new CursorLoader(getActivity(), WebcamColumns.CONTENT_URI, projection, null, null, null);
     }

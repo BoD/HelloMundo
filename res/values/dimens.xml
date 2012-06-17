@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="cell_webcam_random_padding">4dp</dimen>
+    <dimen name="cell_webcam_layExtended_height">48dp</dimen>
 
 </resources>

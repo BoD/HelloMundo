@@ -20,14 +20,17 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.ui.LoadingImageView;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
     private WebcamAdapter mAdapter;
+
+    private boolean mHasAnimated;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,17 +45,19 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
         // Add 'random' item
         final ListView listView = (ListView) res.findViewById(android.R.id.list);
+        setListAdapter(mAdapter);
         listView.addHeaderView(getHeaderView(listView), null, true);
 
-        setListAdapter(mAdapter);
-
+        // Layout animation
+        listView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.listview_layout));
         return res;
     }
 
     private View getHeaderView(ListView listView) {
         final View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
-        final ImageView imgThumbnail = (ImageView) res.findViewById(R.id.imgThumbnail);
+        final LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
         imgThumbnail.setImageResource(R.drawable.ic_random);
+        imgThumbnail.setLoadingBackground(0);
         final int padding = getResources().getDimensionPixelSize(R.dimen.cell_webcam_random_padding);
         imgThumbnail.setPadding(padding, padding, padding, padding);
         return res;
@@ -75,6 +80,10 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
+        if (!mHasAnimated) {
+            mHasAnimated = true;
+            getListView().startLayoutAnimation();
+        }
     }
 
     @Override

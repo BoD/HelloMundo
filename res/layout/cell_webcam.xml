@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:jraf="http://schemas.android.com/apk/res/org.jraf.android.latoureiffel"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:clickable="false" >
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/imgThumbnail"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:background="#F00" />
+    <!-- Main item -->
 
-    <TextView
-        android:id="@+id/txtName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@+id/imgThumbnail"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp" >
 
-    <org.jraf.android.worldtour.util.ui.DontPressWithParentView
-        android:layout_width="48dp"
-        android:layout_height="64dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="2dp"
-        android:background="@drawable/ic_arrow"
-        android:clickable="true" />
+        <org.jraf.android.util.ui.LoadingImageView
+            android:id="@+id/imgThumbnail"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            jraf:loadingBackground="@drawable/ic_launcher" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/imgThumbnail"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <org.jraf.android.util.ui.DontPressWithParentView
+            android:id="@+id/btnExtend"
+            android:layout_width="48dp"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_arrow"
+            android:clickable="true" />
+    </RelativeLayout>
+
+    <!-- Extented item -->
+
+    <View
+        android:id="@+id/layExtended"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:background="#888" />
+
+</LinearLayout>

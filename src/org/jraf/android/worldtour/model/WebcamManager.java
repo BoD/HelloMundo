@@ -24,10 +24,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
 
+import org.jraf.android.util.Blocking;
+import org.jraf.android.util.HttpUtil;
+import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.provider.WebcamColumns;
-import org.jraf.android.worldtour.util.Blocking;
-import org.jraf.android.worldtour.util.HttpUtil;
-import org.jraf.android.worldtour.util.IoUtil;
 
 
 public class WebcamManager {

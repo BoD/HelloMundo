@@ -12,11 +12,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.HttpUtil;
+import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.model.WebcamManager;
-import org.jraf.android.worldtour.util.HttpUtil;
-import org.jraf.android.worldtour.util.IoUtil;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -42,7 +42,7 @@ public class MainActivity extends SherlockActivity {
         super.onResume();
         if (!mDisplayedPreview) {
             displayPreview();
-            //            mDisplayedPreview = true;
+            mDisplayedPreview = true;
 
             // TODO remove
             new AsyncTask<Void, Void, Void>() {

@@ -29,7 +29,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
     public WebcamAdapter(Context context) {
         super(context, R.layout.cell_webcam, null, false);
-        mExtendedHeight = context.getResources().getDimensionPixelSize(R.dimen.cell_webcam_layExtended_height);
+        mExtendedHeight = context.getResources().getDimensionPixelSize(R.dimen.cell_webcam_extended_height);
     }
 
     @Override

@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp" >
+        android:layout_height="@dimen/cell_webcam_collapsed_height" >
 
         <org.jraf.android.util.ui.LoadingImageView
             android:id="@+id/imgThumbnail"
@@ -28,9 +28,12 @@
 
             <TextView
                 android:id="@+id/txtName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:layout_marginRight="8dp"
+                android:drawableRight="@drawable/ic_excluded_from_random"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
 
             <TextView
                 android:id="@+id/txtLocationAndTime"
@@ -53,9 +56,10 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/cell_webcam_separator_height"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/list_divider_holo_light" />
+            android:background="#1A000000" />
+        <!-- android:background="@drawable/list_divider_holo_light" -->
     </RelativeLayout>
 
     <!-- Extented item -->
@@ -68,7 +72,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/cell_webcam_layExtended_height" >
+            android:layout_height="@dimen/cell_webcam_extended_height" >
 
             <LinearLayout
                 android:layout_width="match_parent"

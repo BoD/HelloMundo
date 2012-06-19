@@ -50,7 +50,11 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         setListAdapter(mAdapter);
         listView.addHeaderView(getHeaderView(listView), null, true);
 
+        // Disable dividers since they are handled manually in cell layouts
         listView.setDividerHeight(0);
+
+        // Disable this optimization because this cause problems on dividers in hdpi
+        listView.setScrollingCacheEnabled(false);
 
         // Layout animation
         listView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.listview_layout));

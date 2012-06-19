@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp" >
+        android:layout_height="65dp" >
 
         <org.jraf.android.util.ui.LoadingImageView
             android:id="@+id/imgThumbnail"
@@ -48,6 +48,14 @@
             android:layout_alignParentRight="true"
             android:background="@drawable/ic_arrow"
             android:clickable="true" />
+
+        <!-- Separator -->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/list_divider_holo_light" />
     </RelativeLayout>
 
     <!-- Extented item -->
@@ -58,26 +66,118 @@
         android:layout_height="0px"
         android:background="@drawable/extended_bg" >
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@drawable/extended_bg_shadow" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/cell_webcam_layExtended_height" >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="6dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/ic_ext_bg"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ext_exclude_from_random" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="-2dp"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
+                        android:text="Excl. from random"
+                        android:textColor="#9333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/ic_ext_bg"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ext_preview" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="-2dp"
+                        android:text="Preview"
+                        android:textColor="#9333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/ic_ext_bg"
+                    android:clickable="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_ext_show_on_map" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginTop="-2dp"
+                        android:text="Show on map"
+                        android:textColor="#9333"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/txtSourceUrl"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="8dp"
                 android:autoLink="web"
+                android:background="#aaa"
+                android:gravity="right|center_vertical"
+                android:linksClickable="false"
                 android:maxLines="1"
+                android:paddingBottom="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColorLink="#55D" />
+                android:textColor="#EEE"
+                android:textColorLink="#44D" />
         </RelativeLayout>
+
+        <!-- Shadow -->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/extended_bg_shadow" />
     </FrameLayout>
 
 </LinearLayout>

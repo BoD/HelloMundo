@@ -50,6 +50,8 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         setListAdapter(mAdapter);
         listView.addHeaderView(getHeaderView(listView), null, true);
 
+        listView.setDividerHeight(0);
+
         // Layout animation
         listView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.listview_layout));
         return res;

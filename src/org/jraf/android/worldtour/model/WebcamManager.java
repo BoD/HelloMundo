@@ -28,6 +28,7 @@ import org.jraf.android.util.Blocking;
 import org.jraf.android.util.HttpUtil;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.WebcamType;
 
 
 public class WebcamManager {
@@ -91,7 +92,7 @@ public class WebcamManager {
 
         final String publicIdList = TextUtils.join(",", publicIds);
         final String where = WebcamColumns.TYPE + "=? and " + WebcamColumns.PUBLIC_ID + " not in (" + publicIdList + ")";
-        final String[] selectionArgs = { String.valueOf(WebcamColumns.TYPE_SERVER) };
+        final String[] selectionArgs = { String.valueOf(WebcamType.SERVER) };
         // Now delete objects that exist locally but not remotely
         contentResolver.delete(WebcamColumns.CONTENT_URI, where, selectionArgs);
     }
@@ -154,6 +155,6 @@ public class WebcamManager {
             }
         }
 
-        res.put(WebcamColumns.TYPE, WebcamColumns.TYPE_SERVER);
+        res.put(WebcamColumns.TYPE, WebcamType.SERVER);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="ic_ext_bg_selected">#4833b5e5</color>
     <color name="ic_ext_bg_pressed">#9933b5e5</color>
 
 </resources>

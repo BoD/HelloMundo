@@ -85,6 +85,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
                 WebcamColumns.THUMB_URL, // 2
                 WebcamColumns.LOCATION, // 3
                 WebcamColumns.SOURCE_URL, // 4
+                WebcamColumns.EXCLUDE_RANDOM, // 5
         };
         return new CursorLoader(getActivity(), WebcamColumns.CONTENT_URI, projection, null, null, null);
     }

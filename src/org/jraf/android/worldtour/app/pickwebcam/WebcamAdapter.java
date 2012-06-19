@@ -52,6 +52,10 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         final TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
         txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, cursor.getString(4)));
 
+        final boolean excludedFromRandom = !(!cursor.isNull(5) && cursor.getInt(5) == 1);
+        final View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
+        btnExcludeFromRandom.setSelected(excludedFromRandom);
+        txtName.setCompoundDrawablesWithIntrinsicBounds(0, 0, excludedFromRandom ? R.drawable.ic_excluded_from_random : 0, 0);
     }
 
     private final OnClickListener mOnExtendOnClickListener = new OnClickListener() {

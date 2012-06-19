@@ -63,5 +63,8 @@
 		"name": "added_date",
 		"type": "integer"
 	},
-
+	{
+		"name": "exclude_random",
+		"type": "integer"
+	},
 ]

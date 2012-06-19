@@ -11,7 +11,10 @@
  */
 package org.jraf.android.worldtour.app.pickwebcam;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -29,15 +32,14 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.ui.LoadingImageView;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
-public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor> {
+public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor>, WebcamCallbacks {
     private WebcamAdapter mAdapter;
-
     private boolean mHasAnimated;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new WebcamAdapter(getActivity());
+        mAdapter = new WebcamAdapter(getActivity(), this);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -102,5 +104,23 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+
+    /*
+     * Exclude from random
+     */
+
+    @Override
+    public void setExcludedFromRandom(final long id, final boolean excluded) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                final ContentValues values = new ContentValues(1);
+                values.put(WebcamColumns.EXCLUDE_RANDOM, excluded);
+                getActivity().getContentResolver().update(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, id), values, null, null);
+                return null;
+            }
+        }.execute();
     }
 }

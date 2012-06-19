@@ -31,7 +31,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:drawableRight="@drawable/ic_excluded_from_random"
                 android:textAppearance="?android:attr/textAppearanceMedium" >
             </TextView>
 

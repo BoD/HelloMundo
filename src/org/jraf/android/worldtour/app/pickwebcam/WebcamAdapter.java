@@ -11,6 +11,7 @@
  */
 package org.jraf.android.worldtour.app.pickwebcam;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import android.content.Context;
@@ -22,14 +23,17 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.DateTimeUtil;
 import org.jraf.android.util.ViewHolder;
 import org.jraf.android.util.ui.ExtendHeightAnimation;
 import org.jraf.android.util.ui.LoadingImageView;
+import org.jraf.android.worldtour.Constants;
 
 public class WebcamAdapter extends ResourceCursorAdapter {
     private final int mExtendedHeight;
     private final WebcamCallbacks mWebcamCallbacks;
     private final HashSet<Long> mExtendedIds = new HashSet<Long>(5);
+    private final HashMap<String, String> mLocalTimeCache = new HashMap<String, String>(50);
 
     public WebcamAdapter(Context context, WebcamCallbacks webcamCallbacks) {
         super(context, R.layout.cell_webcam, null, false);
@@ -60,7 +64,13 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         imgThumbnail.loadBitmap(cursor.getString(2));
 
         final TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
-        txtLocationAndTime.setText(cursor.getString(3));
+        String location = cursor.getString(3);
+        final String publicId = cursor.getString(6);
+        final boolean specialCam = Constants.WEBCAM_PUBLIC_ID_EARTH_AMERICA.equals(publicId) || Constants.WEBCAM_PUBLIC_ID_EARTH_EUROPE.equals(publicId);
+        if (!specialCam) {
+            location += " - " + getLocalTime(context, cursor.getString(7));
+        }
+        txtLocationAndTime.setText(location);
 
         final TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
         final String sourceUrl = cursor.getString(4);
@@ -75,6 +85,16 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         btnExcludeFromRandom.setTag(id);
         btnExcludeFromRandom.setOnClickListener(mExcludeFromRandomOnClickListener);
     }
+
+    private String getLocalTime(Context context, String timeZone) {
+        String res = mLocalTimeCache.get(timeZone);
+        if (res == null) {
+            res = DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
+            mLocalTimeCache.put(timeZone, res);
+        }
+        return res;
+    }
+
 
     private final OnClickListener mExtendOnClickListener = new OnClickListener() {
         @Override

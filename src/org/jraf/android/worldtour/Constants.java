@@ -15,4 +15,7 @@ public class Constants {
 
     public static final String TAG = "WorldTour/";
 
+    public static final String WEBCAM_PUBLIC_ID_EARTH_AMERICA = "3";
+    public static final String WEBCAM_PUBLIC_ID_EARTH_EUROPE = "4";
+
 }

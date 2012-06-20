@@ -13,7 +13,9 @@ package org.jraf.android.worldtour.app.pickwebcam;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -122,5 +124,12 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
                 return null;
             }
         }.execute();
+    }
+
+    @Override
+    public void showSource(String sourceUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + sourceUrl));
+        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        getActivity().startActivity(intent);
     }
 }

@@ -42,7 +42,7 @@
                 android:textColor="#888" />
         </LinearLayout>
 
-        <org.jraf.android.util.ui.DontPressWithParentView
+        <org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentView
             android:id="@+id/btnExtend"
             android:layout_width="48dp"
             android:layout_height="64dp"
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/cell_webcam_extended_height" >
 
-            <LinearLayout
+            <org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -158,7 +158,7 @@
                         android:textColor="#9333"
                         android:textSize="12sp" />
                 </LinearLayout>
-            </LinearLayout>
+            </org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentLinearLayout>
 
             <TextView
                 android:id="@+id/txtSourceUrl"

@@ -63,7 +63,10 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         txtLocationAndTime.setText(cursor.getString(3));
 
         final TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
-        txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, cursor.getString(4)));
+        final String sourceUrl = cursor.getString(4);
+        txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, sourceUrl));
+        txtSourceUrl.setTag(sourceUrl);
+        txtSourceUrl.setOnClickListener(mSourceOnClickListener);
 
         final boolean excludedFromRandom = !cursor.isNull(5) && cursor.getInt(5) == 1;
         final View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
@@ -98,6 +101,14 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         public void onClick(View v) {
             final long id = (Long) v.getTag();
             mWebcamCallbacks.setExcludedFromRandom(id, !v.isSelected());
+        }
+    };
+
+    private final OnClickListener mSourceOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final String sourceUrl = (String) v.getTag();
+            mWebcamCallbacks.showSource(sourceUrl);
         }
     };
 }

@@ -26,6 +26,7 @@ public class WebcamColumns implements BaseColumns {
     public static final String VISIBILITY_END_MIN = "visibility_end_min";
     public static final String ADDED_DATE = "added_date";
     public static final String EXCLUDE_RANDOM = "exclude_random";
+    public static final String COORDINATES = "coordinates";
 
     public static final String DEFAULT_ORDER = _ID;
 }

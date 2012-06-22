@@ -67,4 +67,8 @@
 		"name": "exclude_random",
 		"type": "integer"
 	},
+	{
+		"name": "coordinates",
+		"type": "text"
+	},
 ]

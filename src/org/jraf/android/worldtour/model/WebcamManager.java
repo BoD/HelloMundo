@@ -155,6 +155,13 @@ public class WebcamManager {
             }
         }
 
+        // Coordinates
+        if (vals.length > 12) {
+            final String coordinates = vals[12];
+            if (!EMPTY.equals(coordinates)) {
+                res.put(WebcamColumns.COORDINATES, coordinates);
+            }
+        }
         res.put(WebcamColumns.TYPE, WebcamType.SERVER);
     }
 }

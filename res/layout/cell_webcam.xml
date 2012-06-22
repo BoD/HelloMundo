@@ -105,7 +105,7 @@
                         android:ellipsize="marquee"
                         android:singleLine="true"
                         android:text="Excl. from random"
-                        android:textColor="#9333"
+                        android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -130,7 +130,7 @@
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="-2dp"
                         android:text="Preview"
-                        android:textColor="#9333"
+                        android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -147,6 +147,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:duplicateParentState="true"
                         android:src="@drawable/ic_ext_show_on_map" />
 
                     <TextView
@@ -154,8 +155,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="-2dp"
+                        android:duplicateParentState="true"
                         android:text="Show on map"
-                        android:textColor="#9333"
+                        android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>
             </org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentLinearLayout>

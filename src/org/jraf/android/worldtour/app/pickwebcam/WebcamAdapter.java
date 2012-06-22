@@ -46,7 +46,8 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         final long id = cursor.getLong(0);
 
         final TextView txtName = (TextView) ViewHolder.get(view, R.id.txtName);
-        txtName.setText(cursor.getString(1));
+        final String name = cursor.getString(1);
+        txtName.setText(name);
 
         final View layExtended = ViewHolder.get(view, R.id.layExtended);
         layExtended.setTag(id);
@@ -84,6 +85,17 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         txtName.setCompoundDrawablesWithIntrinsicBounds(0, 0, excludedFromRandom ? R.drawable.ic_excluded_from_random : 0, 0);
         btnExcludeFromRandom.setTag(id);
         btnExcludeFromRandom.setOnClickListener(mExcludeFromRandomOnClickListener);
+
+        final View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);
+        final String coordinates = cursor.getString(8);
+        if (coordinates == null) {
+            btnShowOnMap.setEnabled(false);
+        } else {
+            btnShowOnMap.setEnabled(true);
+            btnShowOnMap.setTag(R.id.coordinates, coordinates);
+            btnShowOnMap.setTag(R.id.name, name);
+            btnShowOnMap.setOnClickListener(mShowOnMapOnClickListener);
+        }
     }
 
     private String getLocalTime(Context context, String timeZone) {
@@ -129,6 +141,15 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         public void onClick(View v) {
             final String sourceUrl = (String) v.getTag();
             mWebcamCallbacks.showSource(sourceUrl);
+        }
+    };
+
+    private final OnClickListener mShowOnMapOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final String coordinates = (String) v.getTag(R.id.coordinates);
+            final String label = (String) v.getTag(R.id.name);
+            mWebcamCallbacks.showOnMap(coordinates, label);
         }
     };
 }

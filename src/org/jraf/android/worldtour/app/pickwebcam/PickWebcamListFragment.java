@@ -11,6 +11,9 @@
  */
 package org.jraf.android.worldtour.app.pickwebcam;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -92,6 +95,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
                 WebcamColumns.EXCLUDE_RANDOM, // 5
                 WebcamColumns.PUBLIC_ID, // 6
                 WebcamColumns.TIMEZONE, // 7
+                WebcamColumns.COORDINATES, // 8
         };
         return new CursorLoader(getActivity(), WebcamColumns.CONTENT_URI, projection, null, null, null);
     }
@@ -132,6 +136,24 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     public void showSource(String sourceUrl) {
         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + sourceUrl));
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
+        getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void showOnMap(String coordinates, String label) {
+        // Inverse longitude for geo url
+        /*        if (coordinates.contains(",-")) {
+                    coordinates = coordinates.replace(",-", ",");
+                } else {
+                    coordinates = coordinates.replace(",", ",-");
+                }*/
+        String uri;
+        try {
+            uri = "geo:" + coordinates + "?z=5&q=" + coordinates + "(" + URLEncoder.encode(label, "utf-8") + ")";
+        } catch (final UnsupportedEncodingException e) {
+            throw new AssertionError(e); // Should never happen
+        }
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         getActivity().startActivity(intent);
     }
 }

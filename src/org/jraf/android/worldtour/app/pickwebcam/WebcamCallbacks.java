@@ -15,4 +15,6 @@ public interface WebcamCallbacks {
     void setExcludedFromRandom(final long id, final boolean excluded);
 
     void showSource(String sourceUrl);
+
+    void showOnMap(String coordinates, String label);
 }

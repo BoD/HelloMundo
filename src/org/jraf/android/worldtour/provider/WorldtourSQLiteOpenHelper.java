@@ -34,7 +34,8 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
             + WebcamColumns.VISIBILITY_END_HOUR + " INTEGER, "
             + WebcamColumns.VISIBILITY_END_MIN + " INTEGER, "
             + WebcamColumns.ADDED_DATE + " INTEGER, "
-            + WebcamColumns.EXCLUDE_RANDOM + " INTEGER "
+            + WebcamColumns.EXCLUDE_RANDOM + " INTEGER, "
+            + WebcamColumns.COORDINATES + " TEXT "
             + " );";
 
     // @formatter:on

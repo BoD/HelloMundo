@@ -32,7 +32,7 @@ import org.jraf.android.worldtour.provider.WebcamType;
 
 
 public class WebcamManager {
-    private static final String URL_DATABASE = "http://lubek.b.free.fr/data3.txt_fr";
+    private static final String URL_DATABASE = "http://lubek.b.free.fr/data4.txt";
 
     private static final String HTTP = "http://";
     private static final String EMPTY = "-";

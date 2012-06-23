@@ -43,51 +43,51 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        final long id = cursor.getLong(0);
+        long id = cursor.getLong(0);
 
-        final TextView txtName = (TextView) ViewHolder.get(view, R.id.txtName);
-        final String name = cursor.getString(1);
+        TextView txtName = (TextView) ViewHolder.get(view, R.id.txtName);
+        String name = cursor.getString(1);
         txtName.setText(name);
 
-        final View layExtended = ViewHolder.get(view, R.id.layExtended);
+        View layExtended = ViewHolder.get(view, R.id.layExtended);
         layExtended.setTag(id);
-        final View btnExtend = ViewHolder.get(view, R.id.btnExtend);
+        View btnExtend = ViewHolder.get(view, R.id.btnExtend);
         btnExtend.setTag(layExtended);
         btnExtend.setOnClickListener(mExtendOnClickListener);
-        final LayoutParams layoutParams = layExtended.getLayoutParams();
+        LayoutParams layoutParams = layExtended.getLayoutParams();
         if (mExtendedIds.contains(id)) {
             layoutParams.height = mExtendedHeight;
         } else {
             layoutParams.height = 0;
         }
 
-        final LoadingImageView imgThumbnail = (LoadingImageView) ViewHolder.get(view, R.id.imgThumbnail);
+        LoadingImageView imgThumbnail = (LoadingImageView) ViewHolder.get(view, R.id.imgThumbnail);
         imgThumbnail.loadBitmap(cursor.getString(2));
 
-        final TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
+        TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
         String location = cursor.getString(3);
-        final String publicId = cursor.getString(6);
-        final boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
+        String publicId = cursor.getString(6);
+        boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
         if (!specialCam) {
             location += " - " + getLocalTime(context, cursor.getString(7));
         }
         txtLocationAndTime.setText(location);
 
-        final TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
-        final String sourceUrl = cursor.getString(4);
+        TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
+        String sourceUrl = cursor.getString(4);
         txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, sourceUrl));
         txtSourceUrl.setTag(sourceUrl);
         txtSourceUrl.setOnClickListener(mSourceOnClickListener);
 
-        final boolean excludedFromRandom = !cursor.isNull(5) && cursor.getInt(5) == 1;
-        final View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
+        boolean excludedFromRandom = !cursor.isNull(5) && cursor.getInt(5) == 1;
+        View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
         btnExcludeFromRandom.setSelected(excludedFromRandom);
         txtName.setCompoundDrawablesWithIntrinsicBounds(0, 0, excludedFromRandom ? R.drawable.ic_excluded_from_random : 0, 0);
         btnExcludeFromRandom.setTag(id);
         btnExcludeFromRandom.setOnClickListener(mExcludeFromRandomOnClickListener);
 
-        final View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);
-        final String coordinates = cursor.getString(8);
+        View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);
+        String coordinates = cursor.getString(8);
         if (coordinates == null) {
             btnShowOnMap.setEnabled(false);
         } else {
@@ -111,16 +111,16 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final OnClickListener mExtendOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            final View layExtended = (View) v.getTag();
-            final long id = (Long) layExtended.getTag();
-            final LayoutParams layoutParams = layExtended.getLayoutParams();
+            View layExtended = (View) v.getTag();
+            long id = (Long) layExtended.getTag();
+            LayoutParams layoutParams = layExtended.getLayoutParams();
             if (layoutParams.height == 0) {
-                final ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, true);
+                ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, true);
                 animation.setDuration(300);
                 layExtended.startAnimation(animation);
                 mExtendedIds.add(id);
             } else {
-                final ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, false);
+                ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, false);
                 animation.setDuration(300);
                 layExtended.startAnimation(animation);
                 mExtendedIds.remove(id);
@@ -131,7 +131,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final OnClickListener mExcludeFromRandomOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            final long id = (Long) v.getTag();
+            long id = (Long) v.getTag();
             mWebcamCallbacks.setExcludedFromRandom(id, !v.isSelected());
         }
     };
@@ -139,7 +139,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final OnClickListener mSourceOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            final String sourceUrl = (String) v.getTag();
+            String sourceUrl = (String) v.getTag();
             mWebcamCallbacks.showSource(sourceUrl);
         }
     };
@@ -147,8 +147,8 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final OnClickListener mShowOnMapOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            final String coordinates = (String) v.getTag(R.id.coordinates);
-            final String label = (String) v.getTag(R.id.name);
+            String coordinates = (String) v.getTag(R.id.coordinates);
+            String label = (String) v.getTag(R.id.name);
             mWebcamCallbacks.showOnMap(coordinates, label);
         }
     };

@@ -24,6 +24,8 @@ public class Constants {
 
     public static final HashSet<String> SPECIAL_CAMS = new HashSet<String>(4);
 
+    public static final String PREF_HAS_RUN = "KEY_HAS_RUN";
+
     static {
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_EARTH_AMERICA);
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_EARTH_EUROPE);

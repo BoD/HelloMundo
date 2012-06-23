@@ -50,10 +50,10 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View res = super.onCreateView(inflater, container, savedInstanceState);
+        View res = super.onCreateView(inflater, container, savedInstanceState);
 
         // Add 'random' item
-        final ListView listView = (ListView) res.findViewById(android.R.id.list);
+        ListView listView = (ListView) res.findViewById(android.R.id.list);
         setListAdapter(mAdapter);
         listView.addHeaderView(getHeaderView(listView), null, true);
 
@@ -69,8 +69,8 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     }
 
     private View getHeaderView(ListView listView) {
-        final View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
-        final LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
+        View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
+        LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
         imgThumbnail.setImageResource(R.drawable.ic_random_thumbnail);
         imgThumbnail.setLoadingBackground(0);
         imgThumbnail.setImageViewScaleType(ScaleType.FIT_CENTER);
@@ -87,7 +87,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        final String[] projection = { WebcamColumns._ID, // 0
+        String[] projection = { WebcamColumns._ID, // 0
                 WebcamColumns.NAME, // 1
                 WebcamColumns.THUMB_URL, // 2
                 WebcamColumns.LOCATION, // 3
@@ -124,7 +124,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                final ContentValues values = new ContentValues(1);
+                ContentValues values = new ContentValues(1);
                 values.put(WebcamColumns.EXCLUDE_RANDOM, excluded);
                 getActivity().getContentResolver().update(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, id), values, null, null);
                 return null;
@@ -134,7 +134,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public void showSource(String sourceUrl) {
-        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + sourceUrl));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + sourceUrl));
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         getActivity().startActivity(intent);
     }
@@ -150,10 +150,10 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         String uri;
         try {
             uri = "geo:" + coordinates + "?z=5&q=" + coordinates + "(" + URLEncoder.encode(label, "utf-8") + ")";
-        } catch (final UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new AssertionError(e); // Should never happen
         }
-        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         getActivity().startActivity(intent);
     }
 }

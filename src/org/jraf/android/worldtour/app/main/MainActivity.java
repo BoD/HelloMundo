@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 
 import org.jraf.android.latoureiffel.R;
@@ -16,7 +15,6 @@ import org.jraf.android.util.HttpUtil;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
-import org.jraf.android.worldtour.model.WebcamManager;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -24,7 +22,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class MainActivity extends SherlockActivity {
-    private static final String TAG = Constants.TAG + MainActivity.class.getSimpleName();
+    private static String TAG = Constants.TAG + MainActivity.class.getSimpleName();
 
     private boolean mDisplayedPreview;
 
@@ -49,11 +47,11 @@ public class MainActivity extends SherlockActivity {
 
                 @Override
                 protected Void doInBackground(Void... params) {
-                    try {
-                        WebcamManager.get().refreshDatabaseFromNetwork(MainActivity.this);
-                    } catch (final IOException e) {
-                        Log.e(TAG, "doInBackground", e);
-                    }
+                    /*     try {
+                             WebcamManager.get().refreshDatabaseFromNetwork(MainActivity.this);
+                         } catch (IOException e) {
+                             Log.e(TAG, "doInBackground", e);
+                         }*/
                     return null;
                 }
 
@@ -74,7 +72,7 @@ public class MainActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }
@@ -94,15 +92,15 @@ public class MainActivity extends SherlockActivity {
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
-                final String url = "http://87.98.182.216/is/resize/www.parisrama.com/webcam9.jpg?__width=625&__height=475";
+                String url = "http://87.98.182.216/is/resize/www.parisrama.com/webcam9.jpg?__width=625&__height=475";
                 try {
-                    final InputStream inputStream = HttpUtil.getAsStream(url);
+                    InputStream inputStream = HttpUtil.getAsStream(url);
                     try {
                         return BitmapFactory.decodeStream(inputStream);
                     } finally {
                         IoUtil.close(inputStream);
                     }
-                } catch (final IOException e) {
+                } catch (IOException e) {
                     return null;
                 }
             }

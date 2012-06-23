@@ -26,9 +26,9 @@ public class PickWebcamActivity extends SherlockFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pick_webcam);
-        final FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.findFragmentById(R.id.root) == null) {
-            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.root, new PickWebcamListFragment());
             transaction.commit();
         }
@@ -36,7 +36,7 @@ public class PickWebcamActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.pick_webcam, menu);
         return true;
     }

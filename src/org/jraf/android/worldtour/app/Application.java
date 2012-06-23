@@ -11,8 +11,15 @@
  */
 package org.jraf.android.worldtour.app;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+
+import org.jraf.android.util.Blocking;
+import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.model.WebcamManager;
 
 public class Application extends android.app.Application {
     public static int sVersionCode;
@@ -22,15 +29,33 @@ public class Application extends android.app.Application {
     public void onCreate() {
         synchronized (this) {
             try {
-                final PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                 sVersionCode = packageInfo.versionCode;
                 sVersionName = packageInfo.versionName;
-            } catch (final NameNotFoundException e) {
+            } catch (NameNotFoundException e) {
                 // should never happen
                 throw new AssertionError(e);
             }
+
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    handleFirstRun();
+                    return null;
+                }
+            }.execute();
         }
 
         super.onCreate();
+    }
+
+    @Blocking
+    private void handleFirstRun() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean firstRun = !sharedPreferences.contains(Constants.PREF_HAS_RUN);
+        if (!firstRun) return;
+        sharedPreferences.edit().putBoolean(Constants.PREF_HAS_RUN, true).commit();
+
+        WebcamManager.get().insertWebcamsFromBundledFile(this);
     }
 }

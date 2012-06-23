@@ -12,7 +12,7 @@
 package org.jraf.android.worldtour.app.pickwebcam;
 
 public interface WebcamCallbacks {
-    void setExcludedFromRandom(final long id, final boolean excluded);
+    void setExcludedFromRandom(long id, boolean excluded);
 
     void showSource(String sourceUrl);
 

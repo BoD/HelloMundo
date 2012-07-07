@@ -73,7 +73,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
         imgThumbnail.setImageResource(R.drawable.ic_random_thumbnail);
         imgThumbnail.setLoadingBackground(0);
-        imgThumbnail.setImageViewScaleType(ScaleType.FIT_CENTER);
+        imgThumbnail.setScaleType(ScaleType.FIT_CENTER);
         res.findViewById(R.id.btnExtend).setVisibility(View.GONE);
         ((TextView) res.findViewById(R.id.txtName)).setText(R.string.pickWebcam_random);
         ((TextView) res.findViewById(R.id.txtLocationAndTime)).setText(R.string.pickWebcam_subtitle);

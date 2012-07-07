@@ -92,5 +92,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="#F00" />
+    
+    <ImageView android:id="@+id/test" android:layout_width="match_parent"
+        android:layout_height="48dp"
+        />
 
 </LinearLayout>

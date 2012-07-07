@@ -6,6 +6,9 @@ import java.io.InputStream;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -33,6 +36,31 @@ public class MainActivity extends SherlockActivity {
         if (savedInstanceState != null) {
             mDisplayedPreview = savedInstanceState.getBoolean("mDisplayedPreview");
         }
+
+        ImageView test = (ImageView) findViewById(R.id.test);
+        TransitionDrawable transitionDrawable = new TransitionDrawable(
+                new Drawable[] { new BitmapDrawable(getResources()), new BitmapDrawable(getResources()) });
+        transitionDrawable.setId(0, 0);
+        transitionDrawable.setId(1, 1);
+
+
+
+        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light);
+        transitionDrawable.setDrawableByLayerId(0, backgroundDrawable);
+
+        test.setImageDrawable(transitionDrawable);
+
+
+        Drawable foregroundDrawable = getResources().getDrawable(R.drawable.ic_random);
+        transitionDrawable.setDrawableByLayerId(1, foregroundDrawable);
+
+
+        //        TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[] { backgroundDrawable, foregroundDrawable });
+        //        test.setImageDrawable(backgroundDrawable);
+
+        transitionDrawable.setCrossFadeEnabled(true);
+        transitionDrawable.startTransition(2000);
+
     }
 
     @Override

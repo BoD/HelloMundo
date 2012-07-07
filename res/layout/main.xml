@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.jraf.android.latoureiffel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -20,6 +21,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <org.jraf.android.backport.switchwidget.Switch
+            android:id="@+id/swiOnOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -92,9 +94,5 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="#F00" />
-    
-    <ImageView android:id="@+id/test" android:layout_width="match_parent"
-        android:layout_height="48dp"
-        />
 
 </LinearLayout>

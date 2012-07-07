@@ -52,9 +52,9 @@ public class Application extends android.app.Application {
     @Blocking
     private void handleFirstRun() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean firstRun = !sharedPreferences.contains(Constants.PREF_HAS_RUN);
+        boolean firstRun = sharedPreferences.getBoolean(Constants.PREF_FIRST_RUN, true);
         if (!firstRun) return;
-        sharedPreferences.edit().putBoolean(Constants.PREF_HAS_RUN, true).commit();
+        sharedPreferences.edit().putBoolean(Constants.PREF_FIRST_RUN, false).commit();
 
         WebcamManager.get().insertWebcamsFromBundledFile(this);
     }

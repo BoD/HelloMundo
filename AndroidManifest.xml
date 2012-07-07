@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
         android:name="org.jraf.android.worldtour.app.Application"
@@ -38,6 +39,9 @@
         <activity
             android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
             android:label="@string/menu_pick" />
+
+        <!-- Service -->
+        <service android:name="org.jraf.android.worldtour.app.main.service.WorldTourService" />
     </application>
 
 </manifest>

@@ -3,20 +3,26 @@ package org.jraf.android.worldtour.app.main;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 
+import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.HttpUtil;
 import org.jraf.android.util.IoUtil;
+import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.main.service.WorldTourService;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -33,34 +39,14 @@ public class MainActivity extends SherlockActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        Switch swiOnOff = (Switch) findViewById(R.id.swiOnOff);
+        boolean enabled = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(Constants.PREF_SERVICE_ENABLED, Constants.PREF_SERVICE_ENABLED_DEFAULT);
+        swiOnOff.setChecked(enabled);
+        swiOnOff.setOnCheckedChangeListener(mOnOffOnCheckedChangeListener);
         if (savedInstanceState != null) {
             mDisplayedPreview = savedInstanceState.getBoolean("mDisplayedPreview");
         }
-
-        ImageView test = (ImageView) findViewById(R.id.test);
-        TransitionDrawable transitionDrawable = new TransitionDrawable(
-                new Drawable[] { new BitmapDrawable(getResources()), new BitmapDrawable(getResources()) });
-        transitionDrawable.setId(0, 0);
-        transitionDrawable.setId(1, 1);
-
-
-
-        Drawable backgroundDrawable = getResources().getDrawable(R.drawable.abs__ab_share_pack_holo_light);
-        transitionDrawable.setDrawableByLayerId(0, backgroundDrawable);
-
-        test.setImageDrawable(transitionDrawable);
-
-
-        Drawable foregroundDrawable = getResources().getDrawable(R.drawable.ic_random);
-        transitionDrawable.setDrawableByLayerId(1, foregroundDrawable);
-
-
-        //        TransitionDrawable transitionDrawable = new TransitionDrawable(new Drawable[] { backgroundDrawable, foregroundDrawable });
-        //        test.setImageDrawable(backgroundDrawable);
-
-        transitionDrawable.setCrossFadeEnabled(true);
-        transitionDrawable.startTransition(2000);
-
     }
 
     @Override
@@ -143,4 +129,36 @@ public class MainActivity extends SherlockActivity {
             }
         }.execute();
     }
+
+    /*
+     * Switch on/off.
+     */
+    private final OnCheckedChangeListener mOnOffOnCheckedChangeListener = new OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+            new SimpleAsyncTask() {
+                @Override
+                protected void background() throws Exception {
+                    PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putBoolean(Constants.PREF_SERVICE_ENABLED, isChecked).commit();
+                }
+
+                @Override
+                protected void postExecute(boolean ok) {
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    PendingIntent pendingIntent = WorldTourService.getServicePendingIntent(MainActivity.this);
+                    if (isChecked) {
+                        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
+                        startService(new Intent(MainActivity.this, WorldTourService.class));
+                    } else {
+                        alarmManager.cancel(pendingIntent);
+                    }
+                }
+            }.execute();
+        }
+    };
+
+
+
 }

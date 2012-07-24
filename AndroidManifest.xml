@@ -41,7 +41,7 @@
             android:label="@string/menu_pick" />
 
         <!-- Service -->
-        <service android:name="org.jraf.android.worldtour.app.main.service.WorldTourService" />
+        <service android:name="org.jraf.android.worldtour.app.service.WorldTourService" />
     </application>
 
 </manifest>

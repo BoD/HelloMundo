@@ -1,4 +1,4 @@
-package org.jraf.android.worldtour.app.main.service;
+package org.jraf.android.worldtour.app.service;
 
 import java.io.IOException;
 import java.io.InputStream;

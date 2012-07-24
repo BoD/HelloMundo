@@ -22,8 +22,8 @@ import org.jraf.android.util.HttpUtil;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.app.main.service.WorldTourService;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
+import org.jraf.android.worldtour.app.service.WorldTourService;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;

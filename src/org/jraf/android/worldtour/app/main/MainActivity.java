@@ -23,6 +23,7 @@ import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
+import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -97,6 +98,10 @@ public class MainActivity extends SherlockActivity {
             case R.id.menu_pick:
                 startActivity(new Intent(this, PickWebcamActivity.class));
                 return true;
+
+            case R.id.menu_settings:
+                startActivity(new Intent(this, PreferenceActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -148,7 +153,8 @@ public class MainActivity extends SherlockActivity {
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                     PendingIntent pendingIntent = WorldTourService.getServicePendingIntent(MainActivity.this);
                     if (isChecked) {
-                        long interval = AlarmManager.INTERVAL_HALF_HOUR;
+                        long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
+                                Constants.PREF_UPDATE_INTERVAL_DEFAULT));
                         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
                         startService(new Intent(MainActivity.this, WorldTourService.class));
                     } else {

@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferenceScreen" >
+
+    <ListPreference
+        android:defaultValue="1800000"
+        android:entries="@array/preferences_updateInterval_labels"
+        android:entryValues="@array/preferences_updateInterval_values"
+        android:key="PREF_UPDATE_INTERVAL"
+        android:title="@string/preferences_updateInterval_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="PREF_DIMMED"
+        android:summary="@string/preferences_dimmed_summary"
+        android:title="@string/preferences_dimmed_title" />
+
+    <ListPreference
+        android:defaultValue="2"
+        android:entries="@array/preferences_showInfo_labels"
+        android:entryValues="@array/preferences_showInfo_values"
+        android:key="PREF_SHOW_INFO"
+        android:summary="@string/preferences_showInfo_summary"
+        android:title="@string/preferences_showInfo_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="PREF_AVOID_NIGHT"
+        android:summary="@string/preferences_avoidNight_summary"
+        android:title="@string/preferences_avoidNight_title" />
+
+</PreferenceScreen>

@@ -20,4 +20,13 @@
     <string name="pickWebcam_subtitle">A different webcam every time</string>
     <string name="pickWebcam_source">Source: %1$s</string>
 
+    <!-- Preferences -->
+    <string name="preferences_updateInterval_title">Update frequency</string>
+    <string name="preferences_dimmed_title">Dimmed wallpaper</string>
+    <string name="preferences_dimmed_summary">Make the picture dimmer, making the icons easier to see</string>
+    <string name="preferences_showInfo_title">Show webcam info</string>
+    <string name="preferences_showInfo_summary">Print webcam name, location and local time on wallpaper</string>
+    <string name="preferences_avoidNight_title">Avoid night</string>
+    <string name="preferences_avoidNight_summary">In random mode, discard places where it\'s night time</string>
+
 </resources>

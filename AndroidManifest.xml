@@ -40,6 +40,11 @@
             android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
             android:label="@string/menu_pick" />
 
+        <!-- Settings -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.preference.PreferenceActivity"
+            android:label="@string/menu_settings" />
+
         <!-- Service -->
         <service android:name="org.jraf.android.worldtour.app.service.WorldTourService" />
     </application>

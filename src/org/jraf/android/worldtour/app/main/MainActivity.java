@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.Blocking;
 import org.jraf.android.util.DateTimeUtil;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.SimpleAsyncTask;
@@ -36,6 +37,7 @@ import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
+import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -78,9 +80,25 @@ public class MainActivity extends SherlockActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateWebcamRandom();
-        updateWebcamName();
-        updateWebcamImage();
+
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final boolean firstRun = sharedPreferences.getBoolean(Constants.PREF_FIRST_RUN, true);
+        new SimpleAsyncTask() {
+            @Override
+            protected void background() throws Exception {
+                if (firstRun) {
+                    handleFirstRun();
+                    sharedPreferences.edit().putBoolean(Constants.PREF_FIRST_RUN, false).commit();
+                }
+            }
+
+            @Override
+            protected void postExecute(boolean ok) {
+                updateWebcamRandom();
+                updateWebcamName();
+                updateWebcamImage();
+            }
+        }.execute();
     }
 
     @Override
@@ -105,6 +123,19 @@ public class MainActivity extends SherlockActivity {
                 break;
         }
     }
+
+
+    /*
+     * First run.
+     */
+
+    @Blocking
+    private void handleFirstRun() {
+        if (Config.LOGD) Log.d(TAG, "handleFirstRun");
+        WebcamManager.get().insertWebcamsFromBundledFile(this);
+    }
+
+
 
     /*
      * Action bar.
@@ -256,7 +287,7 @@ public class MainActivity extends SherlockActivity {
         if (!new File(getFilesDir(), Constants.FILE_IMAGE).exists()) {
             // The service has never been started, there is no file yet: start it now
             startService(new Intent(this, WorldTourService.class));
-            findViewById(R.id.imgPreview).setVisibility(View.INVISIBLE);
+            findViewById(R.id.imgPreviewFrame).setVisibility(View.INVISIBLE);
             return;
         }
         new AsyncTask<Void, Void, Bitmap>() {
@@ -277,9 +308,8 @@ public class MainActivity extends SherlockActivity {
             @Override
             protected void onPostExecute(Bitmap result) {
                 if (result == null) return;
-                ImageView imgPreview = (ImageView) findViewById(R.id.imgPreview);
-                imgPreview.setImageBitmap(result);
-                imgPreview.setVisibility(View.VISIBLE);
+                ((ImageView) findViewById(R.id.imgPreview)).setImageBitmap(result);
+                findViewById(R.id.imgPreviewFrame).setVisibility(View.VISIBLE);
             }
         }.execute();
     }

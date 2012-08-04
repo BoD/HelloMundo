@@ -49,6 +49,8 @@ public class MainActivity extends SherlockActivity {
     private static final int REQUEST_PICK_WEBCAM = 0;
 
     private boolean mBroadcastReceiverRegistered;
+    private boolean mLoading;
+    private MenuItem mRefreshMenuItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class MainActivity extends SherlockActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        mRefreshMenuItem = menu.getItem(1);
         return true;
     }
 
@@ -124,6 +127,11 @@ public class MainActivity extends SherlockActivity {
 
             case R.id.menu_settings:
                 startActivity(new Intent(this, PreferenceActivity.class));
+                return true;
+
+            case R.id.menu_refresh:
+                if (mLoading) return true;
+                startService(new Intent(this, WorldTourService.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -141,12 +149,17 @@ public class MainActivity extends SherlockActivity {
             String action = intent.getAction();
             if (WorldTourService.ACTION_UPDATE_START.equals(action)) {
                 updateWebcamName();
+                setLoading(true);
             } else if (WorldTourService.ACTION_UPDATE_END_SUCCESS.equals(action)) {
+                setLoading(false);
                 updateWebcamImage();
                 if (PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
                         Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT)) {
                     Toast.makeText(MainActivity.this, R.string.main_toast_wallpaperUpdated, Toast.LENGTH_SHORT).show();
                 }
+            } else if (WorldTourService.ACTION_UPDATE_END_FAILURE.equals(action)) {
+                setLoading(false);
+                // TODO
             }
         }
     };
@@ -269,5 +282,19 @@ public class MainActivity extends SherlockActivity {
                 imgPreview.setVisibility(View.VISIBLE);
             }
         }.execute();
+    }
+
+
+    /*
+     * Loading.
+     */
+
+    private void setLoading(boolean loading) {
+        mLoading = loading;
+        if (loading) {
+            mRefreshMenuItem.setActionView(R.layout.main_refreshing);
+        } else {
+            mRefreshMenuItem.setActionView(null);
+        }
     }
 }

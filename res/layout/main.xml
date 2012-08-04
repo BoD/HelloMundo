@@ -48,7 +48,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:visibility="invisible" />
         </FrameLayout>
     </FrameLayout>
 
@@ -62,6 +63,7 @@
         android:orientation="horizontal" >
 
         <ImageView
+            android:id="@+id/imgWebcamInfo_random"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
@@ -73,19 +75,19 @@
             android:orientation="vertical" >
 
             <TextView
+                android:id="@+id/txtWebcamInfo_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="Rio Gilao with Roman bridge"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
+                android:id="@+id/txtWebcamInfo_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="Tavira, Portugal (16:15)"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout> <!-- android:layout_marginTop="4dp" -->
     </LinearLayout>

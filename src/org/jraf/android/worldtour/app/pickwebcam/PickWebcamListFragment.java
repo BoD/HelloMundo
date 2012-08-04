@@ -14,6 +14,7 @@ package org.jraf.android.worldtour.app.pickwebcam;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +37,13 @@ import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.ui.LoadingImageView;
+import org.jraf.android.worldtour.Config;
+import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor>, WebcamCallbacks {
+    private static final String TAG = Constants.TAG + PickWebcamListFragment.class.getSimpleName();
+
     private WebcamAdapter mAdapter;
     private boolean mHasAnimated;
 
@@ -78,6 +84,24 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         ((TextView) res.findViewById(R.id.txtName)).setText(R.string.pickWebcam_random);
         ((TextView) res.findViewById(R.id.txtLocationAndTime)).setText(R.string.pickWebcam_subtitle);
         return res;
+    }
+
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        if (Config.LOGD) Log.d(TAG, "onListItemClick position=" + position + " id=" + id);
+        String publicId;
+        if (position == 0) {
+            // Random webcam
+            publicId = Constants.WEBCAM_PUBLIC_ID_RANDOM;
+        } else {
+            Cursor cursor = mAdapter.getCursor();
+            cursor.moveToPosition(position - 1);
+            publicId = cursor.getString(6);
+        }
+        if (Config.LOGD) Log.d(TAG, "onListItemClick publicId=" + publicId);
+        getActivity().setResult(Activity.RESULT_OK, new Intent().setData(new Uri.Builder().authority(publicId).build()));
+        getActivity().finish();
     }
 
 

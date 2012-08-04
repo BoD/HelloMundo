@@ -14,6 +14,7 @@
 
     <!-- Main -->
     <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
+    <string name="main_toast_wallpaperUpdated">Wallpaper updated</string>
 
     <!-- Pick webcam -->
     <string name="pickWebcam_random">Random</string>

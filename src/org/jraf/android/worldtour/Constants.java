@@ -17,6 +17,7 @@ public class Constants {
 
     public static final String TAG = "WorldTour/";
 
+    public static final String WEBCAM_PUBLIC_ID_RANDOM = "RANDOM";
     public static final String WEBCAM_PUBLIC_ID_EARTH_AMERICA = "3";
     public static final String WEBCAM_PUBLIC_ID_EARTH_EUROPE = "4";
     public static final String WEBCAM_PUBLIC_ID_SUN = "23";
@@ -31,13 +32,18 @@ public class Constants {
     public static final HashSet<String> SPECIAL_CAMS = new HashSet<String>(4);
 
     public static final String PREF_FIRST_RUN = "KEY_FIRST_RUN";
-    public static final String PREF_SERVICE_ENABLED = "PREF_SERVICE_ENABLED";
-    public static final boolean PREF_SERVICE_ENABLED_DEFAULT = false;
-    public static final String PREF_WEBCAM_PUBLIC_ID = "PREF_WEBCAM_PUBLIC_ID";
-    public static final String PREF_WEBCAM_PUBLIC_ID_DEFAULT = WEBCAM_PUBLIC_ID_EIFFEL_TOWER;
-    public static final String PREF_WEBCAM_PUBLIC_ID_RANDOM = "RANDOM";
+
+    public static final String PREF_AUTO_UPDATE_WALLPAPER = "PREF_AUTO_UPDATE_WALLPAPER";
+    public static final boolean PREF_AUTO_UPDATE_WALLPAPER_DEFAULT = false;
+
+    public static final String PREF_SELECTED_WEBCAM_PUBLIC_ID = "PREF_SELECTED_WEBCAM_PUBLIC_ID";
+    public static final String PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT = WEBCAM_PUBLIC_ID_EIFFEL_TOWER;
+    public static final String PREF_CURRENT_WEBCAM_PUBLIC_ID = "PREF_CURRENT_WEBCAM_PUBLIC_ID";
+
     public static final String PREF_UPDATE_INTERVAL = "PREF_UPDATE_INTERVAL";
     public static final String PREF_UPDATE_INTERVAL_DEFAULT = String.valueOf(INTERVAL_30_MINUTES);
+
+    public static final String FILE_IMAGE = "image";
 
     static {
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_EARTH_AMERICA);

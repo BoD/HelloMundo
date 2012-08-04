@@ -1,9 +1,11 @@
 package org.jraf.android.worldtour.app.service;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
@@ -24,6 +26,11 @@ import org.jraf.android.worldtour.provider.WebcamColumns;
 public class WorldTourService extends IntentService {
     private static final String TAG = Constants.TAG + WorldTourService.class.getSimpleName();
 
+    private static final String PREFIX = WorldTourService.class.getName() + ".";
+    public static final String ACTION_UPDATE_START = PREFIX + "ACTION_UPDATE_START";
+    public static final String ACTION_UPDATE_END_SUCCESS = PREFIX + "ACTION_UPDATE_END_SUCCESS";
+    public static final String ACTION_UPDATE_END_FAILURE = PREFIX + "ACTION_UPDATE_END_FAILURE";
+
     public WorldTourService() {
         super("WorldTourService");
     }
@@ -31,21 +38,16 @@ public class WorldTourService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
-
-        // Check if the service is enabled, if not, we stop right now and cancel the alarm.
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean enabled = sharedPreferences.getBoolean(Constants.PREF_SERVICE_ENABLED, Constants.PREF_SERVICE_ENABLED_DEFAULT);
-        if (Config.LOGD) Log.d(TAG, "onHandleIntent enabled=" + enabled);
-        if (!enabled) {
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.cancel(getServicePendingIntent(this));
-            return;
-        }
 
-        String webcamId = sharedPreferences.getString(Constants.PREF_WEBCAM_PUBLIC_ID, Constants.PREF_WEBCAM_PUBLIC_ID_DEFAULT);
-        if (Constants.PREF_WEBCAM_PUBLIC_ID_RANDOM.equals(webcamId)) {
+        String webcamId = sharedPreferences.getString(Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID, Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT);
+        if (Constants.WEBCAM_PUBLIC_ID_RANDOM.equals(webcamId)) {
             // TODO 
         }
+
+        sharedPreferences.edit().putString(Constants.PREF_CURRENT_WEBCAM_PUBLIC_ID, webcamId).commit();
+
+        sendBroadcast(new Intent(ACTION_UPDATE_START));
 
         String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
         String selection = WebcamColumns.PUBLIC_ID + "=?";
@@ -56,7 +58,7 @@ public class WorldTourService extends IntentService {
         try {
             if (cursor == null || !cursor.moveToFirst()) {
                 Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + webcamId);
-                // TODO: do something!
+                sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
                 return;
             }
             url = cursor.getString(0);
@@ -71,15 +73,49 @@ public class WorldTourService extends IntentService {
             inputStream = HttpUtil.getAsStream(url);
         } catch (IOException e) {
             Log.w(TAG, "onHandleIntent Could not download webcam with webcamId=" + webcamId, e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return;
+        }
+
+        // Download the wallpaper into a file
+        FileOutputStream outputStream;
+        try {
+            outputStream = openFileOutput(Constants.FILE_IMAGE, MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            // Should never happen
+            Log.e(TAG, "Could not open a file", e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
             return;
         }
         try {
-            WallpaperManager.getInstance(this).setStream(inputStream);
+            IoUtil.copy(inputStream, outputStream);
         } catch (IOException e) {
-            Log.w(TAG, "onHandleIntent Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
+            Log.w(TAG, "onHandleIntent Could not download webcam with webcamId=" + webcamId, e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return;
         } finally {
             IoUtil.close(inputStream);
+            IoUtil.close(outputStream);
         }
+
+        // If enabled, update the wallpaper with the contents of the file
+        boolean enabled = sharedPreferences.getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
+        if (Config.LOGD) Log.d(TAG, "onHandleIntent enabled=" + enabled);
+        if (enabled) {
+            FileInputStream imageInputStream = null;
+            try {
+                imageInputStream = openFileInput(Constants.FILE_IMAGE);
+                WallpaperManager.getInstance(this).setStream(imageInputStream);
+            } catch (IOException e) {
+                Log.w(TAG, "onHandleIntent Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
+                sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+                return;
+            } finally {
+                IoUtil.close(imageInputStream);
+            }
+        }
+
+        sendBroadcast(new Intent(ACTION_UPDATE_END_SUCCESS));
     }
 
     public static PendingIntent getServicePendingIntent(Context context) {

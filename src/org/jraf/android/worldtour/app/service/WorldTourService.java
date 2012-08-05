@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -42,7 +43,8 @@ public class WorldTourService extends IntentService {
 
         String webcamId = sharedPreferences.getString(Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID, Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT);
         if (Constants.WEBCAM_PUBLIC_ID_RANDOM.equals(webcamId)) {
-            // TODO 
+            webcamId = getRandomWebcamId();
+            if (Config.LOGD) Log.d(TAG, "onHandleIntent Random cam: " + webcamId);
         }
 
         sharedPreferences.edit().putString(Constants.PREF_CURRENT_WEBCAM_PUBLIC_ID, webcamId).commit();
@@ -116,6 +118,25 @@ public class WorldTourService extends IntentService {
         }
 
         sendBroadcast(new Intent(ACTION_UPDATE_END_SUCCESS));
+    }
+
+    private String getRandomWebcamId() {
+        String[] projection = { WebcamColumns.PUBLIC_ID };
+        String selection = WebcamColumns.EXCLUDE_RANDOM + " is null or " + WebcamColumns.EXCLUDE_RANDOM + "=0";
+        Cursor cursor = getContentResolver().query(WebcamColumns.CONTENT_URI, projection, selection, null, null);
+        try {
+            if (cursor == null) {
+                Log.w(TAG, "getRandomWebcamId Could not find random webcamId");
+                return null;
+            }
+            int count = cursor.getCount();
+            int randomIndex = new Random().nextInt(count);
+            cursor.moveToPosition(randomIndex);
+            return cursor.getString(0);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+
     }
 
     public static PendingIntent getServicePendingIntent(Context context) {

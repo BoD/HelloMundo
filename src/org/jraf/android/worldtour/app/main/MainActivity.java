@@ -53,6 +53,7 @@ public class MainActivity extends SherlockActivity {
     private boolean mBroadcastReceiverRegistered;
     private boolean mLoading;
     private MenuItem mRefreshMenuItem;
+    private boolean mNeedToResume = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,11 @@ public class MainActivity extends SherlockActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!mNeedToResume) {
+            mNeedToResume = true;
+            return;
+        }
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean firstRun = sharedPreferences.getBoolean(Constants.PREF_FIRST_RUN, true);
@@ -113,6 +119,7 @@ public class MainActivity extends SherlockActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_CANCELED) return;
+        mNeedToResume = false;
         switch (requestCode) {
             case REQUEST_PICK_WEBCAM:
                 String publicId = data.getData().getAuthority();

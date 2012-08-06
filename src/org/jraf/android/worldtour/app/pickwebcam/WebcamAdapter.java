@@ -96,6 +96,10 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             btnShowOnMap.setTag(R.id.name, name);
             btnShowOnMap.setOnClickListener(mShowOnMapOnClickListener);
         }
+
+        View btnPreview = ViewHolder.get(view, R.id.btnPreview);
+        btnPreview.setTag(id);
+        btnPreview.setOnClickListener(mPreviewOnClickListener);
     }
 
     private String getLocalTime(Context context, String timeZone) {
@@ -150,6 +154,14 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             String coordinates = (String) v.getTag(R.id.coordinates);
             String label = (String) v.getTag(R.id.name);
             mWebcamCallbacks.showOnMap(coordinates, label);
+        }
+    };
+
+    private final OnClickListener mPreviewOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Long id = (Long) v.getTag();
+            mWebcamCallbacks.showPreview(id);
         }
     };
 }

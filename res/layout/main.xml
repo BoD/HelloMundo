@@ -90,7 +90,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#888" />
         </LinearLayout> <!-- android:layout_marginTop="4dp" -->
     </LinearLayout>
 

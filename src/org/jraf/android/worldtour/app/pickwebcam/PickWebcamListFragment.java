@@ -140,11 +140,12 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
 
     /*
-     * Exclude from random
+     * WebcamCallbacks implementation.
      */
 
     @Override
     public void setExcludedFromRandom(final long id, final boolean excluded) {
+        if (Config.LOGD) Log.d(TAG, "setExcludedFromRandom id=" + id + " excluded=" + excluded);
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -165,12 +166,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public void showOnMap(String coordinates, String label) {
-        // Inverse longitude for geo url
-        /*        if (coordinates.contains(",-")) {
-                    coordinates = coordinates.replace(",-", ",");
-                } else {
-                    coordinates = coordinates.replace(",", ",-");
-                }*/
+        if (Config.LOGD) Log.d(TAG, "showOnMap coordinates=" + coordinates + " label=" + label);
         String uri;
         try {
             uri = "geo:" + coordinates + "?z=5&q=" + coordinates + "(" + URLEncoder.encode(label, "utf-8") + ")";
@@ -179,5 +175,11 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         }
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void showPreview(long id) {
+        if (Config.LOGD) Log.d(TAG, "showPreview id=" + id);
+        new PreviewDialogFragment().show(getFragmentManager(), "dialog");
     }
 }

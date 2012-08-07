@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Dialog.Preview" parent="@android:Theme.Holo.Panel">
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+</resources>

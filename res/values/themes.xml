@@ -6,4 +6,8 @@
         <item name="@android:panelFullBackground">@drawable/menu_background_fill_parent_width</item>
     </style>
 
+    <style name="Theme.Dialog.Preview" parent="@android:Theme.Panel">
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
 </resources>

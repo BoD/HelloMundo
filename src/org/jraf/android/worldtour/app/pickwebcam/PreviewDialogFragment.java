@@ -11,21 +11,50 @@
  */
 package org.jraf.android.worldtour.app.pickwebcam;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import android.content.ContentUris;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.HttpUtil;
+import org.jraf.android.util.HttpUtil.Options;
+import org.jraf.android.util.IoUtil;
+import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.provider.WebcamColumns;
 
 public class PreviewDialogFragment extends DialogFragment {
+    private static final String TAG = Constants.TAG + PreviewDialogFragment.class.getSimpleName();
+
+    private long mWebcamId;
+
     public PreviewDialogFragment() {}
+
+    public static PreviewDialogFragment newInstance(Long webcamId) {
+        PreviewDialogFragment res = new PreviewDialogFragment();
+        Bundle args = new Bundle(1);
+        args.putLong("webcamId", webcamId);
+        res.setArguments(args);
+        return res;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_FRAME, R.style.Theme_Dialog_Preview);
+        mWebcamId = getArguments().getLong("webcamId");
     }
 
     @Override
@@ -36,4 +65,54 @@ public class PreviewDialogFragment extends DialogFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
+                Uri uri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, mWebcamId);
+                Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+                String url = null;
+                String httpReferer = null;
+                try {
+                    if (cursor == null || !cursor.moveToFirst()) {
+                        Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + mWebcamId);
+                        return null;
+                    }
+                    url = cursor.getString(0);
+                    httpReferer = cursor.getString(1);
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+                Options options = new Options();
+                options.referer = httpReferer;
+                InputStream inputStream;
+                try {
+                    inputStream = HttpUtil.getAsStream(url);
+                } catch (IOException e) {
+                    Log.w(TAG, "onHandleIntent Could not download webcam with webcamId=" + mWebcamId, e);
+                    return null;
+                }
+
+                try {
+                    return BitmapFactory.decodeStream(inputStream);
+                } finally {
+                    IoUtil.close(inputStream);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap result) {
+                if (!isAdded()) return;
+                getView().findViewById(R.id.pgbLoading).setVisibility(View.GONE);
+                if (result == null) {
+                    //TODO: toast with error message, close popup 
+                }
+                ((ImageView) getView().findViewById(R.id.imgPreview)).setImageBitmap(result);
+                getView().findViewById(R.id.imgPreviewFrame).setVisibility(View.VISIBLE);
+            }
+        }.execute();
+    }
 }

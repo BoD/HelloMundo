@@ -41,6 +41,7 @@ public class WorldTourService extends IntentService {
         if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //TODO: user _id instead of public_id (so user defined cams work)
         String webcamId = sharedPreferences.getString(Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID, Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT);
         if (Constants.WEBCAM_PUBLIC_ID_RANDOM.equals(webcamId)) {
             webcamId = getRandomWebcamId();

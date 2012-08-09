@@ -75,7 +75,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     }
 
     private View getHeaderView(ListView listView) {
-        View res = getActivity().getLayoutInflater().inflate(R.layout.cell_webcam, listView, false);
+        View res = getActivity().getLayoutInflater().inflate(R.layout.pick_webcam_item, listView, false);
         LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
         imgThumbnail.setImageResource(R.drawable.ic_random_thumbnail);
         imgThumbnail.setLoadingBackground(0);

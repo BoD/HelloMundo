@@ -36,7 +36,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final HashMap<String, String> mLocalTimeCache = new HashMap<String, String>(50);
 
     public WebcamAdapter(Context context, WebcamCallbacks webcamCallbacks) {
-        super(context, R.layout.cell_webcam, null, false);
+        super(context, R.layout.pick_webcam_item, null, false);
         mExtendedHeight = context.getResources().getDimensionPixelSize(R.dimen.cell_webcam_extended_height);
         mWebcamCallbacks = webcamCallbacks;
     }

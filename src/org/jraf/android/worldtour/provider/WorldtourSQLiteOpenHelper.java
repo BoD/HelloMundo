@@ -11,7 +11,7 @@ import org.jraf.android.worldtour.Constants;
 public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = Constants.TAG + WorldtourSQLiteOpenHelper.class.getSimpleName();
 
-    public static final String DATABASE_NAME = "worldtour";
+    public static final String DATABASE_NAME = "worldtour.db";
     private static final int DATABASE_VERSION = 1;
 
     // @formatter:off

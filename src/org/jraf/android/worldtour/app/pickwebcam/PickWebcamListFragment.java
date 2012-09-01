@@ -90,17 +90,15 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         if (Config.LOGD) Log.d(TAG, "onListItemClick position=" + position + " id=" + id);
-        String publicId;
+        long res;
         if (position == 0) {
             // Random webcam
-            publicId = Constants.WEBCAM_PUBLIC_ID_RANDOM;
+            res = Constants.WEBCAM_ID_RANDOM;
         } else {
-            Cursor cursor = mAdapter.getCursor();
-            cursor.moveToPosition(position - 1);
-            publicId = cursor.getString(6);
+            res = id;
         }
-        if (Config.LOGD) Log.d(TAG, "onListItemClick publicId=" + publicId);
-        getActivity().setResult(Activity.RESULT_OK, new Intent().setData(new Uri.Builder().authority(publicId).build()));
+        if (Config.LOGD) Log.d(TAG, "onListItemClick res=" + res);
+        getActivity().setResult(Activity.RESULT_OK, new Intent().setData(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, res)));
         getActivity().finish();
     }
 

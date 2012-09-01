@@ -3,5 +3,5 @@
 	"providerClassName": "WorldtourProvider",
 	"sqliteHelperClassName": "WorldtourSQLiteOpenHelper",
 	"authority": "org.jraf.android.worldtour.provider",
-	"databaseName": "worldtour",
+	"databaseName": "worldtour.db",
 }

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,6 +15,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -122,9 +124,9 @@ public class MainActivity extends SherlockActivity {
         mNeedToResume = false;
         switch (requestCode) {
             case REQUEST_PICK_WEBCAM:
-                String publicId = data.getData().getAuthority();
-                if (Config.LOGD) Log.d(TAG, "onActivityResult publicId=" + publicId);
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putString(Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID, publicId).commit();
+                long selectedWebcamId = ContentUris.parseId(data.getData());
+                if (Config.LOGD) Log.d(TAG, "onActivityResult selectedWebcamId=" + selectedWebcamId);
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, selectedWebcamId).commit();
                 updateWebcamRandom();
                 startService(new Intent(this, WorldTourService.class));
                 break;
@@ -224,7 +226,11 @@ public class MainActivity extends SherlockActivity {
                     if (isChecked) {
                         long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
                                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));
+
+                        // Set the alarm
                         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
+
+                        // Update the wallpaper now
                         startService(new Intent(MainActivity.this, WorldTourService.class));
                     } else {
                         alarmManager.cancel(pendingIntent);
@@ -241,8 +247,8 @@ public class MainActivity extends SherlockActivity {
 
     private void updateWebcamRandom() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String selectedPublicId = preferences.getString(Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID, Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT);
-        if (Constants.WEBCAM_PUBLIC_ID_RANDOM.equals(selectedPublicId)) {
+        long selectedWebcamId = preferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+        if (selectedWebcamId == Constants.WEBCAM_ID_RANDOM) {
             findViewById(R.id.imgWebcamInfo_random).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.imgWebcamInfo_random).setVisibility(View.GONE);
@@ -251,25 +257,26 @@ public class MainActivity extends SherlockActivity {
 
     private void updateWebcamName() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final String currentPublicId = preferences.getString(Constants.PREF_CURRENT_WEBCAM_PUBLIC_ID, Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT);
+        final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
         new SimpleAsyncTask() {
             private String mName;
             private String mLocation;
             private String mTimeZone;
+            private String mPublicId;
 
             @Override
             protected void background() throws Exception {
-                String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE };
-                String selection = WebcamColumns.PUBLIC_ID + "=?";
-                String[] selectionArgs = { currentPublicId };
-                Cursor cursor = getContentResolver().query(WebcamColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+                String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID };
+                Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
+                Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
                 try {
                     if (cursor == null || !cursor.moveToFirst()) {
-                        throw new Exception("Could not find webcam with webcamId=" + currentPublicId);
+                        throw new Exception("Could not find webcam with id=" + currentWebcamId);
                     }
                     mName = cursor.getString(0);
                     mLocation = cursor.getString(1);
                     mTimeZone = cursor.getString(2);
+                    mPublicId = cursor.getString(3);
                 } finally {
                     if (cursor != null) cursor.close();
                 }
@@ -280,7 +287,7 @@ public class MainActivity extends SherlockActivity {
                 if (!ok) return;
                 ((TextView) findViewById(R.id.txtWebcamInfo_name)).setText(mName);
                 String location = mLocation;
-                boolean specialCam = Constants.SPECIAL_CAMS.contains(currentPublicId);
+                boolean specialCam = Constants.SPECIAL_CAMS.contains(mPublicId);
                 if (!specialCam) {
                     location += " - " + DateTimeUtil.getCurrentTimeForTimezone(MainActivity.this, mTimeZone);
                 }

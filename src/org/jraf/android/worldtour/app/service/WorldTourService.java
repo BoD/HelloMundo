@@ -10,10 +10,12 @@ import java.util.Random;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -41,21 +43,25 @@ public class WorldTourService extends IntentService {
         if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //TODO: user _id instead of public_id (so user defined cams work)
-        String webcamId = sharedPreferences.getString(Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID, Constants.PREF_SELECTED_WEBCAM_PUBLIC_ID_DEFAULT);
-        if (Constants.WEBCAM_PUBLIC_ID_RANDOM.equals(webcamId)) {
-            webcamId = getRandomWebcamId();
+        long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+        if (webcamId == Constants.WEBCAM_ID_RANDOM) {
+            Long randomWebcamId = getRandomWebcamId();
+            if (randomWebcamId == null) {
+                Log.w(TAG, "onHandleIntent Could not get random webcam id");
+                sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+                return;
+            }
+            webcamId = randomWebcamId;
             if (Config.LOGD) Log.d(TAG, "onHandleIntent Random cam: " + webcamId);
         }
 
-        sharedPreferences.edit().putString(Constants.PREF_CURRENT_WEBCAM_PUBLIC_ID, webcamId).commit();
+        sharedPreferences.edit().putLong(Constants.PREF_CURRENT_WEBCAM_ID, webcamId).commit();
 
         sendBroadcast(new Intent(ACTION_UPDATE_START));
 
         String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
-        String selection = WebcamColumns.PUBLIC_ID + "=?";
-        String[] selectionArgs = { webcamId };
-        Cursor cursor = getContentResolver().query(WebcamColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
+        Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
         String url = null;
         String httpReferer = null;
         try {
@@ -121,8 +127,8 @@ public class WorldTourService extends IntentService {
         sendBroadcast(new Intent(ACTION_UPDATE_END_SUCCESS));
     }
 
-    private String getRandomWebcamId() {
-        String[] projection = { WebcamColumns.PUBLIC_ID };
+    private Long getRandomWebcamId() {
+        String[] projection = { WebcamColumns._ID };
         String selection = WebcamColumns.EXCLUDE_RANDOM + " is null or " + WebcamColumns.EXCLUDE_RANDOM + "=0";
         Cursor cursor = getContentResolver().query(WebcamColumns.CONTENT_URI, projection, selection, null, null);
         try {
@@ -133,7 +139,7 @@ public class WorldTourService extends IntentService {
             int count = cursor.getCount();
             int randomIndex = new Random().nextInt(count);
             cursor.moveToPosition(randomIndex);
-            return cursor.getString(0);
+            return cursor.getLong(0);
         } finally {
             if (cursor != null) cursor.close();
         }

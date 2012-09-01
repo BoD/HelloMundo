@@ -50,9 +50,16 @@
         <service android:name="org.jraf.android.worldtour.app.service.WorldTourService" />
 
         <!-- Boot receiver -->
-        <receiver android:name="org.jraf.android.worldtour.WorldtourBroadcastReceiver" >
+        <receiver android:name="org.jraf.android.worldtour.app.receiver.BootCompletedBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        
+        <!-- Wallpaper changed receiver -->
+        <receiver android:name="org.jraf.android.worldtour.app.receiver.WallpaperChangedBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.WALLPAPER_CHANGED" />
             </intent-filter>
         </receiver>
     </application>

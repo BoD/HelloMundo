@@ -48,6 +48,10 @@ public class Constants {
     public static final String PREF_UPDATE_INTERVAL = "PREF_UPDATE_INTERVAL";
     public static final String PREF_UPDATE_INTERVAL_DEFAULT = String.valueOf(INTERVAL_30_MINUTES);
 
+    public static final String PREF_WALLPAPER_CHANGED_INTERNAL = "PREF_WALLPAPER_CHANGED_INTERNAL";
+    public static final boolean PREF_WALLPAPER_CHANGED_INTERNAL_DEFAULT = false;
+
+
     public static final String FILE_IMAGE = "image";
 
     static {

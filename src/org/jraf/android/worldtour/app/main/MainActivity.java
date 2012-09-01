@@ -55,17 +55,15 @@ public class MainActivity extends SherlockActivity {
     private boolean mBroadcastReceiverRegistered;
     private boolean mLoading;
     private MenuItem mRefreshMenuItem;
-    private boolean mNeedToResume = true;
+    private boolean mNeedToUpdateWebcamInfo = true;
+
+    private Switch mSwiOnOff;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Switch swiOnOff = (Switch) findViewById(R.id.swiOnOff);
-        boolean enabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
-                Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
-        swiOnOff.setChecked(enabled);
-        swiOnOff.setOnCheckedChangeListener(mOnOffOnCheckedChangeListener);
+        mSwiOnOff = (Switch) findViewById(R.id.swiOnOff);
     }
 
     @Override
@@ -84,8 +82,14 @@ public class MainActivity extends SherlockActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!mNeedToResume) {
-            mNeedToResume = true;
+        boolean enabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
+                Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
+        mSwiOnOff.setOnCheckedChangeListener(null);
+        mSwiOnOff.setChecked(enabled);
+        mSwiOnOff.setOnCheckedChangeListener(mOnOffOnCheckedChangeListener);
+
+        if (!mNeedToUpdateWebcamInfo) {
+            mNeedToUpdateWebcamInfo = true;
             return;
         }
 
@@ -121,7 +125,7 @@ public class MainActivity extends SherlockActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_CANCELED) return;
-        mNeedToResume = false;
+        mNeedToUpdateWebcamInfo = false;
         switch (requestCode) {
             case REQUEST_PICK_WEBCAM:
                 long selectedWebcamId = ContentUris.parseId(data.getData());

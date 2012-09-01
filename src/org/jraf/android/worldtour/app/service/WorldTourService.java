@@ -111,6 +111,9 @@ public class WorldTourService extends IntentService {
         boolean enabled = sharedPreferences.getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
         if (Config.LOGD) Log.d(TAG, "onHandleIntent enabled=" + enabled);
         if (enabled) {
+            // Update flag
+            sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, true).commit();
+
             FileInputStream imageInputStream = null;
             try {
                 imageInputStream = openFileInput(Constants.FILE_IMAGE);

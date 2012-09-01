@@ -24,8 +24,8 @@ import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 
-public class BootBroadcastReceiver extends BroadcastReceiver {
-    private static final String TAG = Constants.TAG + BootBroadcastReceiver.class.getSimpleName();
+public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
+    private static final String TAG = Constants.TAG + BootCompletedBroadcastReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {

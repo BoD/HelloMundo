@@ -48,19 +48,22 @@ public class PreferenceActivity extends SherlockPreferenceActivity {
     private void updateSummary() {
         int value = Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREF_UPDATE_INTERVAL,
                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));
-        int labelIndex = 2;
+        int labelIndex = 3;
         switch (value) {
-            case (int) Constants.INTERVAL_10_MINUTES:
+            case (int) Constants.INTERVAL_1_MINUTE:
                 labelIndex = 0;
                 break;
-            case (int) Constants.INTERVAL_20_MINUTES:
+            case (int) Constants.INTERVAL_10_MINUTES:
                 labelIndex = 1;
                 break;
-            case (int) Constants.INTERVAL_30_MINUTES:
+            case (int) Constants.INTERVAL_20_MINUTES:
                 labelIndex = 2;
                 break;
-            case (int) Constants.INTERVAL_1_HOUR:
+            case (int) Constants.INTERVAL_30_MINUTES:
                 labelIndex = 3;
+                break;
+            case (int) Constants.INTERVAL_1_HOUR:
+                labelIndex = 4;
                 break;
         }
         String[] stringArray = getResources().getStringArray(R.array.preferences_updateInterval_labels_title);

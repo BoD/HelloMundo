@@ -35,7 +35,7 @@ public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
         if (Config.LOGD) Log.d(TAG, "onReceive enabled=" + enabled);
         if (enabled) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pendingIntent = WorldTourService.getServicePendingIntent(context);
+            PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(context);
             long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREF_UPDATE_INTERVAL,
                     Constants.PREF_UPDATE_INTERVAL_DEFAULT));
 

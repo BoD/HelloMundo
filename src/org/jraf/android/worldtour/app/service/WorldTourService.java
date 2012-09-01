@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
@@ -33,6 +34,8 @@ public class WorldTourService extends IntentService {
     public static final String ACTION_UPDATE_START = PREFIX + "ACTION_UPDATE_START";
     public static final String ACTION_UPDATE_END_SUCCESS = PREFIX + "ACTION_UPDATE_END_SUCCESS";
     public static final String ACTION_UPDATE_END_FAILURE = PREFIX + "ACTION_UPDATE_END_FAILURE";
+
+    private static final String EXTRA_FROM_ALARM = "EXTRA_FROM_ALARM";
 
     public WorldTourService() {
         super("WorldTourService");
@@ -111,6 +114,23 @@ public class WorldTourService extends IntentService {
         boolean enabled = sharedPreferences.getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
         if (Config.LOGD) Log.d(TAG, "onHandleIntent enabled=" + enabled);
         if (enabled) {
+            // If this is triggered by an alarm, we first check if the current wallpaper is a live wallpaper.
+            // This would mean the current wallpaper has been manually changed by the user, and so we should disable ourself.
+            if (intent.getBooleanExtra(WorldTourService.EXTRA_FROM_ALARM, false)) {
+                if (WallpaperManager.getInstance(this).getWallpaperInfo() != null) {
+                    if (Config.LOGD) Log.d(TAG, "onHandleIntent Current wallpaper is a live wallpaper: disabling service and alarm");
+                    // Disable setting
+                    sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
+
+                    // Disable alarm
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                    PendingIntent pendingIntent = getAlarmPendingIntent(this);
+                    alarmManager.cancel(pendingIntent);
+                    sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+                    return;
+                }
+            }
+
             // Update flag
             sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, true).commit();
 
@@ -149,8 +169,10 @@ public class WorldTourService extends IntentService {
 
     }
 
-    public static PendingIntent getServicePendingIntent(Context context) {
-        return PendingIntent.getService(context, 0, new Intent(context, WorldTourService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+    public static PendingIntent getAlarmPendingIntent(Context context) {
+        Intent intent = new Intent(context, WorldTourService.class);
+        intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, true);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 

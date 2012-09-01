@@ -25,6 +25,8 @@ public class Constants {
 
     public static final long WEBCAM_ID_RANDOM = -1;
 
+
+    public static final long INTERVAL_1_MINUTE = 60 * 1000;
     public static final long INTERVAL_10_MINUTES = 10 * 60 * 1000;
     public static final long INTERVAL_20_MINUTES = 20 * 60 * 1000;
     public static final long INTERVAL_30_MINUTES = 30 * 60 * 1000;

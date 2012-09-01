@@ -38,13 +38,13 @@ public class WallpaperChangedBroadcastReceiver extends BroadcastReceiver {
             // Update flag
             sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, false).commit();
         } else {
-            if (Config.LOGD) Log.d(TAG, "onReceive Wallpaper changed by external app: disable service and alarm");
+            if (Config.LOGD) Log.d(TAG, "onReceive Wallpaper changed by external app: disabling service and alarm");
             // Disable setting
             sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
 
             // Disable alarm
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pendingIntent = WorldTourService.getServicePendingIntent(context);
+            PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(context);
             alarmManager.cancel(pendingIntent);
         }
     }

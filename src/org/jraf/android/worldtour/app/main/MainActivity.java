@@ -226,7 +226,7 @@ public class MainActivity extends SherlockActivity {
                 @Override
                 protected void postExecute(boolean ok) {
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    PendingIntent pendingIntent = WorldTourService.getServicePendingIntent(MainActivity.this);
+                    PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(MainActivity.this);
                     if (isChecked) {
                         long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
                                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));

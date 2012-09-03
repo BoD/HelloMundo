@@ -29,6 +29,11 @@ public class PreferenceActivity extends SherlockPreferenceActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         addPreferencesFromResource(R.xml.preferences);
         updateSummary();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
     }
 
@@ -41,6 +46,7 @@ public class PreferenceActivity extends SherlockPreferenceActivity {
     private final OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener = new OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            setResult(RESULT_OK);
             updateSummary();
         }
     };

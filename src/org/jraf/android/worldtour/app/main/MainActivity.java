@@ -51,6 +51,7 @@ public class MainActivity extends SherlockActivity {
     private static String TAG = Constants.TAG + MainActivity.class.getSimpleName();
 
     private static final int REQUEST_PICK_WEBCAM = 0;
+    private static final int REQUEST_SETTINGS = 1;
 
     private boolean mBroadcastReceiverRegistered;
     private boolean mLoading;
@@ -134,6 +135,11 @@ public class MainActivity extends SherlockActivity {
                 updateWebcamRandom();
                 startService(new Intent(this, WorldTourService.class));
                 break;
+
+            case REQUEST_SETTINGS:
+                // Reset the alarm because the use may have changed the frequency in the settings
+                setAlarm(mSwiOnOff.isChecked());
+                break;
         }
     }
 
@@ -170,7 +176,7 @@ public class MainActivity extends SherlockActivity {
                 return true;
 
             case R.id.menu_settings:
-                startActivity(new Intent(this, PreferenceActivity.class));
+                startActivityForResult(new Intent(this, PreferenceActivity.class), REQUEST_SETTINGS);
                 return true;
 
             case R.id.menu_refresh:
@@ -225,24 +231,28 @@ public class MainActivity extends SherlockActivity {
 
                 @Override
                 protected void postExecute(boolean ok) {
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(MainActivity.this);
-                    if (isChecked) {
-                        long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
-                                Constants.PREF_UPDATE_INTERVAL_DEFAULT));
-
-                        // Set the alarm
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
-
-                        // Update the wallpaper now
-                        startService(new Intent(MainActivity.this, WorldTourService.class));
-                    } else {
-                        alarmManager.cancel(pendingIntent);
-                    }
+                    setAlarm(isChecked);
                 }
             }.execute();
         }
     };
+
+    private void setAlarm(boolean enabled) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(MainActivity.this);
+        if (enabled) {
+            long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
+                    Constants.PREF_UPDATE_INTERVAL_DEFAULT));
+
+            // Set the alarm
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
+
+            // Update the wallpaper now
+            startService(new Intent(MainActivity.this, WorldTourService.class));
+        } else {
+            alarmManager.cancel(pendingIntent);
+        }
+    }
 
 
     /*

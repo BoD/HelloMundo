@@ -19,7 +19,7 @@
     <!-- Main -->
     <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
     <string name="main_toast_wallpaperUpdated">Wallpaper updated.</string>
-    <string name="main_toast_fileSaved">Picture saved.</string>
+    <string name="main_toast_fileSaved">Picture saved to the WorldTour album.</string>
     <string name="main_dialog_noSdCard">External storage is currently not available.</string>
 
     <!-- Pick webcam -->

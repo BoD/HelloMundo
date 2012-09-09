@@ -3,6 +3,10 @@
 
     <string name="app_name">WorldTour</string>
 
+    <!-- Common -->
+    <string name="common_pleaseWait">Please wait…</string>
+    <string name="common_toast_unexpectedError">An unexpected error occured.\nPlease try again.</string>
+
     <!-- Menu -->
     <string name="menu_pick">Pick webcam</string>
     <string name="menu_refresh">Refresh wallpaper</string>
@@ -14,7 +18,9 @@
 
     <!-- Main -->
     <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
-    <string name="main_toast_wallpaperUpdated">Wallpaper updated</string>
+    <string name="main_toast_wallpaperUpdated">Wallpaper updated.</string>
+    <string name="main_toast_fileSaved">Picture saved.</string>
+    <string name="main_dialog_noSdCard">External storage is currently not available.</string>
 
     <!-- Pick webcam -->
     <string name="pickWebcam_random">Random</string>

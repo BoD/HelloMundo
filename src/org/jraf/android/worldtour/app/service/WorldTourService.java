@@ -106,8 +106,7 @@ public class WorldTourService extends IntentService {
             sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
             return;
         } finally {
-            IoUtil.close(inputStream);
-            IoUtil.close(outputStream);
+            IoUtil.close(inputStream, outputStream);
         }
 
         // If enabled, update the wallpaper with the contents of the file

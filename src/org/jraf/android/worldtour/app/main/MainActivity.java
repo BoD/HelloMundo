@@ -1,8 +1,11 @@
 package org.jraf.android.worldtour.app.main;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -18,8 +21,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -32,8 +38,12 @@ import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.Blocking;
 import org.jraf.android.util.DateTimeUtil;
+import org.jraf.android.util.EnvironmentUtil;
+import org.jraf.android.util.FileUtil;
 import org.jraf.android.util.IoUtil;
+import org.jraf.android.util.MediaScannerUtil;
 import org.jraf.android.util.SimpleAsyncTask;
+import org.jraf.android.util.SimpleAsyncTaskFragment;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
@@ -42,16 +52,19 @@ import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class MainActivity extends SherlockActivity {
+public class MainActivity extends SherlockFragmentActivity {
     private static String TAG = Constants.TAG + MainActivity.class.getSimpleName();
 
     private static final int REQUEST_PICK_WEBCAM = 0;
     private static final int REQUEST_SETTINGS = 1;
+
+    private static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
+    private static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
 
     private boolean mBroadcastReceiverRegistered;
     private boolean mLoading;
@@ -59,6 +72,8 @@ public class MainActivity extends SherlockActivity {
     private boolean mNeedToUpdateWebcamInfo = true;
 
     private Switch mSwiOnOff;
+
+    private final Handler mHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,6 +184,14 @@ public class MainActivity extends SherlockActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_refresh).setEnabled(!mLoading);
+        menu.findItem(R.id.menu_save).setEnabled(!mLoading);
+        menu.findItem(R.id.menu_share).setEnabled(!mLoading);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pick:
@@ -182,6 +205,10 @@ public class MainActivity extends SherlockActivity {
             case R.id.menu_refresh:
                 if (mLoading) return true;
                 startService(new Intent(this, WorldTourService.class));
+                return true;
+
+            case R.id.menu_save:
+                saveCurrentImage();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -354,5 +381,107 @@ public class MainActivity extends SherlockActivity {
         } else {
             mRefreshMenuItem.setActionView(null);
         }
+    }
+
+
+    /*
+     * Save current image.
+     */
+    private void saveCurrentImage() {
+        if (Config.LOGD) Log.d(TAG, "saveCurrentImage");
+        if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
+            getSupportFragmentManager().beginTransaction().add(AlertDialogFragment.newInstance(getString(R.string.main_dialog_noSdCard)), FRAGMENT_DIALOG)
+                    .commit();
+            return;
+        }
+
+        getSupportFragmentManager().beginTransaction().add(new SimpleAsyncTaskFragment() {
+            private boolean mTaskFinished;
+
+            @Override
+            protected void onPreExecute() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mTaskFinished) {
+                            ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+                            progressDialogFragment.show(getFragmentManager(), FRAGMENT_DIALOG);
+                        }
+                    }
+                }, 500);
+            }
+
+            @Override
+            protected void background() throws Exception {
+                // 2.1 equivalent of File path = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);
+                File picturesPath = new File(Environment.getExternalStorageDirectory(), "Pictures");
+                File path = new File(picturesPath, "WorldTour");
+                String fileName = getFileName();
+                if (fileName == null) {
+                    throw new Exception("Could not get file name");
+                }
+                File file = new File(path, fileName);
+                path.mkdirs();
+                InputStream inputStream = openFileInput(Constants.FILE_IMAGE);
+                OutputStream outputStream = new FileOutputStream(file);
+                try {
+                    IoUtil.copy(inputStream, outputStream);
+                } finally {
+                    IoUtil.close(inputStream, outputStream);
+                }
+
+                // Tell the media scanner about the new file so that it is immediately available to the user.
+                MediaScannerUtil.scanFile(MainActivity.this, new String[] { file.toString() }, null, null);
+            }
+
+            @Override
+            protected void postExecute(boolean ok) {
+                mTaskFinished = true;
+                DialogFragment dialogFragment = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
+                if (dialogFragment != null) dialogFragment.dismissAllowingStateLoss();
+                if (!ok) {
+                    Toast.makeText(MainActivity.this, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(MainActivity.this, R.string.main_toast_fileSaved, Toast.LENGTH_SHORT).show();
+            }
+        }, FRAGMENT_ASYNC_TASK).commit();
+    }
+
+
+    protected String getFileName() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+        String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID };
+        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
+        Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
+        try {
+            if (cursor == null || !cursor.moveToFirst()) {
+                Log.e(TAG, "Could not find webcam with id=" + currentWebcamId);
+                return null;
+            }
+            String name = cursor.getString(0);
+            String location = cursor.getString(1);
+            String timeZone = cursor.getString(2);
+            String publicId = cursor.getString(3);
+
+            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
+            if (!specialCam) {
+                location += " - " + DateTimeUtil.getCurrentTimeForTimezone(this, timeZone);
+            } else {
+                location += " - " + DateTimeUtil.formatTime(this, new Date());
+            }
+
+            String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
+            res += name + " - ";
+            res += location;
+            res += ".jpg";
+
+            res = FileUtil.stripBadCharsForFileName(res, "_");
+            return res;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+
     }
 }

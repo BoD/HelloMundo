@@ -20,7 +20,8 @@
     <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
     <string name="main_toast_wallpaperUpdated">Wallpaper updated.</string>
     <string name="main_toast_fileSaved">Picture saved to the WorldTour album.</string>
-    <string name="main_dialog_noSdCard">External storage is currently not available.</string>
+    <string name="main_dialog_noSdCard">The external storage is currently not available.</string>
+    <string name="main_shareText">Image of \'%1$s\', %2$s, taken on %3$s.  Spotted on WorldTour for Android.</string>
 
     <!-- Pick webcam -->
     <string name="pickWebcam_random">Random</string>

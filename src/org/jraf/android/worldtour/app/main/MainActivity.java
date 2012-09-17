@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
@@ -210,6 +211,10 @@ public class MainActivity extends SherlockFragmentActivity {
             case R.id.menu_save:
                 saveCurrentImage();
                 return true;
+
+            case R.id.menu_share:
+                shareCurrentImage();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -387,6 +392,7 @@ public class MainActivity extends SherlockFragmentActivity {
     /*
      * Save current image.
      */
+
     private void saveCurrentImage() {
         if (Config.LOGD) Log.d(TAG, "saveCurrentImage");
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
@@ -413,25 +419,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
             @Override
             protected void background() throws Exception {
-                // 2.1 equivalent of File path = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);
-                File picturesPath = new File(Environment.getExternalStorageDirectory(), "Pictures");
-                File path = new File(picturesPath, "WorldTour");
-                String fileName = getFileName();
-                if (fileName == null) {
-                    throw new Exception("Could not get file name");
-                }
-                File file = new File(path, fileName);
-                path.mkdirs();
-                InputStream inputStream = openFileInput(Constants.FILE_IMAGE);
-                OutputStream outputStream = new FileOutputStream(file);
-                try {
-                    IoUtil.copy(inputStream, outputStream);
-                } finally {
-                    IoUtil.close(inputStream, outputStream);
-                }
-
-                // Tell the media scanner about the new file so that it is immediately available to the user.
-                MediaScannerUtil.scanFile(MainActivity.this, new String[] { file.toString() }, null, null);
+                saveAndInsertImage();
             }
 
             @Override
@@ -449,7 +437,44 @@ public class MainActivity extends SherlockFragmentActivity {
     }
 
 
-    protected String getFileName() {
+    protected String getFileName(WebcamInfo currentWebcamInfo) {
+        boolean specialCam = Constants.SPECIAL_CAMS.contains(currentWebcamInfo.publicId);
+        String location = currentWebcamInfo.location;
+        if (!specialCam) {
+            location += " - " + DateTimeUtil.getCurrentTimeForTimezone(this, currentWebcamInfo.timeZone);
+        } else {
+            location += " - " + DateTimeUtil.formatTime(this, new Date());
+        }
+
+        String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
+        res += currentWebcamInfo.name + " - ";
+        res += location;
+        res += ".jpg";
+
+        res = FileUtil.stripBadCharsForFileName(res, "_");
+        return res;
+    }
+
+    private class WebcamInfo {
+        public String name;
+        public String location;
+        public String timeZone;
+        public String publicId;
+        public String uriStr;
+
+        public String getShareText() {
+            String date = DateTimeUtil.formatDate(MainActivity.this, new Date()) + ", ";
+            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
+            if (!specialCam) {
+                date += DateTimeUtil.getCurrentTimeForTimezone(MainActivity.this, timeZone);
+            } else {
+                date += DateTimeUtil.formatTime(MainActivity.this, new Date());
+            }
+            return getString(R.string.main_shareText, name, location, date);
+        }
+    }
+
+    private WebcamInfo getCurrentWebcamInfo() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
         String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID };
@@ -460,28 +485,82 @@ public class MainActivity extends SherlockFragmentActivity {
                 Log.e(TAG, "Could not find webcam with id=" + currentWebcamId);
                 return null;
             }
-            String name = cursor.getString(0);
-            String location = cursor.getString(1);
-            String timeZone = cursor.getString(2);
-            String publicId = cursor.getString(3);
-
-            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
-            if (!specialCam) {
-                location += " - " + DateTimeUtil.getCurrentTimeForTimezone(this, timeZone);
-            } else {
-                location += " - " + DateTimeUtil.formatTime(this, new Date());
-            }
-
-            String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
-            res += name + " - ";
-            res += location;
-            res += ".jpg";
-
-            res = FileUtil.stripBadCharsForFileName(res, "_");
+            WebcamInfo res = new WebcamInfo();
+            res.name = cursor.getString(0);
+            res.location = cursor.getString(1);
+            res.timeZone = cursor.getString(2);
+            res.publicId = cursor.getString(3);
             return res;
         } finally {
             if (cursor != null) cursor.close();
         }
+    }
 
+    private WebcamInfo saveAndInsertImage() throws Exception {
+        // 2.1 equivalent of File path = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);
+        File picturesPath = new File(Environment.getExternalStorageDirectory(), "Pictures");
+        File path = new File(picturesPath, "WorldTour");
+        WebcamInfo currentWebcamInfo = getCurrentWebcamInfo();
+        if (currentWebcamInfo == null) {
+            throw new Exception("Could not get current webcam info");
+        }
+        String fileName = getFileName(currentWebcamInfo);
+        File file = new File(path, fileName);
+        path.mkdirs();
+        InputStream inputStream = openFileInput(Constants.FILE_IMAGE);
+        OutputStream outputStream = new FileOutputStream(file);
+        try {
+            IoUtil.copy(inputStream, outputStream);
+        } finally {
+            IoUtil.close(inputStream, outputStream);
+        }
+
+        String uriStr = MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), currentWebcamInfo.name,
+                currentWebcamInfo.getShareText());
+        currentWebcamInfo.uriStr = uriStr;
+
+        // Tell the media scanner about the new file so that it is immediately available to the user.
+        MediaScannerUtil.scanFile(MainActivity.this, new String[] { file.toString() }, null, null);
+
+        return currentWebcamInfo;
+    }
+
+
+    /*
+     * Share current image.
+     */
+
+    private void shareCurrentImage() {
+        if (Config.LOGD) Log.d(TAG, "shareCurrentImage");
+        if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
+            getSupportFragmentManager().beginTransaction().add(AlertDialogFragment.newInstance(getString(R.string.main_dialog_noSdCard)), FRAGMENT_DIALOG)
+                    .commit();
+            return;
+        }
+        new SimpleAsyncTask() {
+            private WebcamInfo mWebcamInfo;
+
+            @Override
+            protected void background() throws Exception {
+                mWebcamInfo = saveAndInsertImage();
+            }
+
+            @Override
+            protected void postExecute(boolean ok) {
+                if (!ok) {
+                    Toast.makeText(MainActivity.this, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("image/jpeg");
+
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, mWebcamInfo.name);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText());
+                shareIntent.putExtra("sms_body", mWebcamInfo.name);
+                Uri uri = Uri.parse(mWebcamInfo.uriStr);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
+            }
+        }.execute();
     }
 }

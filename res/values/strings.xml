@@ -6,6 +6,8 @@
     <!-- Common -->
     <string name="common_pleaseWait">Please wait…</string>
     <string name="common_toast_unexpectedError">An unexpected error occured.\nPlease try again.</string>
+    <string name="common_discard">Discard</string>
+    <string name="common_done">Done</string>
 
     <!-- Menu -->
     <string name="menu_pick">Pick webcam</string>
@@ -27,6 +29,7 @@
     <string name="pickWebcam_random">Random</string>
     <string name="pickWebcam_subtitle">A different webcam every time</string>
     <string name="pickWebcam_source">Source: %1$s</string>
+    <string name="pickWebcam_previewDialog_cantPreviewToast">Could not download the picture.</string>
 
     <!-- Preferences -->
     <string name="preferences_updateInterval_title">Update frequency</string>

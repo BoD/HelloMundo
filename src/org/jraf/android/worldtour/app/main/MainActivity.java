@@ -1,3 +1,14 @@
+/*
+ * This source is part of the
+ *      _____  ___   ____
+ *  __ / / _ \/ _ | / __/___  _______ _
+ * / // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+ * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+ *                              /___/
+ * repository.
+ *
+ * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ */
 package org.jraf.android.worldtour.app.main;
 
 import java.io.File;
@@ -29,6 +40,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -73,6 +85,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private boolean mNeedToUpdateWebcamInfo = true;
 
     private Switch mSwiOnOff;
+    private ImageView mImgPreview;
 
     private final Handler mHandler = new Handler();
 
@@ -81,6 +94,8 @@ public class MainActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mSwiOnOff = (Switch) findViewById(R.id.swiOnOff);
+        mImgPreview = (ImageView) findViewById(R.id.imgPreview);
+        mImgPreview.setOnClickListener(mImgPreviewOnClickListener);
     }
 
     @Override
@@ -288,6 +303,18 @@ public class MainActivity extends SherlockFragmentActivity {
 
 
     /*
+     * Preview img.
+     */
+
+    private final OnClickListener mImgPreviewOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startActivityForResult(new Intent(MainActivity.this, PickWebcamActivity.class), REQUEST_PICK_WEBCAM);
+        }
+    };
+
+
+    /*
      * Webcam info.
      */
 
@@ -347,7 +374,7 @@ public class MainActivity extends SherlockFragmentActivity {
         if (!new File(getFilesDir(), Constants.FILE_IMAGE).exists()) {
             // The service has never been started, there is no file yet: start it now
             startService(new Intent(this, WorldTourService.class));
-            findViewById(R.id.imgPreviewFrame).setVisibility(View.INVISIBLE);
+            mImgPreview.setVisibility(View.INVISIBLE);
             return;
         }
         new AsyncTask<Void, Void, Bitmap>() {
@@ -368,7 +395,7 @@ public class MainActivity extends SherlockFragmentActivity {
             @Override
             protected void onPostExecute(Bitmap result) {
                 if (result == null) return;
-                ((ImageView) findViewById(R.id.imgPreview)).setImageBitmap(result);
+                mImgPreview.setImageBitmap(result);
                 findViewById(R.id.imgPreviewFrame).setVisibility(View.VISIBLE);
             }
         }.execute();

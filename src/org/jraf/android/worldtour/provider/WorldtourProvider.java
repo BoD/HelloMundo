@@ -1,3 +1,14 @@
+/*
+ * This source is part of the
+ *      _____  ___   ____
+ *  __ / / _ \/ _ | / __/___  _______ _
+ * / // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+ * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+ *                              /___/
+ * repository.
+ *
+ * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ */
 package org.jraf.android.worldtour.provider;
 
 import android.content.ContentProvider;
@@ -125,8 +136,8 @@ public class WorldtourProvider extends ContentProvider {
         final String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
         if (Config.LOGD_PROVIDER) Log.d(TAG, "query uri=" + uri + " selection=" + selection + " sortOrder=" + sortOrder + " groupBy=" + groupBy);
         final QueryParams queryParams = getQueryParams(uri, selection, true);
-        final Cursor res = mWorldtourSQLiteOpenHelper.getReadableDatabase().query(queryParams.tableWithJoins, projection, queryParams.whereClause, selectionArgs,
-                groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        final Cursor res = mWorldtourSQLiteOpenHelper.getReadableDatabase().query(queryParams.tableWithJoins, projection, queryParams.whereClause,
+                selectionArgs, groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }

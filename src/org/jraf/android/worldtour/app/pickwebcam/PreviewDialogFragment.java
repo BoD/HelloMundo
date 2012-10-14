@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.HttpUtil;
@@ -106,10 +107,12 @@ public class PreviewDialogFragment extends DialogFragment {
             @Override
             protected void onPostExecute(Bitmap result) {
                 if (!isAdded()) return;
-                getView().findViewById(R.id.pgbLoading).setVisibility(View.GONE);
                 if (result == null) {
-                    //TODO: toast with error message, close popup 
+                    Toast.makeText(getActivity(), R.string.pickWebcam_previewDialog_cantPreviewToast, Toast.LENGTH_SHORT).show();
+                    dismissAllowingStateLoss();
+                    return;
                 }
+                getView().findViewById(R.id.pgbLoading).setVisibility(View.GONE);
                 ((ImageView) getView().findViewById(R.id.imgPreview)).setImageBitmap(result);
                 getView().findViewById(R.id.imgPreviewFrame).setVisibility(View.VISIBLE);
             }

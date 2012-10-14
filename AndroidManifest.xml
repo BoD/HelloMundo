@@ -40,6 +40,7 @@
         <activity
             android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
             android:label="@string/menu_pick" />
+        <activity android:name="org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity" />
 
         <!-- Settings -->
         <activity
@@ -55,7 +56,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        
+
         <!-- Wallpaper changed receiver -->
         <receiver android:name="org.jraf.android.worldtour.app.receiver.WallpaperChangedBroadcastReceiver" >
             <intent-filter>

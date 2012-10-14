@@ -11,17 +11,22 @@
  */
 package org.jraf.android.worldtour.app.pickwebcam;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 public class PickWebcamActivity extends SherlockFragmentActivity {
+    private static final int REQUEST_NEW_WEBCAM = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +39,24 @@ public class PickWebcamActivity extends SherlockFragmentActivity {
         }
     }
 
+
+    /*
+     * Action bar.
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.pick_webcam, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_newWebcam:
+                startActivityForResult(new Intent(this, AddUserWebcamActivity.class), REQUEST_NEW_WEBCAM);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

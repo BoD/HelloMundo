@@ -86,6 +86,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
     private Switch mSwiOnOff;
     private ImageView mImgPreview;
+    private View mImgPreviewFrame;
 
     private final Handler mHandler = new Handler();
 
@@ -96,6 +97,7 @@ public class MainActivity extends SherlockFragmentActivity {
         mSwiOnOff = (Switch) findViewById(R.id.swiOnOff);
         mImgPreview = (ImageView) findViewById(R.id.imgPreview);
         mImgPreview.setOnClickListener(mImgPreviewOnClickListener);
+        mImgPreviewFrame = findViewById(R.id.imgPreviewFrame);
     }
 
     @Override
@@ -314,6 +316,7 @@ public class MainActivity extends SherlockFragmentActivity {
     };
 
 
+
     /*
      * Webcam info.
      */
@@ -374,7 +377,7 @@ public class MainActivity extends SherlockFragmentActivity {
         if (!new File(getFilesDir(), Constants.FILE_IMAGE).exists()) {
             // The service has never been started, there is no file yet: start it now
             startService(new Intent(this, WorldTourService.class));
-            mImgPreview.setVisibility(View.INVISIBLE);
+            mImgPreviewFrame.setVisibility(View.INVISIBLE);
             return;
         }
         new AsyncTask<Void, Void, Bitmap>() {
@@ -396,7 +399,7 @@ public class MainActivity extends SherlockFragmentActivity {
             protected void onPostExecute(Bitmap result) {
                 if (result == null) return;
                 mImgPreview.setImageBitmap(result);
-                findViewById(R.id.imgPreviewFrame).setVisibility(View.VISIBLE);
+                mImgPreviewFrame.setVisibility(View.VISIBLE);
             }
         }.execute();
     }

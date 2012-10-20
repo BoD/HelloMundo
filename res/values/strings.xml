@@ -33,7 +33,7 @@
 
     <!-- Preferences -->
     <string name="preferences_updateInterval_title">Update frequency</string>
-    <string name="preferences_dimmed_title">Dimmed wallpaper</string>
+    <string name="preferences_dimmed_title">Dim wallpaper</string>
     <string name="preferences_dimmed_summary">Make the picture dimmer, making the icons easier to see</string>
     <string name="preferences_showInfo_title">Show webcam info</string>
     <string name="preferences_showInfo_summary">Print webcam name, location and local time on wallpaper</string>

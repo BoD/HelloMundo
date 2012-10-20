@@ -3,6 +3,7 @@
 
     <style name="Theme" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="switchStyle">@style/Widget.Holo.Light.CompoundButton.Switch</item>
+        <item name="switchPreferenceStyle">@style/Preference.SwitchPreference</item>
         <item name="@android:panelFullBackground">@drawable/menu_background_fill_parent_width</item>
     </style>
 

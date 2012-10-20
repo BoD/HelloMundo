@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,12 @@ public class PreviewDialogFragment extends DialogFragment {
 
     private long mWebcamId;
 
+    private View mPgbLoading;
+    private ImageView mImgPreview;
+    private View mImgPreviewFrame;
+
+    protected Handler mHandler = new Handler();
+
     public PreviewDialogFragment() {}
 
     public static PreviewDialogFragment newInstance(Long webcamId) {
@@ -60,9 +67,11 @@ public class PreviewDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDialog().setCanceledOnTouchOutside(true);
         View view = inflater.inflate(R.layout.preview, container, false);
+        mPgbLoading = view.findViewById(R.id.pgbLoading);
+        mImgPreview = (ImageView) view.findViewById(R.id.imgPreview);
+        mImgPreviewFrame = view.findViewById(R.id.imgPreviewFrame);
         return view;
     }
 
@@ -105,16 +114,25 @@ public class PreviewDialogFragment extends DialogFragment {
             }
 
             @Override
-            protected void onPostExecute(Bitmap result) {
+            protected void onPostExecute(final Bitmap result) {
                 if (!isAdded()) return;
                 if (result == null) {
                     Toast.makeText(getActivity(), R.string.pickWebcam_previewDialog_cantPreviewToast, Toast.LENGTH_SHORT).show();
                     dismissAllowingStateLoss();
                     return;
                 }
-                getView().findViewById(R.id.pgbLoading).setVisibility(View.GONE);
-                ((ImageView) getView().findViewById(R.id.imgPreview)).setImageBitmap(result);
-                getView().findViewById(R.id.imgPreviewFrame).setVisibility(View.VISIBLE);
+                mPgbLoading.setVisibility(View.GONE);
+
+                // I'm not sure exactly why, but waiting a bit before showing the picture fixes a visual glitch
+                // with the progressbar moving to the top of the dialog for a fraction of a second before
+                // disappearing.
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mImgPreview.setImageBitmap(result);
+                        mImgPreviewFrame.setVisibility(View.VISIBLE);
+                    }
+                }, 10);
             }
         }.execute();
     }

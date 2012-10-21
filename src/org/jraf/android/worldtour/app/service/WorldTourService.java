@@ -27,6 +27,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -100,35 +104,16 @@ public class WorldTourService extends IntentService {
         } finally {
             if (cursor != null) cursor.close();
         }
-        Options options = new Options();
-        options.referer = httpReferer;
-        InputStream inputStream;
-        try {
-            inputStream = HttpUtil.getAsStream(url);
-        } catch (IOException e) {
-            Log.w(TAG, "onHandleIntent Could not download webcam with webcamId=" + webcamId, e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
-            return;
-        }
 
         // Download the wallpaper into a file
-        FileOutputStream outputStream;
-        try {
-            outputStream = openFileOutput(Constants.FILE_IMAGE, MODE_PRIVATE);
-        } catch (FileNotFoundException e) {
-            // Should never happen
-            Log.e(TAG, "Could not open a file", e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
-            return;
-        }
-        try {
-            IoUtil.copy(inputStream, outputStream);
-        } catch (IOException e) {
-            Log.w(TAG, "onHandleIntent Could not download webcam with webcamId=" + webcamId, e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
-            return;
-        } finally {
-            IoUtil.close(inputStream, outputStream);
+        boolean ok = downloadWallPaper(url, httpReferer, webcamId);
+        if (!ok) return;
+
+        // If the dimmed setting is enabled, create a dimmed version of the image
+        boolean wantDimmed = sharedPreferences.getBoolean(Constants.PREF_DIMMED, Constants.PREF_DIMMED_DEFAULT);
+        if (wantDimmed) {
+            ok = saveDimmedVersion();
+            if (!ok) return;
         }
 
         // If enabled, update the wallpaper with the contents of the file
@@ -155,9 +140,10 @@ public class WorldTourService extends IntentService {
             // Update flag
             sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, true).commit();
 
+            // Set wallpaper
             FileInputStream imageInputStream = null;
             try {
-                imageInputStream = openFileInput(Constants.FILE_IMAGE);
+                imageInputStream = openFileInput(wantDimmed ? Constants.FILE_IMAGE_DIMMED : Constants.FILE_IMAGE);
                 WallpaperManager.getInstance(this).setStream(imageInputStream);
             } catch (IOException e) {
                 Log.w(TAG, "onHandleIntent Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
@@ -171,14 +157,101 @@ public class WorldTourService extends IntentService {
         sendBroadcast(new Intent(ACTION_UPDATE_END_SUCCESS));
     }
 
+    private boolean downloadWallPaper(String url, String httpReferer, long webcamId) {
+        if (Config.LOGD) Log.d(TAG, "downloadWallPaper url=" + url + " httpReferer=" + httpReferer + " webcamId=" + webcamId);
+        Options options = new Options();
+        options.referer = httpReferer;
+        InputStream inputStream;
+        try {
+            inputStream = HttpUtil.getAsStream(url);
+        } catch (IOException e) {
+            Log.w(TAG, "downloadWallPaper Could not download webcam with webcamId=" + webcamId, e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        }
+
+        FileOutputStream outputStream;
+        try {
+            outputStream = openFileOutput(Constants.FILE_IMAGE, MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            // Should never happen
+            Log.e(TAG, "downloadWallPaper Could not open a file", e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        }
+        try {
+            IoUtil.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            Log.w(TAG, "downloadWallPaper Could not download webcam with webcamId=" + webcamId, e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        } finally {
+            IoUtil.close(inputStream, outputStream);
+        }
+        return true;
+    }
+
+    private boolean saveDimmedVersion() {
+        if (Config.LOGD) Log.d(TAG, "saveDimmedVersion");
+        Bitmap bitmap;
+        FileInputStream input = null;
+        try {
+            input = openFileInput(Constants.FILE_IMAGE);
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (FileNotFoundException e) {
+            Log.w(TAG, "saveDimmedVersion Could not read saved image", e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        } finally {
+            IoUtil.close(input);
+        }
+
+        if (bitmap == null) {
+            Log.w(TAG, "saveDimmedVersion Could not decode saved image as a bitmap");
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        }
+
+        // Make a mutable version of the bitmap
+        Bitmap.Config config = bitmap.getConfig();
+        if (config == null) {
+            // Fix for gif images
+            config = Bitmap.Config.ARGB_8888;
+        }
+        bitmap = bitmap.copy(config, true);
+
+        // Draw a 70% gray color layer on top of the bitmap
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(0x4D000000);
+
+        // Now save the bitmap to a file
+        FileOutputStream outputStream;
+        try {
+            outputStream = openFileOutput(Constants.FILE_IMAGE_DIMMED, MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            // Should never happen
+            Log.e(TAG, "saveDimmedVersion Could not open a file", e);
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        }
+        boolean ok = bitmap.compress(CompressFormat.JPEG, 90, outputStream);
+        IoUtil.close(outputStream);
+        if (!ok) {
+            Log.w(TAG, "saveDimmedVersion Could not encode dimmed image");
+            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            return false;
+        }
+        return true;
+    }
+
     private void refreshDatabaseFromNetworkIfNeeded(SharedPreferences sharedPreferences) {
         long lastDatabaseUpdate = sharedPreferences.getLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, 0);
         if (System.currentTimeMillis() - lastDatabaseUpdate > THREE_DAYS) {
-            if (Config.LOGD) Log.d(TAG, "updateDatabaseIfNeeded Last update was more than 3 days ago: refreshing database from network");
+            if (Config.LOGD) Log.d(TAG, "refreshDatabaseFromNetworkIfNeeded Last update was more than 3 days ago: refreshing database from network");
             try {
                 WebcamManager.get().refreshDatabaseFromNetwork(this);
             } catch (IOException e) {
-                Log.w(TAG, "updateDatabaseIfNeeded Could not refresh database from network.  Will try next time.", e);
+                Log.w(TAG, "refreshDatabaseFromNetworkIfNeeded Could not refresh database from network.  Will try next time.", e);
             }
         }
     }

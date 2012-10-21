@@ -34,7 +34,7 @@ public class Constants {
 
     public static final HashSet<String> SPECIAL_CAMS = new HashSet<String>(4);
 
-    public static final String PREF_FIRST_RUN = "KEY_FIRST_RUN";
+    public static final String PREF_FIRST_RUN = "PREF_FIRST_RUN";
 
     public static final String PREF_AUTO_UPDATE_WALLPAPER = "PREF_AUTO_UPDATE_WALLPAPER";
     public static final boolean PREF_AUTO_UPDATE_WALLPAPER_DEFAULT = false;
@@ -55,7 +55,12 @@ public class Constants {
 
     public static final String PREF_DATABASE_LAST_DOWNLOAD = "PREF_DATABASE_LAST_DOWNLOAD";
 
+    public static final String PREF_DIMMED = "PREF_DIMMED";
+    public static final boolean PREF_DIMMED_DEFAULT = false;
+
+
     public static final String FILE_IMAGE = "image";
+    public static final String FILE_IMAGE_DIMMED = "image_dimmed";
 
     static {
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_EARTH_AMERICA);

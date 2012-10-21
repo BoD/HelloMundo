@@ -36,6 +36,7 @@ import org.jraf.android.util.HttpUtil.Options;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 public class WorldTourService extends IntentService {
@@ -48,6 +49,8 @@ public class WorldTourService extends IntentService {
 
     private static final String EXTRA_FROM_ALARM = "EXTRA_FROM_ALARM";
 
+    private static final int THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
+
     public WorldTourService() {
         super("WorldTourService");
     }
@@ -56,6 +59,8 @@ public class WorldTourService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        refreshDatabaseFromNetworkIfNeeded(sharedPreferences);
 
         long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
@@ -81,6 +86,12 @@ public class WorldTourService extends IntentService {
         try {
             if (cursor == null || !cursor.moveToFirst()) {
                 Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + webcamId);
+
+                // The currently selected webcam doesn't exist.
+                // This could happen after a database refresh from network (a non-working cam has been deleted).
+                // Default to the Eiffel Tower.
+                sharedPreferences.edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT).commit();
+
                 sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
                 return;
             }
@@ -158,6 +169,18 @@ public class WorldTourService extends IntentService {
         }
 
         sendBroadcast(new Intent(ACTION_UPDATE_END_SUCCESS));
+    }
+
+    private void refreshDatabaseFromNetworkIfNeeded(SharedPreferences sharedPreferences) {
+        long lastDatabaseUpdate = sharedPreferences.getLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, 0);
+        if (System.currentTimeMillis() - lastDatabaseUpdate > THREE_DAYS) {
+            if (Config.LOGD) Log.d(TAG, "updateDatabaseIfNeeded Last update was more than 3 days ago: refreshing database from network");
+            try {
+                WebcamManager.get().refreshDatabaseFromNetwork(this);
+            } catch (IOException e) {
+                Log.w(TAG, "updateDatabaseIfNeeded Could not refresh database from network.  Will try next time.", e);
+            }
+        }
     }
 
     private Long getRandomWebcamId() {

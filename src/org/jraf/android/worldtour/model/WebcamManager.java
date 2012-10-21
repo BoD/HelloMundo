@@ -21,7 +21,9 @@ import java.util.GregorianCalendar;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -42,13 +44,10 @@ public class WebcamManager {
     private static String HTTP = "http://";
     private static String EMPTY = "-";
 
-    private static WebcamManager sWebcamManager;
+    private static final WebcamManager INSTANCE = new WebcamManager();
 
     public synchronized static WebcamManager get() {
-        if (sWebcamManager == null) {
-            sWebcamManager = new WebcamManager();
-        }
-        return sWebcamManager;
+        return INSTANCE;
     }
 
     private WebcamManager() {}
@@ -63,6 +62,8 @@ public class WebcamManager {
         } catch (IOException e) {
             Log.e(TAG, "Could not insert webcams from bundled file", e);
         }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
     }
 
     @Blocking
@@ -75,6 +76,9 @@ public class WebcamManager {
         String[] selectionArgs = { String.valueOf(WebcamType.SERVER) };
         // Now delete objects that exist locally but not remotely
         contentResolver.delete(WebcamColumns.CONTENT_URI, where, selectionArgs);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
     }
 
     private ArrayList<String> insertWebcams(InputStream inputStream, ContentResolver contentResolver) throws IOException {

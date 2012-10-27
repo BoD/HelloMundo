@@ -5,6 +5,7 @@
         <item name="switchStyle">@style/Widget.Holo.Light.CompoundButton.Switch</item>
         <item name="switchPreferenceStyle">@style/Preference.SwitchPreference</item>
         <item name="@android:panelFullBackground">@drawable/menu_background_fill_parent_width</item>
+        <item name="android:textColorSecondaryInverse">@android:color/secondary_text_light</item>
     </style>
 
     <style name="Theme.Dialog.Preview" parent="@android:Theme.Panel">

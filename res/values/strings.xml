@@ -40,4 +40,10 @@
     <string name="preferences_avoidNight_title">Avoid night</string>
     <string name="preferences_avoidNight_summary">In random mode, discard places where it\'s night time</string>
 
+    <!-- Add user webcam -->
+    <string name="addUserWebcam_edtName_hint">Name</string>
+    <string name="addUserWebcam_edtUrl_hint">Webcam url</string>
+    <string name="addUserWebcam_http">http://</string>
+    <string name="addUserWebcam_txtInfo">You can add a webcam to the list if you know its URL.\nNote: only \'photo\' (not video) cams are supported.</string>
+
 </resources>

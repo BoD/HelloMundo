@@ -28,6 +28,7 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
     private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();
 
     private View mBtnDone;
+    private EditText mEdtName;
     private EditText mEdtUrl;
 
     @Override
@@ -55,6 +56,9 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
 
         mEdtUrl = (EditText) findViewById(R.id.edtUrl);
         validators.addUrlValidator(mEdtUrl);
+
+        mEdtName = (EditText) findViewById(R.id.edtName);
+        validators.addNotEmptyValidator(mEdtName);
 
         // Show the custom action bar view and hide the normal Home icon and title.
         final ActionBar actionBar = getSupportActionBar();

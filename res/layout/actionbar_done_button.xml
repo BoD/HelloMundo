@@ -12,6 +12,7 @@
         android:layout_gravity="center"
         android:drawableLeft="@drawable/ic_action_done"
         android:drawablePadding="8dp"
+        android:duplicateParentState="true"
         android:gravity="center_vertical"
         android:paddingRight="20dp"
         android:text="@string/common_done" />

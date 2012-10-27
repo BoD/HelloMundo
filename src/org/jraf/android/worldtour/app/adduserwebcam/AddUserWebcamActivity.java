@@ -14,8 +14,11 @@ package org.jraf.android.worldtour.app.adduserwebcam;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.validation.OnValidationListener;
+import org.jraf.android.util.validation.Validators;
 import org.jraf.android.worldtour.Constants;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -24,13 +27,18 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 public class AddUserWebcamActivity extends SherlockFragmentActivity {
     private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();
 
+    private View mBtnDone;
+    private EditText mEdtUrl;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_user_webcam);
+        Validators validators = Validators.newValidators(mOnValidationListener);
 
         final View customActionBarView = getLayoutInflater().inflate(R.layout.add_user_webcam_actionbar, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(new View.OnClickListener() {
+        mBtnDone = customActionBarView.findViewById(R.id.actionbar_done);
+        mBtnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // "Done"
@@ -45,12 +53,21 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
             }
         });
 
+        mEdtUrl = (EditText) findViewById(R.id.edtUrl);
+        validators.addUrlValidator(mEdtUrl);
 
         // Show the custom action bar view and hide the normal Home icon and title.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM, ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
         actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
+        validators.validate();
     }
 
+    private final OnValidationListener mOnValidationListener = new OnValidationListener() {
+        @Override
+        public void onValidation(boolean valid) {
+            mBtnDone.setEnabled(valid);
+        }
+    };
 }

@@ -61,6 +61,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         // Add 'random' item
         ListView listView = (ListView) res.findViewById(android.R.id.list);
         setListAdapter(mAdapter);
+        mAdapter.setListView(listView);
         listView.addHeaderView(getHeaderView(listView), null, true);
 
         // Disable dividers since they are handled manually in cell layouts
@@ -181,5 +182,10 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     public void showPreview(long id) {
         if (Config.LOGD) Log.d(TAG, "showPreview id=" + id);
         PreviewDialogFragment.newInstance(id).show(getFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void delete(long id) {
+        if (Config.LOGD) Log.d(TAG, "delete id=" + id);
     }
 }

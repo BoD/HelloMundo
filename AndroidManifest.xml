@@ -40,7 +40,10 @@
         <activity
             android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
             android:label="@string/menu_pick" />
-        <activity android:name="org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity" />
+        <!-- Add user webcam -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity"
+            android:windowSoftInputMode="stateVisible" />
 
         <!-- Settings -->
         <activity

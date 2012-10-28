@@ -20,6 +20,10 @@ import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
@@ -35,11 +39,16 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final WebcamCallbacks mWebcamCallbacks;
     private final HashSet<Long> mExtendedIds = new HashSet<Long>(5);
     private final HashMap<String, String> mLocalTimeCache = new HashMap<String, String>(50);
+    private ListView mListView;
 
     public WebcamAdapter(Context context, WebcamCallbacks webcamCallbacks) {
         super(context, R.layout.pick_webcam_item, null, false);
         mExtendedHeight = context.getResources().getDimensionPixelSize(R.dimen.cell_webcam_extended_height);
         mWebcamCallbacks = webcamCallbacks;
+    }
+
+    public void setListView(ListView listView) {
+        mListView = listView;
     }
 
     @Override
@@ -57,6 +66,12 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         layExtended.setTag(id);
         View btnExtend = ViewHolder.get(view, R.id.btnExtend);
         btnExtend.setTag(layExtended);
+
+        if (cursor.getPosition() == cursor.getCount() - 1) {
+            btnExtend.setTag(R.id.lastItem, true);
+        } else {
+            btnExtend.setTag(R.id.lastItem, false);
+        }
         btnExtend.setOnClickListener(mExtendOnClickListener);
         LayoutParams layoutParams = layExtended.getLayoutParams();
         if (mExtendedIds.contains(id)) {
@@ -113,16 +128,27 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         btnExcludeFromRandom.setTag(id);
         btnExcludeFromRandom.setOnClickListener(mExcludeFromRandomOnClickListener);
 
-        // Show on map
+        // Show on map / delete
         View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);
-        String coordinates = cursor.getString(8);
-        if (coordinates == null) {
-            btnShowOnMap.setEnabled(false);
+        ImageView imgShowOnMap = (ImageView) ViewHolder.get(view, R.id.imgShowOnMap);
+        TextView txtShowOnMap = (TextView) ViewHolder.get(view, R.id.txtShowOnMap);
+        if (isUserWebcam) {
+            imgShowOnMap.setImageResource(R.drawable.ic_ext_delete);
+            txtShowOnMap.setText(R.string.pickWebcam_delete);
+            btnShowOnMap.setTag(id);
+            btnShowOnMap.setOnClickListener(mDeleteOnClickListener);
         } else {
-            btnShowOnMap.setEnabled(true);
-            btnShowOnMap.setTag(R.id.coordinates, coordinates);
-            btnShowOnMap.setTag(R.id.name, name);
-            btnShowOnMap.setOnClickListener(mShowOnMapOnClickListener);
+            imgShowOnMap.setImageResource(R.drawable.ic_ext_show_on_map);
+            txtShowOnMap.setText(R.string.pickWebcam_showOnMap);
+            String coordinates = cursor.getString(8);
+            if (coordinates == null) {
+                btnShowOnMap.setEnabled(false);
+            } else {
+                btnShowOnMap.setEnabled(true);
+                btnShowOnMap.setTag(R.id.coordinates, coordinates);
+                btnShowOnMap.setTag(R.id.name, name);
+                btnShowOnMap.setOnClickListener(mShowOnMapOnClickListener);
+            }
         }
 
         View btnPreview = ViewHolder.get(view, R.id.btnPreview);
@@ -147,11 +173,27 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             long id = (Long) layExtended.getTag();
             LayoutParams layoutParams = layExtended.getLayoutParams();
             if (layoutParams.height == 0) {
+                // Extend
                 ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, true);
                 animation.setDuration(300);
+                if ((Boolean) v.getTag(R.id.lastItem) == true) {
+                    animation.setAnimationListener(new AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation a) {}
+
+                        @Override
+                        public void onAnimationRepeat(Animation a) {}
+
+                        @Override
+                        public void onAnimationEnd(Animation a) {
+                            mListView.setSelection(getCount() - 1);
+                        }
+                    });
+                }
                 layExtended.startAnimation(animation);
                 mExtendedIds.add(id);
             } else {
+                // Collapse
                 ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, false);
                 animation.setDuration(300);
                 layExtended.startAnimation(animation);
@@ -190,6 +232,14 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         public void onClick(View v) {
             Long id = (Long) v.getTag();
             mWebcamCallbacks.showPreview(id);
+        }
+    };
+
+    private final OnClickListener mDeleteOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            long id = (Long) v.getTag();
+            mWebcamCallbacks.delete(id);
         }
     };
 }

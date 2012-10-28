@@ -103,7 +103,7 @@
                         android:layout_marginTop="-2dp"
                         android:ellipsize="marquee"
                         android:singleLine="true"
-                        android:text="Excl. from random"
+                        android:text="@string/pickWebcam_exclFromRandom"
                         android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -119,18 +119,20 @@
                     android:orientation="vertical" >
 
                     <ImageView
+                        android:id="@+id/imgShowOnMap"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:duplicateParentState="true"
                         android:src="@drawable/ic_ext_show_on_map" />
 
                     <TextView
+                        android:id="@+id/txtShowOnMap"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="-2dp"
                         android:duplicateParentState="true"
-                        android:text="Show on map"
+                        android:text="@string/pickWebcam_showOnMap"
                         android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -155,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
                         android:layout_marginTop="-2dp"
-                        android:text="Preview"
+                        android:text="@string/pickWebcam_preview"
                         android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>

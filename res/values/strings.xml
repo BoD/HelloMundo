@@ -31,6 +31,10 @@
     <string name="pickWebcam_source">Source: %1$s</string>
     <string name="pickWebcam_previewDialog_cantPreviewToast">Could not download the picture.</string>
     <string name="pickWebcam_userDefined">User defined webcam</string>
+    <string name="pickWebcam_exclFromRandom">Excl. from random</string>
+    <string name="pickWebcam_delete">Delete</string>
+    <string name="pickWebcam_showOnMap">Show on map</string>
+    <string name="pickWebcam_preview">Preview</string>
 
     <!-- Preferences -->
     <string name="preferences_updateInterval_title">Update frequency</string>

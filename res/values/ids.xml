@@ -3,5 +3,6 @@
 
     <item name="name" type="id"/>
     <item name="coordinates" type="id"/>
+    <item name="lastItem" type="id"/>
 
 </resources>

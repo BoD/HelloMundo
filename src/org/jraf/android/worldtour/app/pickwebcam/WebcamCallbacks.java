@@ -19,4 +19,6 @@ public interface WebcamCallbacks {
     void showOnMap(String coordinates, String label);
 
     void showPreview(long id);
+
+    void delete(long id);
 }

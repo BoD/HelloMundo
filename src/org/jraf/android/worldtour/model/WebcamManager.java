@@ -189,4 +189,15 @@ public class WebcamManager {
         }
         res.put(WebcamColumns.TYPE, WebcamType.SERVER);
     }
+
+    public void insertUserWebcam(Context context, String name, String url) {
+        ContentValues values = new ContentValues(12);
+        values.put(WebcamColumns.PUBLIC_ID, "user_" + System.currentTimeMillis());
+        values.put(WebcamColumns.NAME, name);
+        values.put(WebcamColumns.URL, HTTP + url);
+        values.put(WebcamColumns.ADDED_DATE, System.currentTimeMillis());
+        values.put(WebcamColumns.TYPE, WebcamType.USER);
+        ContentResolver contentResolver = context.getContentResolver();
+        contentResolver.insert(WebcamColumns.CONTENT_URI, values);
+    }
 }

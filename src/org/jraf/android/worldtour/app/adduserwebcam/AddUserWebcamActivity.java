@@ -13,18 +13,23 @@ package org.jraf.android.worldtour.app.adduserwebcam;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.SimpleAsyncTaskFragment;
 import org.jraf.android.util.validation.OnValidationListener;
 import org.jraf.android.util.validation.Validators;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.model.WebcamManager;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class AddUserWebcamActivity extends SherlockFragmentActivity {
+    protected static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
+
     private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();
 
     private View mBtnDone;
@@ -39,20 +44,10 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
 
         final View customActionBarView = getLayoutInflater().inflate(R.layout.add_user_webcam_actionbar, null);
         mBtnDone = customActionBarView.findViewById(R.id.actionbar_done);
-        mBtnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // "Done"
-                finish(); // TODO: don't just finish()!
-            }
-        });
-        customActionBarView.findViewById(R.id.actionbar_discard).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // "Discard"
-                finish(); // TODO: don't just finish()!
-            }
-        });
+        mBtnDone.setOnClickListener(mDoneOnClickListener);
+
+        View btnDiscard = customActionBarView.findViewById(R.id.actionbar_discard);
+        btnDiscard.setOnClickListener(mDiscardOnClickListener);
 
         mEdtUrl = (EditText) findViewById(R.id.edtUrl);
         validators.addUrlValidator(mEdtUrl);
@@ -72,6 +67,30 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
         @Override
         public void onValidation(boolean valid) {
             mBtnDone.setEnabled(valid);
+        }
+    };
+
+    private final OnClickListener mDoneOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getSupportFragmentManager().beginTransaction().add(new SimpleAsyncTaskFragment() {
+                @Override
+                protected void background() throws Exception {
+                    WebcamManager.get().insertUserWebcam(AddUserWebcamActivity.this, mEdtName.getText().toString().trim(), mEdtUrl.getText().toString().trim());
+                }
+
+                @Override
+                protected void postExecute(boolean ok) {
+                    finish();
+                }
+            }, FRAGMENT_ASYNC_TASK).commit();
+        }
+    };
+
+    private final OnClickListener mDiscardOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
         }
     };
 }

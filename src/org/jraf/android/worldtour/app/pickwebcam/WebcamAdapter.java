@@ -28,6 +28,7 @@ import org.jraf.android.util.ViewHolder;
 import org.jraf.android.util.ui.ExtendHeightAnimation;
 import org.jraf.android.util.ui.LoadingImageView;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.provider.WebcamType;
 
 public class WebcamAdapter extends ResourceCursorAdapter {
     private final int mExtendedHeight;
@@ -49,6 +50,9 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         String name = cursor.getString(1);
         txtName.setText(name);
 
+        boolean isUserWebcam = cursor.getInt(9) == WebcamType.USER;
+
+        // Extend
         View layExtended = ViewHolder.get(view, R.id.layExtended);
         layExtended.setTag(id);
         View btnExtend = ViewHolder.get(view, R.id.btnExtend);
@@ -61,24 +65,47 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             layoutParams.height = 0;
         }
 
+        // Thumbnail
         LoadingImageView imgThumbnail = (LoadingImageView) ViewHolder.get(view, R.id.imgThumbnail);
-        imgThumbnail.loadBitmap(cursor.getString(2));
-
-        TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
-        String location = cursor.getString(3);
-        String publicId = cursor.getString(6);
-        boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
-        if (!specialCam) {
-            location += " - " + getLocalTime(context, cursor.getString(7));
+        if (isUserWebcam) {
+            imgThumbnail.setImageResource(R.drawable.ic_thumbnail_user_defined);
+        } else {
+            //            imgThumbnail.setImageResource(0);
+            imgThumbnail.loadBitmap(cursor.getString(2));
         }
-        txtLocationAndTime.setText(location);
 
+        // Location & time
+        TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
+        if (isUserWebcam) {
+            txtLocationAndTime.setText(R.string.pickWebcam_userDefined);
+        } else {
+            String location = cursor.getString(3);
+            String publicId = cursor.getString(6);
+            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
+            if (!specialCam) {
+                location += " - " + getLocalTime(context, cursor.getString(7));
+            }
+            txtLocationAndTime.setText(location);
+        }
+
+        // Source url
         TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
-        String sourceUrl = cursor.getString(4);
+        String sourceUrl;
+        if (isUserWebcam) {
+            sourceUrl = cursor.getString(10);
+            sourceUrl = sourceUrl.substring("http://".length());
+            int slashIdx = sourceUrl.indexOf('/');
+            if (slashIdx != -1) {
+                sourceUrl = sourceUrl.substring(0, slashIdx);
+            }
+        } else {
+            sourceUrl = cursor.getString(4);
+        }
         txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, sourceUrl));
         txtSourceUrl.setTag(sourceUrl);
         txtSourceUrl.setOnClickListener(mSourceOnClickListener);
 
+        // Exclude from random
         boolean excludedFromRandom = !cursor.isNull(5) && cursor.getInt(5) == 1;
         View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
         btnExcludeFromRandom.setSelected(excludedFromRandom);
@@ -86,6 +113,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         btnExcludeFromRandom.setTag(id);
         btnExcludeFromRandom.setOnClickListener(mExcludeFromRandomOnClickListener);
 
+        // Show on map
         View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);
         String coordinates = cursor.getString(8);
         if (coordinates == null) {

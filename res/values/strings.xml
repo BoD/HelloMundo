@@ -30,6 +30,7 @@
     <string name="pickWebcam_subtitle">A different webcam every time</string>
     <string name="pickWebcam_source">Source: %1$s</string>
     <string name="pickWebcam_previewDialog_cantPreviewToast">Could not download the picture.</string>
+    <string name="pickWebcam_userDefined">User defined webcam</string>
 
     <!-- Preferences -->
     <string name="preferences_updateInterval_title">Update frequency</string>

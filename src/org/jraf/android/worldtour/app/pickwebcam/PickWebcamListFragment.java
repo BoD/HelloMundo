@@ -187,5 +187,6 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     @Override
     public void delete(long id) {
         if (Config.LOGD) Log.d(TAG, "delete id=" + id);
+
     }
 }

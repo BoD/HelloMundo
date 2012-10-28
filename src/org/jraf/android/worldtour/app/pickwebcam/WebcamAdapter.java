@@ -85,7 +85,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         if (isUserWebcam) {
             imgThumbnail.setImageResource(R.drawable.ic_thumbnail_user_defined);
         } else {
-            //            imgThumbnail.setImageResource(0);
+            imgThumbnail.setImageResource(0);
             imgThumbnail.loadBitmap(cursor.getString(2));
         }
 

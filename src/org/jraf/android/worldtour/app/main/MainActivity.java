@@ -57,6 +57,7 @@ import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.MediaScannerUtil;
 import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.util.SimpleAsyncTaskFragment;
+import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
@@ -426,8 +427,8 @@ public class MainActivity extends SherlockFragmentActivity {
     private void saveCurrentImage() {
         if (Config.LOGD) Log.d(TAG, "saveCurrentImage");
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
-            getSupportFragmentManager().beginTransaction().add(AlertDialogFragment.newInstance(getString(R.string.main_dialog_noSdCard)), FRAGMENT_DIALOG)
-                    .commit();
+            getSupportFragmentManager().beginTransaction()
+                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), FRAGMENT_DIALOG).commit();
             return;
         }
 
@@ -563,8 +564,8 @@ public class MainActivity extends SherlockFragmentActivity {
     private void shareCurrentImage() {
         if (Config.LOGD) Log.d(TAG, "shareCurrentImage");
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
-            getSupportFragmentManager().beginTransaction().add(AlertDialogFragment.newInstance(getString(R.string.main_dialog_noSdCard)), FRAGMENT_DIALOG)
-                    .commit();
+            getSupportFragmentManager().beginTransaction()
+                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), FRAGMENT_DIALOG).commit();
             return;
         }
         new SimpleAsyncTask() {

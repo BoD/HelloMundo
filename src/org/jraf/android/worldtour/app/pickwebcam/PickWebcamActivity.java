@@ -13,15 +13,23 @@ package org.jraf.android.worldtour.app.pickwebcam;
 
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.util.dialog.AlertDialogListener;
+import org.jraf.android.worldtour.Config;
+import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity;
+import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -30,7 +38,11 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class PickWebcamActivity extends SherlockFragmentActivity implements AlertDialogListener {
+    private static final String TAG = Constants.TAG + PickWebcamActivity.class.getSimpleName();
+
     private static final int REQUEST_NEW_WEBCAM = 0;
+
+    private final Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +77,30 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) return;
+        switch (requestCode) {
+            case REQUEST_NEW_WEBCAM:
+                Toast.makeText(PickWebcamActivity.this, R.string.pickWebcam_webcamAddedToast, Toast.LENGTH_SHORT).show();
+                final PickWebcamListFragment pickWebcamListFragment = (PickWebcamListFragment) getSupportFragmentManager().findFragmentById(R.id.root);
+                // Go to the bottom of the list.
+                // We have to wait a bit to do this because the listview has to be updated (after the loader is restarted by the system)
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int position = pickWebcamListFragment.getListAdapter().getCount() - 1;
+                        if (Config.LOGD) Log.d(TAG, "position=" + position);
+                        pickWebcamListFragment.getListView().setSelection(position);
+                    }
+                }, 200);
+                break;
+
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+
+        }
+    }
 
     /*
      * Alert dialog.
@@ -77,6 +113,20 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
             @Override
             protected void background() throws Exception {
                 getContentResolver().delete(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, id), null, null);
+
+                // Check if the selected cam is the one we just deleted, if yes set the eiffel tower one
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(PickWebcamActivity.this);
+                long selectedWebcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+                if (id == selectedWebcamId) {
+                    if (Config.LOGD) Log.d(TAG, "onClickPositive User deleted currently selected webcam: reset to defaults");
+                    Editor editor = sharedPreferences.edit();
+                    editor.putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+                    editor.putLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+                    editor.commit();
+
+                    // Invoke service to download the default image now.
+                    startService(new Intent(PickWebcamActivity.this, WorldTourService.class));
+                }
             }
 
             @Override

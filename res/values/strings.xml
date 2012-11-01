@@ -39,6 +39,7 @@
     <string name="pickWebcam_preview">Preview</string>
     <string name="pickWebcam_deleteConfirmDialog_message">Are you sure you want to delete this webcam?</string>
     <string name="pickWebcam_webcamDeletedToast">Webcam deleted.</string>
+    <string name="pickWebcam_webcamAddedToast">Webcam added.</string>
 
     <!-- Preferences -->
     <string name="preferences_updateInterval_title">Update frequency</string>

@@ -77,6 +77,7 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
 
                 @Override
                 protected void postExecute(boolean ok) {
+                    setResult(RESULT_OK);
                     finish();
                 }
             }, FRAGMENT_ASYNC_TASK).commit();

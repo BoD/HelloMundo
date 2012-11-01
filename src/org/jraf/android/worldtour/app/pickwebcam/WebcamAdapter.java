@@ -14,8 +14,10 @@ package org.jraf.android.worldtour.app.pickwebcam;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -186,7 +188,11 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
                         @Override
                         public void onAnimationEnd(Animation a) {
-                            mListView.setSelection(getCount() - 1);
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+                                moveToBottomEclair();
+                            } else {
+                                moveToBottomFroyo();
+                            }
                         }
                     });
                 }
@@ -201,6 +207,15 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             }
         }
     };
+
+    private void moveToBottomEclair() {
+        mListView.setSelection(getCount() - 1);
+    }
+
+    @TargetApi(8)
+    private void moveToBottomFroyo() {
+        mListView.smoothScrollToPosition(getCount());
+    }
 
     private final OnClickListener mExcludeFromRandomOnClickListener = new OnClickListener() {
         @Override

@@ -38,6 +38,7 @@
         android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/txtHttp"
         android:hint="@string/addUserWebcam_edtUrl_hint"
+        android:imeOptions="actionDone"
         android:inputType="textUri"
         android:paddingLeft="4dp" />
 

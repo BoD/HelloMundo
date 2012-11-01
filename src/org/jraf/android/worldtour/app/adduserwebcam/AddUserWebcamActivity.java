@@ -12,10 +12,13 @@
 package org.jraf.android.worldtour.app.adduserwebcam;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.SimpleAsyncTaskFragment;
@@ -41,7 +44,7 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
         Validators validators = Validators.newValidators();
 
         final View customActionBarView = getLayoutInflater().inflate(R.layout.add_user_webcam_actionbar, null);
-        View btnDone = customActionBarView.findViewById(R.id.actionbar_done);
+        final View btnDone = customActionBarView.findViewById(R.id.actionbar_done);
         btnDone.setOnClickListener(mDoneOnClickListener);
         validators.enableWhenValid(btnDone);
 
@@ -49,6 +52,13 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
         btnDiscard.setOnClickListener(mDiscardOnClickListener);
 
         mEdtUrl = (EditText) findViewById(R.id.edtUrl);
+        mEdtUrl.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (btnDone.isEnabled()) btnDone.performClick();
+                return true;
+            }
+        });
         validators.addUrlValidator(mEdtUrl);
 
         mEdtName = (EditText) findViewById(R.id.edtName);

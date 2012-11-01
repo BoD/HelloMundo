@@ -78,7 +78,6 @@ public class MainActivity extends SherlockFragmentActivity {
     private static final int REQUEST_PICK_WEBCAM = 0;
     private static final int REQUEST_SETTINGS = 1;
 
-    private static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
     private static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
 
     private boolean mBroadcastReceiverRegistered;
@@ -438,7 +437,8 @@ public class MainActivity extends SherlockFragmentActivity {
         if (Config.LOGD) Log.d(TAG, "saveCurrentImage");
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), FRAGMENT_DIALOG).commit();
+                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), Constants.FRAGMENT_DIALOG)
+                    .commit();
             return;
         }
 
@@ -452,7 +452,7 @@ public class MainActivity extends SherlockFragmentActivity {
                     public void run() {
                         if (!mTaskFinished) {
                             ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-                            progressDialogFragment.show(getFragmentManager(), FRAGMENT_DIALOG);
+                            progressDialogFragment.show(getFragmentManager(), Constants.FRAGMENT_DIALOG);
                         }
                     }
                 }, 500);
@@ -466,7 +466,7 @@ public class MainActivity extends SherlockFragmentActivity {
             @Override
             protected void postExecute(boolean ok) {
                 mTaskFinished = true;
-                DialogFragment dialogFragment = (DialogFragment) getFragmentManager().findFragmentByTag(FRAGMENT_DIALOG);
+                DialogFragment dialogFragment = (DialogFragment) getFragmentManager().findFragmentByTag(Constants.FRAGMENT_DIALOG);
                 if (dialogFragment != null) dialogFragment.dismissAllowingStateLoss();
                 if (!ok) {
                     Toast.makeText(MainActivity.this, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
@@ -575,7 +575,8 @@ public class MainActivity extends SherlockFragmentActivity {
         if (Config.LOGD) Log.d(TAG, "shareCurrentImage");
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), FRAGMENT_DIALOG).commit();
+                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), Constants.FRAGMENT_DIALOG)
+                    .commit();
             return;
         }
         new SimpleAsyncTask() {

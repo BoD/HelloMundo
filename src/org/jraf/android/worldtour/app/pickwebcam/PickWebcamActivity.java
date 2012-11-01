@@ -11,20 +11,25 @@
  */
 package org.jraf.android.worldtour.app.pickwebcam;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.SimpleAsyncTask;
+import org.jraf.android.util.dialog.AlertDialogListener;
 import org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity;
+import org.jraf.android.worldtour.provider.WebcamColumns;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class PickWebcamActivity extends SherlockFragmentActivity {
+public class PickWebcamActivity extends SherlockFragmentActivity implements AlertDialogListener {
     private static final int REQUEST_NEW_WEBCAM = 0;
 
     @Override
@@ -59,4 +64,29 @@ public class PickWebcamActivity extends SherlockFragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    /*
+     * Alert dialog.
+     */
+
+    @Override
+    public void onClickPositive(int tag, Object payload) {
+        final long id = (Long) payload;
+        new SimpleAsyncTask() {
+            @Override
+            protected void background() throws Exception {
+                getContentResolver().delete(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, id), null, null);
+            }
+
+            @Override
+            protected void postExecute(boolean ok) {
+                if (!ok) return;
+                Toast.makeText(PickWebcamActivity.this, R.string.pickWebcam_webcamDeletedToast, Toast.LENGTH_SHORT).show();
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onClickNegative(int tag, Object payload) {}
 }

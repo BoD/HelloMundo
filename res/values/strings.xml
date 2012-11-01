@@ -9,6 +9,7 @@
     <string name="common_discard">Discard</string>
     <string name="common_done">Done</string>
     <string name="common_userDefined">User defined webcam</string>
+    <string name="common_confirmation">Confirmation</string>
 
     <!-- Menu -->
     <string name="menu_pick">Pick webcam</string>
@@ -25,6 +26,7 @@
     <string name="main_toast_fileSaved">Picture saved to the WorldTour album.</string>
     <string name="main_dialog_noSdCard">The external storage is currently not available.</string>
     <string name="main_shareText">Image of \'%1$s\', %2$s, taken on %3$s.  Spotted on WorldTour for Android.</string>
+    <string name="main_previewFrame_weight">100</string>
 
     <!-- Pick webcam -->
     <string name="pickWebcam_random">Random</string>
@@ -35,6 +37,8 @@
     <string name="pickWebcam_delete">Delete</string>
     <string name="pickWebcam_showOnMap">Show on map</string>
     <string name="pickWebcam_preview">Preview</string>
+    <string name="pickWebcam_deleteConfirmDialog_message">Are you sure you want to delete this webcam?</string>
+    <string name="pickWebcam_webcamDeletedToast">Webcam deleted.</string>
 
     <!-- Preferences -->
     <string name="preferences_updateInterval_title">Update frequency</string>

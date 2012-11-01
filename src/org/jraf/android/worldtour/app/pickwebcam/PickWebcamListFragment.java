@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.util.ui.LoadingImageView;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -187,6 +188,10 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     @Override
     public void delete(long id) {
         if (Config.LOGD) Log.d(TAG, "delete id=" + id);
+        getFragmentManager()
+                .beginTransaction()
+                .add(AlertDialogFragment.newInstance(0, R.string.common_confirmation, R.string.pickWebcam_deleteConfirmDialog_message, 0, android.R.string.yes,
+                        android.R.string.no, id), Constants.FRAGMENT_DIALOG).commit();
 
     }
 }

@@ -68,4 +68,6 @@ public class Constants {
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_SUN);
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_TRUCK);
     }
+
+    public static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
 }

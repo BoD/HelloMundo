@@ -92,7 +92,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         // Location & time
         TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
         if (isUserWebcam) {
-            txtLocationAndTime.setText(R.string.pickWebcam_userDefined);
+            txtLocationAndTime.setText(R.string.common_userDefined);
         } else {
             String location = cursor.getString(3);
             String publicId = cursor.getString(6);

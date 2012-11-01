@@ -39,5 +39,5 @@ public class WebcamColumns implements BaseColumns {
     public static final String EXCLUDE_RANDOM = "exclude_random";
     public static final String COORDINATES = "coordinates";
 
-    public static final String DEFAULT_ORDER = _ID;
+    public static final String DEFAULT_ORDER = TYPE + ',' + _ID;
 }

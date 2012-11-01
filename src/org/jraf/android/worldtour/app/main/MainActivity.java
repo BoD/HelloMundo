@@ -65,6 +65,7 @@ import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.WebcamType;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -88,6 +89,8 @@ public class MainActivity extends SherlockFragmentActivity {
     private Switch mSwiOnOff;
     private ImageView mImgPreview;
     private View mImgPreviewFrame;
+    private TextView mTxtWebcamInfoName;
+    private TextView mTxtWebcamInfoLocation;
 
     private final Handler mHandler = new Handler();
 
@@ -99,6 +102,8 @@ public class MainActivity extends SherlockFragmentActivity {
         mImgPreview = (ImageView) findViewById(R.id.imgPreview);
         mImgPreview.setOnClickListener(mImgPreviewOnClickListener);
         mImgPreviewFrame = findViewById(R.id.imgPreviewFrame);
+        mTxtWebcamInfoName = (TextView) findViewById(R.id.txtWebcamInfo_name);
+        mTxtWebcamInfoLocation = (TextView) findViewById(R.id.txtWebcamInfo_location);
     }
 
     @Override
@@ -340,10 +345,11 @@ public class MainActivity extends SherlockFragmentActivity {
             private String mLocation;
             private String mTimeZone;
             private String mPublicId;
+            private int mType;
 
             @Override
             protected void background() throws Exception {
-                String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID };
+                String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE, };
                 Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
                 Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
                 try {
@@ -354,6 +360,7 @@ public class MainActivity extends SherlockFragmentActivity {
                     mLocation = cursor.getString(1);
                     mTimeZone = cursor.getString(2);
                     mPublicId = cursor.getString(3);
+                    mType = cursor.getInt(4);
                 } finally {
                     if (cursor != null) cursor.close();
                 }
@@ -362,14 +369,17 @@ public class MainActivity extends SherlockFragmentActivity {
             @Override
             protected void postExecute(boolean ok) {
                 if (!ok) return;
-                ((TextView) findViewById(R.id.txtWebcamInfo_name)).setText(mName);
-                String location = mLocation;
-                boolean specialCam = Constants.SPECIAL_CAMS.contains(mPublicId);
-                if (!specialCam) {
-                    location += " - " + DateTimeUtil.getCurrentTimeForTimezone(MainActivity.this, mTimeZone);
+                mTxtWebcamInfoName.setText(mName);
+                if (mType == WebcamType.USER) {
+                    mTxtWebcamInfoLocation.setText(R.string.common_userDefined);
+                } else {
+                    String location = mLocation;
+                    boolean specialCam = Constants.SPECIAL_CAMS.contains(mPublicId);
+                    if (!specialCam) {
+                        location += " - " + DateTimeUtil.getCurrentTimeForTimezone(MainActivity.this, mTimeZone);
+                    }
+                    mTxtWebcamInfoLocation.setText(location);
                 }
-                ((TextView) findViewById(R.id.txtWebcamInfo_name)).setText(mName);
-                ((TextView) findViewById(R.id.txtWebcamInfo_location)).setText(location);
             }
         }.execute();
     }

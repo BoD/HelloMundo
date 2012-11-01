@@ -19,7 +19,6 @@ import android.widget.EditText;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.SimpleAsyncTaskFragment;
-import org.jraf.android.util.validation.OnValidationListener;
 import org.jraf.android.util.validation.Validators;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.model.WebcamManager;
@@ -32,7 +31,6 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
 
     private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();
 
-    private View mBtnDone;
     private EditText mEdtName;
     private EditText mEdtUrl;
 
@@ -40,11 +38,12 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_user_webcam);
-        Validators validators = Validators.newValidators(mOnValidationListener);
+        Validators validators = Validators.newValidators();
 
         final View customActionBarView = getLayoutInflater().inflate(R.layout.add_user_webcam_actionbar, null);
-        mBtnDone = customActionBarView.findViewById(R.id.actionbar_done);
-        mBtnDone.setOnClickListener(mDoneOnClickListener);
+        View btnDone = customActionBarView.findViewById(R.id.actionbar_done);
+        btnDone.setOnClickListener(mDoneOnClickListener);
+        validators.enableWhenValid(btnDone);
 
         View btnDiscard = customActionBarView.findViewById(R.id.actionbar_discard);
         btnDiscard.setOnClickListener(mDiscardOnClickListener);
@@ -63,20 +62,17 @@ public class AddUserWebcamActivity extends SherlockFragmentActivity {
         validators.validate();
     }
 
-    private final OnValidationListener mOnValidationListener = new OnValidationListener() {
-        @Override
-        public void onValidation(boolean valid) {
-            mBtnDone.setEnabled(valid);
-        }
-    };
-
     private final OnClickListener mDoneOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             getSupportFragmentManager().beginTransaction().add(new SimpleAsyncTaskFragment() {
                 @Override
                 protected void background() throws Exception {
-                    WebcamManager.get().insertUserWebcam(AddUserWebcamActivity.this, mEdtName.getText().toString().trim(), mEdtUrl.getText().toString().trim());
+                    String url = mEdtUrl.getText().toString().trim();
+                    if (url.startsWith("http://")) {
+                        url = url.substring(7);
+                    }
+                    WebcamManager.get().insertUserWebcam(AddUserWebcamActivity.this, mEdtName.getText().toString().trim(), url);
                 }
 
                 @Override

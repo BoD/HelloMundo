@@ -16,7 +16,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.Random;
+import java.util.TimeZone;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -43,6 +45,8 @@ import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
+import ca.rmen.sunrisesunset.SunriseSunset;
+
 public class WorldTourService extends IntentService {
     private static final String TAG = Constants.TAG + WorldTourService.class.getSimpleName();
 
@@ -67,8 +71,9 @@ public class WorldTourService extends IntentService {
         refreshDatabaseFromNetworkIfNeeded(sharedPreferences);
 
         long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+        boolean avoidNight = sharedPreferences.getBoolean(Constants.PREF_AVOID_NIGHT, Constants.PREF_AVOID_NIGHT_DEFAULT);
         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
-            Long randomWebcamId = getRandomWebcamId();
+            Long randomWebcamId = getRandomWebcamId(avoidNight);
             if (randomWebcamId == null) {
                 Log.w(TAG, "onHandleIntent Could not get random webcam id");
                 sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
@@ -256,8 +261,10 @@ public class WorldTourService extends IntentService {
         }
     }
 
-    private Long getRandomWebcamId() {
-        String[] projection = { WebcamColumns._ID };
+    private Long getRandomWebcamId(boolean avoidNight) {
+        if (Config.LOGD) Log.d(TAG, "getRandomWebcamId avoidNight=" + avoidNight);
+        String[] projection = { WebcamColumns._ID, WebcamColumns.COORDINATES, WebcamColumns.PUBLIC_ID, WebcamColumns.VISIBILITY_BEGIN_HOUR,
+                WebcamColumns.VISIBILITY_BEGIN_MIN, WebcamColumns.VISIBILITY_END_HOUR, WebcamColumns.VISIBILITY_END_MIN };
         String selection = WebcamColumns.EXCLUDE_RANDOM + " is null or " + WebcamColumns.EXCLUDE_RANDOM + "=0";
         Cursor cursor = getContentResolver().query(WebcamColumns.CONTENT_URI, projection, selection, null, null);
         try {
@@ -268,11 +275,46 @@ public class WorldTourService extends IntentService {
             int count = cursor.getCount();
             int randomIndex = new Random().nextInt(count);
             cursor.moveToPosition(randomIndex);
-            return cursor.getLong(0);
+            long res = cursor.getLong(0);
+            String publicId = cursor.getString(2);
+            if (Config.LOGD) Log.d(TAG, "getRandomWebcamId res=" + res + " publicId=" + publicId);
+            if (avoidNight) {
+                if (!cursor.isNull(3)) {
+                    boolean isNight = isNight(cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6));
+                    if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
+                    if (isNight) {
+                        // Recurse
+                        return getRandomWebcamId(avoidNight);
+                    }
+                } else {
+                    String coordinates = cursor.getString(1);
+                    boolean isNight = SunriseSunset.isNight(coordinates);
+                    if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
+                    if (isNight) {
+                        // Recurse
+                        return getRandomWebcamId(avoidNight);
+                    }
+                }
+            }
+            return res;
         } finally {
             if (cursor != null) cursor.close();
         }
 
+    }
+
+    private boolean isNight(int startHour, int startMinute, int endHour, int endMinute) {
+        if (Config.LOGD) Log.d(TAG, "isNight startHour=" + startHour + " startMinute=" + startMinute + " endHour=" + endHour + " endMinute=" + endMinute);
+        Calendar now = Calendar.getInstance();
+        TimeZone gmtTimeZone = TimeZone.getTimeZone("GMT");
+        Calendar start = Calendar.getInstance(gmtTimeZone);
+        start.set(Calendar.HOUR_OF_DAY, startHour);
+        start.set(Calendar.MINUTE, startMinute);
+        Calendar end = Calendar.getInstance(gmtTimeZone);
+        end.set(Calendar.HOUR_OF_DAY, endHour);
+        end.set(Calendar.MINUTE, endMinute);
+        boolean isLight = start.before(now) && now.before(end);
+        return !isLight;
     }
 
     public static PendingIntent getAlarmPendingIntent(Context context) {

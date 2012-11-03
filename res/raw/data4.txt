@@ -1,5 +1,5 @@
 #begin;;;;;;;;;;;;
-0;La Tour Eiffel;Paris, France;www.parisrama.com;87.98.182.216/is/resize/www.parisrama.com/webcam9.jpg?__width=625&__height=475;lubek.b.free.fr/thumb_0.png;2009-03-21;Europe/Paris;-;-;3:50;23:00;48.858179,2.29508
+0;La Tour Eiffel;Paris, France;www.parisrama.com;87.98.182.216/is/resize/www.parisrama.com/webcam9.jpg?__width=625&__height=475;lubek.b.free.fr/thumb_0.png;2009-03-21;Europe/Paris;-;-;7:00;23:59;48.858179,2.29508
 3;The Earth (America);The Earth;www.fourmilab.ch/cgi-bin/Earth;87.98.182.216/is/resize/www.fourmilab.ch/cgi-bin/Earth?di=752E4392361AD817BC4A37D621AB4BFCC72E3E1C66584073B872C333E997ABCBCEAD28446A2849C6F0AEC02E78C34650DCC58FC272DBE64EDFCC39A87FDF8561&__width=768&__height=576&__composite=true;lubek.b.free.fr/thumb_3.png;2009-03-23;America/Panama;-;-;-;-;-
 4;The Earth (Europe);The Earth;www.fourmilab.ch/cgi-bin/Earth;87.98.182.216/is/resize/www.fourmilab.ch/cgi-bin/Earth?di=154E23F2567AB877DC2A57B641CB2B9CA74E5E7C06382013D812A35389F7CBABAECD48240A4829A690CEA04E18A32630A9B37934842D10B8293ACF5E892973A2&__width=768&__height=576&__composite=true;lubek.b.free.fr/thumb_4.png;2009-03-23;Europe/London;-;-;-;-;-
 7;Statue of Liberty;New York City, NY, USA;earthcam.com;images.earthcam.com/ec_metros/ourcams/liberty.jpg;lubek.b.free.fr/thumb_7.png;2009-03-21;America/New_York;-;-;-;-;40.690177,-74.0457
@@ -23,7 +23,7 @@
 27;Charles Bridge;Prague, Czech Republic;www.webcams.travel;87.98.182.216/is/resize/webcam.pis.cz/Upload/videochb1.jpg?__width=640&__height=480&__lucky=true;lubek.b.free.fr/thumb_27.png;2009-05-03;Europe/Prague;-;-;-;-;50.08652,14.411134
 28;Minack Theatre;Porthcurno, Cornwall, England;www.minack.com;www.minack.com/webcams/webcam.jpg;lubek.b.free.fr/thumb_28.png;2009-05-03;Europe/London;-;600x480;-;-;50.041812,-5.650594
 29;Emmanuel College;Cambridge, England;www.emma.cam.ac.uk;131.111.133.11/axis-cgi/jpg/image.cgi?resolution=640x480;lubek.b.free.fr/thumb_29.png;2009-05-06;Europe/London;-;-;-;-;52.203507,0.123677
-30;Laundry Cam;Kitakyushu, Japan;www.wash-house.jp;210.157.199.232/SnapshotJPEG?Resolution=640x480&Quality=Clarity;lubek.b.free.fr/thumb_30.png;2009-05-23;Asia/Tokyo;-;-;-;-;33.842475,130.879333
+30;Laundry Cam;Kitakyushu, Japan;www.wash-house.jp;210.157.199.232/SnapshotJPEG?Resolution=640x480&Quality=Clarity;lubek.b.free.fr/thumb_30.png;2009-05-23;Asia/Tokyo;-;-;0:00;23:59;33.842475,130.879333
 31;Akropolis;Athens, Greece;www.hellenic-foundation.gr;62.103.68.28:86/record/current.jpg;lubek.b.free.fr/thumb_31.png;2009-05-23;Europe/Athens;-;-;-;-;37.97918,23.716647
 32;Ground Zero;New York City, NY, USA;www.earthcam.com;63.229.55.21/ec_metros/ourcams/milleniumhilton1.jpg;lubek.b.free.fr/thumb_32.png;2009-05-23;America/New_York;-;-;-;-;40.714273,-74.005537
 33;Stechelberg;Stechelberg, Switzerland;www.stechelberg.ch;www.stechelberg.ch/cam/cam.jpg;lubek.b.free.fr/thumb_33.png;2009-05-23;Europe/Zurich;-;-;-;-;46.545332,7.903011

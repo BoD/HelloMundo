@@ -137,56 +137,47 @@ public class WebcamManager {
         res.put(WebcamColumns.TIMEZONE, vals[7]);
 
         // Referer
-        if (vals.length > 8) {
-            String referer = vals[8];
-            if (!EMPTY.equals(referer)) {
-                res.put(WebcamColumns.HTTP_REFERER, HTTP + referer);
-            }
+        String referer = vals[8];
+        if (!EMPTY.equals(referer)) {
+            res.put(WebcamColumns.HTTP_REFERER, HTTP + referer);
         }
 
         // Resize
-        if (vals.length > 9) {
-            String resize = vals[9];
-            if (!EMPTY.equals(resize)) {
-                String[] resizeVals = resize.split("x");
-                int width = Integer.parseInt(resizeVals[0]);
-                int height = Integer.parseInt(resizeVals[1]);
-                res.put(WebcamColumns.RESIZE_WIDTH, width);
-                res.put(WebcamColumns.RESIZE_HEIGHT, height);
-            }
+        String resize = vals[9];
+        if (!EMPTY.equals(resize)) {
+            String[] resizeVals = resize.split("x");
+            int width = Integer.parseInt(resizeVals[0]);
+            int height = Integer.parseInt(resizeVals[1]);
+            res.put(WebcamColumns.RESIZE_WIDTH, width);
+            res.put(WebcamColumns.RESIZE_HEIGHT, height);
         }
 
         // Visibility begin
-        if (vals.length > 10) {
-            String visibilityBegin = vals[10];
-            if (!EMPTY.equals(visibilityBegin)) {
-                String[] visibilityBeginVals = visibilityBegin.split(":");
-                int beginHour = Integer.parseInt(visibilityBeginVals[0]);
-                int beginMin = Integer.parseInt(visibilityBeginVals[1]);
-                res.put(WebcamColumns.VISIBILITY_BEGIN_HOUR, beginHour);
-                res.put(WebcamColumns.VISIBILITY_BEGIN_MIN, beginMin);
-            }
+        String visibilityBegin = vals[10];
+        if (!EMPTY.equals(visibilityBegin)) {
+            String[] visibilityBeginVals = visibilityBegin.split(":");
+            int beginHour = Integer.parseInt(visibilityBeginVals[0]);
+            int beginMin = Integer.parseInt(visibilityBeginVals[1]);
+            res.put(WebcamColumns.VISIBILITY_BEGIN_HOUR, beginHour);
+            res.put(WebcamColumns.VISIBILITY_BEGIN_MIN, beginMin);
         }
 
         // Visibility end
-        if (vals.length > 11) {
-            String visibilityEnd = vals[11];
-            if (!EMPTY.equals(visibilityEnd)) {
-                String[] visibilityEndVals = visibilityEnd.split(":");
-                int endHour = Integer.parseInt(visibilityEndVals[0]);
-                int endMin = Integer.parseInt(visibilityEndVals[1]);
-                res.put(WebcamColumns.VISIBILITY_END_HOUR, endHour);
-                res.put(WebcamColumns.VISIBILITY_END_MIN, endMin);
-            }
+        String visibilityEnd = vals[11];
+        if (!EMPTY.equals(visibilityEnd)) {
+            String[] visibilityEndVals = visibilityEnd.split(":");
+            int endHour = Integer.parseInt(visibilityEndVals[0]);
+            int endMin = Integer.parseInt(visibilityEndVals[1]);
+            res.put(WebcamColumns.VISIBILITY_END_HOUR, endHour);
+            res.put(WebcamColumns.VISIBILITY_END_MIN, endMin);
         }
 
         // Coordinates
-        if (vals.length > 12) {
-            String coordinates = vals[12];
-            if (!EMPTY.equals(coordinates)) {
-                res.put(WebcamColumns.COORDINATES, coordinates);
-            }
+        String coordinates = vals[12];
+        if (!EMPTY.equals(coordinates)) {
+            res.put(WebcamColumns.COORDINATES, coordinates);
         }
+
         res.put(WebcamColumns.TYPE, WebcamType.SERVER);
     }
 

@@ -4,20 +4,20 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/txtInfo"
+        android:id="@+id/txtInfo1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/addUserWebcam_txtInfo"
+        android:text="@string/addUserWebcam_txtInfo1"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/edtName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtInfo"
+        android:layout_below="@+id/txtInfo1"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="8dp"
@@ -52,5 +52,17 @@
         android:layout_marginTop="8dp"
         android:text="@string/addUserWebcam_http"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/txtInfo2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edtUrl"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/addUserWebcam_txtInfo2"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorHint" />
 
 </RelativeLayout>

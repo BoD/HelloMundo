@@ -31,6 +31,7 @@ public class AboutActivity extends SherlockActivity {
         findViewById(R.id.btnRate).setOnClickListener(mRateOnClickListener);
         findViewById(R.id.btnOtherApps).setOnClickListener(mOtherAppsOnClickListener);
         findViewById(R.id.btnEula).setOnClickListener(mEulaOnClickListener);
+        findViewById(R.id.btnDonate).setOnClickListener(mDonateOnClickListener);
     }
 
     private final OnClickListener mShareOnClickListener = new OnClickListener() {
@@ -71,4 +72,14 @@ public class AboutActivity extends SherlockActivity {
         }
     };
 
+    private final OnClickListener mDonateOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri
+                    .parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=BoD%40JRAF%2eorg&lc=US&item_name=Donate%20to%20BoD&item_number=Donate%20to%20BoD&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest"
+                            + getPackageName()));
+            startActivity(intent);
+        }
+    };
 }

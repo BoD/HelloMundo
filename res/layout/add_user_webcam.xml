@@ -20,7 +20,7 @@
         android:layout_below="@+id/txtInfo1"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:hint="@string/addUserWebcam_edtName_hint"
         android:inputType="textCapWords" >
 
@@ -35,7 +35,6 @@
         android:layout_below="@+id/edtName"
         android:layout_marginLeft="-4dp"
         android:layout_marginRight="12dp"
-        android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/txtHttp"
         android:hint="@string/addUserWebcam_edtUrl_hint"
         android:imeOptions="actionDone"
@@ -49,7 +48,7 @@
         android:layout_alignBaseline="@+id/edtUrl"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/addUserWebcam_http"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -60,7 +59,7 @@
         android:layout_below="@+id/edtUrl"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:text="@string/addUserWebcam_txtInfo2"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorHint" />

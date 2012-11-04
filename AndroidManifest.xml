@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.jraf.android.latoureiffel"
-    android:versionCode="20000"
-    android:versionName="2.0.0" >
+    android:versionCode="0"
+    android:versionName="${versionName} ${configuration}" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -25,31 +25,6 @@
             android:name="org.jraf.android.worldtour.provider.WorldtourProvider"
             android:authorities="org.jraf.android.worldtour.provider" />
 
-        <!-- Main -->
-        <activity
-            android:name="org.jraf.android.worldtour.app.main.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <!-- Pick webcam -->
-        <activity
-            android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
-            android:label="@string/menu_pick" />
-        <!-- Add user webcam -->
-        <activity
-            android:name="org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity"
-            android:windowSoftInputMode="stateVisible" />
-
-        <!-- Settings -->
-        <activity
-            android:name="org.jraf.android.worldtour.app.preference.PreferenceActivity"
-            android:label="@string/menu_settings" />
-
         <!-- Service -->
         <service android:name="org.jraf.android.worldtour.app.service.WorldTourService" />
 
@@ -66,6 +41,37 @@
                 <action android:name="android.intent.action.WALLPAPER_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <!-- Main -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.main.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Pick webcam -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
+            android:label="@string/menu_pick" />
+
+        <!-- Add user webcam -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity"
+            android:windowSoftInputMode="stateVisible" />
+
+        <!-- Settings -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.preference.PreferenceActivity"
+            android:label="@string/menu_settings" />
+
+        <!-- About -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.about.AboutActivity"
+            android:label="@string/menu_about" />
     </application>
 
 </manifest>

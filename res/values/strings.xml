@@ -57,4 +57,16 @@
     <string name="addUserWebcam_txtInfo1">You can add a webcam to the list if you know its URL.</string>
     <string name="addUserWebcam_txtInfo2">Note: only \'photo\' (not video) cams are supported.</string>
 
+    <!-- About -->
+    <string name="about_txtInfo1"><b>BoD WorldTour</b>\nv2.00 (full)\nBuilt on ${buildDate}</string>
+    <string name="about_txtInfo2">Copyright 2012 Benoit \'BoD\' Lubek.  All Rights Reserved.</string>
+    <string name="about_email">BoD@JRAF.org</string>
+    <string name="about_web">http://JRAF.org/android</string>
+    <string name="about_btnShare">Share this app</string>
+    <string name="about_btnRate">Rate this app</string>
+    <string name="about_btnOtherApps">Other apps by BoD</string>
+    <string name="about_btnEula"><u>End user license agreement</u></string>
+    <string name="about_shareText_subject">Checkout out WorldTour!</string>
+    <string name="about_shareText_body">WorldTour for Android is a most excellent app!\nCheck it out here:\nhttp://play.google.com/store/apps/details?id=%s</string>
+
 </resources>

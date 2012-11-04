@@ -60,6 +60,7 @@ import org.jraf.android.util.SimpleAsyncTaskFragment;
 import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.about.AboutActivity;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
@@ -236,6 +237,10 @@ public class MainActivity extends SherlockFragmentActivity {
 
             case R.id.menu_share:
                 shareCurrentImage();
+                return true;
+
+            case R.id.menu_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

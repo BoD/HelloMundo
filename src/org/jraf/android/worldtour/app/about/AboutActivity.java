@@ -11,7 +11,6 @@
  */
 package org.jraf.android.worldtour.app.about;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,8 +19,10 @@ import android.view.View.OnClickListener;
 
 import org.jraf.android.latoureiffel.R;
 
+import com.actionbarsherlock.app.SherlockActivity;
 
-public class AboutActivity extends Activity {
+
+public class AboutActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +30,14 @@ public class AboutActivity extends Activity {
         findViewById(R.id.btnShare).setOnClickListener(mShareOnClickListener);
         findViewById(R.id.btnRate).setOnClickListener(mRateOnClickListener);
         findViewById(R.id.btnOtherApps).setOnClickListener(mOtherAppsOnClickListener);
-
+        findViewById(R.id.btnEula).setOnClickListener(mEulaOnClickListener);
     }
 
     private final OnClickListener mShareOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_shareText_subject));
             String shareTextBody = getString(R.string.about_shareText_body, getPackageName());
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareTextBody);
@@ -62,5 +64,11 @@ public class AboutActivity extends Activity {
         }
     };
 
+    private final OnClickListener mEulaOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(AboutActivity.this, EulaActivity.class));
+        }
+    };
 
 }

@@ -104,6 +104,9 @@ public class MainActivity extends SherlockFragmentActivity {
         mImgPreviewFrame = findViewById(R.id.imgPreviewFrame);
         mTxtWebcamInfoName = (TextView) findViewById(R.id.txtWebcamInfo_name);
         mTxtWebcamInfoLocation = (TextView) findViewById(R.id.txtWebcamInfo_location);
+
+        getSupportActionBar().setLogo(R.drawable.ic_home);
+        setTitle(null);
     }
 
     @Override

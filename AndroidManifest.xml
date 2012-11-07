@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.jraf.android.latoureiffel"
     android:versionCode="0"
-    android:versionName="${versionName} ${configuration}" >
+    android:versionName="${versionName}" >
 
     <uses-sdk
         android:minSdkVersion="7"

@@ -3,6 +3,7 @@
 
     <style name="Animation.Activity.Welcome" parent="@android:style/Animation.Activity">
         <item name="android:activityCloseExitAnimation">@anim/welcome_exit</item>
+        <item name="android:windowExitAnimation">@anim/welcome_exit</item>
     </style>
 
 </resources>

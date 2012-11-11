@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/imgShowCase"
+        android:layout_width="65dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="75dp" /> <!-- android:background="@drawable/welcome_showcase" -->
+
+    <ImageView
+        android:id="@+id/imgShowCase_hide"
+        android:layout_width="65dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="75dp"
+        android:background="@color/welcome_bg"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/imgAbove"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/welcome_bg" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/imgShowCase"
+        android:background="@color/welcome_bg" />
+
+    <ImageView
+        android:id="@+id/imgLeft"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_alignBottom="@+id/imgShowCase"
+        android:layout_alignTop="@+id/imgShowCase"
+        android:background="@color/welcome_bg" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignBottom="@+id/imgShowCase"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imgShowCase"
+        android:layout_toRightOf="@+id/imgShowCase"
+        android:background="@color/welcome_bg" />
+
+</RelativeLayout>

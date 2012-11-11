@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -64,6 +66,7 @@ import org.jraf.android.worldtour.app.about.AboutActivity;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
+import org.jraf.android.worldtour.app.welcome.WelcomeActivity;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 import org.jraf.android.worldtour.provider.WebcamType;
@@ -107,6 +110,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
         getSupportActionBar().setLogo(R.drawable.ic_home);
         setTitle(null);
+
+        showWelcome();
     }
 
     @Override
@@ -118,13 +123,11 @@ public class MainActivity extends SherlockFragmentActivity {
         intentFilter.addAction(WorldTourService.ACTION_UPDATE_END_SUCCESS);
         registerReceiver(mBroadcastReceiver, intentFilter);
         mBroadcastReceiverRegistered = true;
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         boolean enabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
                 Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
         mSwiOnOff.setOnCheckedChangeListener(null);
@@ -612,5 +615,63 @@ public class MainActivity extends SherlockFragmentActivity {
                 startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
             }
         }.execute();
+    }
+
+
+    /*
+     * Welcome screen.
+     */
+
+    private void showWelcome() {
+        // Check for need for welcome screen
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int welcomeResumeIndex = sharedPreferences.getInt(Constants.PREF_WELCOME_RESUME_INDEX, -1);
+        boolean seenWelcome = sharedPreferences.getBoolean(Constants.PREF_SEEN_WELCOME, false);
+        if (!seenWelcome || welcomeResumeIndex != -1) {
+            getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    View btnPick = findViewById(R.id.menu_pick);
+                    View swiOnOff = findViewById(R.id.swiOnOff);
+
+                    // This could be called when the views are not there yet, so we must test for null
+                    if (btnPick != null && swiOnOff != null) {
+                        // Height of status bar
+                        Rect rect = new Rect();
+                        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                        int statusBarHeight = rect.top;
+
+                        // Pick button
+                        Rect rectPick = getLocationInWindow(btnPick);
+                        rectPick.offset(0, -statusBarHeight);
+
+                        // On/off switch
+                        Rect rectSwiOnOff = getLocationInWindow(swiOnOff);
+                        rectSwiOnOff.offset(0, -statusBarHeight);
+
+                        showWelcomeScreen(rectPick, rectSwiOnOff);
+
+                        // Now get rid of this listener
+                        getWindow().getDecorView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+                }
+            });
+        }
+    }
+
+    private static Rect getLocationInWindow(View v) {
+        int[] location = new int[2];
+        v.getLocationInWindow(location);
+        int x = location[0];
+        int y = location[1];
+        int width = v.getWidth();
+        int height = v.getHeight();
+        Rect rectPick = new Rect(x, y, x + width, y + height);
+        return rectPick;
+    }
+
+    private void showWelcomeScreen(Rect rectPick, Rect rectSwiOnOff) {
+        startActivity(new Intent(this, WelcomeActivity.class).putExtra(WelcomeActivity.EXTRA_RECT_PICK, rectPick).putExtra(WelcomeActivity.EXTRA_RECT_SWITCH,
+                rectSwiOnOff));
     }
 }

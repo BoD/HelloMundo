@@ -61,6 +61,8 @@ public class Constants {
     public static final String PREF_AVOID_NIGHT = "PREF_AVOID_NIGHT";
     public static final boolean PREF_AVOID_NIGHT_DEFAULT = true;
 
+    public static final String PREF_WELCOME_RESUME_INDEX = "PREF_WELCOME_RESUME_INDEX";
+    public static final String PREF_SEEN_WELCOME = "PREF_SEEN_WELCOME";
 
     public static final String FILE_IMAGE = "image";
     public static final String FILE_IMAGE_DIMMED = "image_dimmed";

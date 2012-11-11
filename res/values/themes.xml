@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="switchStyle">@style/Widget.Holo.Light.CompoundButton.Switch</item>
@@ -10,6 +10,10 @@
 
     <style name="Theme.Dialog.Preview" parent="@android:Theme.Panel">
         <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="Theme.Welcome" parent="@android:Theme.Translucent.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/Animation.Activity.Welcome</item>
     </style>
 
 </resources>

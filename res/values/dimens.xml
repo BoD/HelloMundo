@@ -2,5 +2,10 @@
 <resources>
 
     <dimen name="cell_webcam_extended_height">84dp</dimen>
+    <dimen name="welcome_txtText_width">240dp</dimen>
+    <dimen name="welcome_imgArrowUp_width">30dp</dimen>
+    <dimen name="welcome_marginTop">4dp</dimen>
+    <dimen name="welcome_marginTop_arrowUp">10dp</dimen>
+    <dimen name="welcome_showCase_margin">6dp</dimen>
 
 </resources>

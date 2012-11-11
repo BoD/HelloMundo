@@ -77,6 +77,12 @@
         <activity
             android:name="org.jraf.android.worldtour.app.about.EulaActivity"
             android:label="@string/eula_title" />
+
+        <!-- Welcome -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.welcome.WelcomeActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Welcome" />
     </application>
 
 </manifest>

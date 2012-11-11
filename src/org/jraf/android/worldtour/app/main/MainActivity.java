@@ -245,6 +245,11 @@ public class MainActivity extends SherlockFragmentActivity {
                 shareCurrentImage();
                 return true;
 
+            case R.id.menu_help:
+                View btnPick = findViewById(R.id.menu_pick);
+                showWelcomeScreen(btnPick, mSwiOnOff);
+                return true;
+
             case R.id.menu_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
@@ -636,20 +641,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
                     // This could be called when the views are not there yet, so we must test for null
                     if (btnPick != null && swiOnOff != null) {
-                        // Height of status bar
-                        Rect rect = new Rect();
-                        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-                        int statusBarHeight = rect.top;
-
-                        // Pick button
-                        Rect rectPick = getLocationInWindow(btnPick);
-                        rectPick.offset(0, -statusBarHeight);
-
-                        // On/off switch
-                        Rect rectSwiOnOff = getLocationInWindow(swiOnOff);
-                        rectSwiOnOff.offset(0, -statusBarHeight);
-
-                        showWelcomeScreen(rectPick, rectSwiOnOff);
+                        showWelcomeScreen(btnPick, swiOnOff);
 
                         // Now get rid of this listener
                         getWindow().getDecorView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -657,6 +649,23 @@ public class MainActivity extends SherlockFragmentActivity {
                 }
             });
         }
+    }
+
+    private void showWelcomeScreen(View btnPick, View swiOnOff) {
+        // Height of status bar
+        Rect rect = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        int statusBarHeight = rect.top;
+
+        // Pick button
+        Rect rectPick = getLocationInWindow(btnPick);
+        rectPick.offset(0, -statusBarHeight);
+
+        // On/off switch
+        Rect rectSwiOnOff = getLocationInWindow(swiOnOff);
+        rectSwiOnOff.offset(0, -statusBarHeight);
+
+        showWelcomeScreen(rectPick, rectSwiOnOff);
     }
 
     private static Rect getLocationInWindow(View v) {

@@ -60,6 +60,7 @@ import org.jraf.android.util.MediaScannerUtil;
 import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.util.SimpleAsyncTaskFragment;
 import org.jraf.android.util.dialog.AlertDialogFragment;
+import org.jraf.android.util.ui.UiUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.about.AboutActivity;
@@ -652,31 +653,13 @@ public class MainActivity extends SherlockFragmentActivity {
     }
 
     private void showWelcomeScreen(View btnPick, View swiOnOff) {
-        // Height of status bar
-        Rect rect = new Rect();
-        getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-        int statusBarHeight = rect.top;
-
         // Pick button
-        Rect rectPick = getLocationInWindow(btnPick);
-        rectPick.offset(0, -statusBarHeight);
+        Rect rectPick = UiUtil.getLocationInWindow(btnPick);
 
         // On/off switch
-        Rect rectSwiOnOff = getLocationInWindow(swiOnOff);
-        rectSwiOnOff.offset(0, -statusBarHeight);
+        Rect rectSwiOnOff = UiUtil.getLocationInWindow(swiOnOff);
 
         showWelcomeScreen(rectPick, rectSwiOnOff);
-    }
-
-    private static Rect getLocationInWindow(View v) {
-        int[] location = new int[2];
-        v.getLocationInWindow(location);
-        int x = location[0];
-        int y = location[1];
-        int width = v.getWidth();
-        int height = v.getHeight();
-        Rect rectPick = new Rect(x, y, x + width, y + height);
-        return rectPick;
     }
 
     private void showWelcomeScreen(Rect rectPick, Rect rectSwiOnOff) {

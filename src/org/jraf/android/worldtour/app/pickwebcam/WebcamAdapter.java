@@ -30,9 +30,9 @@ import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.DateTimeUtil;
-import org.jraf.android.util.ViewHolder;
 import org.jraf.android.util.ui.ExtendHeightAnimation;
 import org.jraf.android.util.ui.LoadingImageView;
+import org.jraf.android.util.ui.ViewHolder;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamType;
 

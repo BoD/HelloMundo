@@ -49,9 +49,9 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pick_webcam);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (fragmentManager.findFragmentById(R.id.root) == null) {
+        if (fragmentManager.findFragmentById(R.id.conList) == null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.root, new PickWebcamListFragment());
+            transaction.add(R.id.conList, new PickWebcamListFragment());
             transaction.commit();
         }
     }
@@ -83,7 +83,7 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
         switch (requestCode) {
             case REQUEST_NEW_WEBCAM:
                 Toast.makeText(PickWebcamActivity.this, R.string.pickWebcam_webcamAddedToast, Toast.LENGTH_SHORT).show();
-                final PickWebcamListFragment pickWebcamListFragment = (PickWebcamListFragment) getSupportFragmentManager().findFragmentById(R.id.root);
+                final PickWebcamListFragment pickWebcamListFragment = (PickWebcamListFragment) getSupportFragmentManager().findFragmentById(R.id.conList);
                 // Go to the bottom of the list.
                 // We have to wait a bit to do this because the listview has to be updated (after the loader is restarted by the system)
                 mHandler.postDelayed(new Runnable() {

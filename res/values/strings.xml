@@ -11,6 +11,9 @@
     <string name="common_userDefined">User defined webcam</string>
     <string name="common_confirmation">Confirmation</string>
 
+    <!-- Global -->
+    <string name="global_ad">(Ad)</string>
+
     <!-- Menu -->
     <string name="menu_pick">Pick webcam</string>
     <string name="menu_refresh">Refresh wallpaper</string>

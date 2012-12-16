@@ -51,9 +51,9 @@ public class WorldTourService extends IntentService {
     private static final String TAG = Constants.TAG + WorldTourService.class.getSimpleName();
 
     private static final String PREFIX = WorldTourService.class.getName() + ".";
-    public static final String ACTION_UPDATE_START = PREFIX + "ACTION_UPDATE_START";
-    public static final String ACTION_UPDATE_END_SUCCESS = PREFIX + "ACTION_UPDATE_END_SUCCESS";
-    public static final String ACTION_UPDATE_END_FAILURE = PREFIX + "ACTION_UPDATE_END_FAILURE";
+    public static final String ACTION_UPDATE_WALLPAPER_START = PREFIX + "ACTION_UPDATE_WALLPAPER_START";
+    public static final String ACTION_UPDATE_WALLPAPER_END_SUCCESS = PREFIX + "ACTION_UPDATE_WALLPAPER_END_SUCCESS";
+    public static final String ACTION_UPDATE_WALLPAPER_END_FAILURE = PREFIX + "ACTION_UPDATE_WALLPAPER_END_FAILURE";
 
     private static final String EXTRA_FROM_ALARM = "EXTRA_FROM_ALARM";
 
@@ -66,6 +66,17 @@ public class WorldTourService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
+        updateWallpaper(intent);
+        updateWidgets();
+    }
+
+
+    /*
+     * Wallpaper.
+     */
+
+    private void updateWallpaper(Intent intent) {
+        if (Config.LOGD) Log.d(TAG, "updateWallpaper");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         refreshDatabaseFromNetworkIfNeeded(sharedPreferences);
@@ -76,7 +87,7 @@ public class WorldTourService extends IntentService {
             Long randomWebcamId = getRandomWebcamId(avoidNight);
             if (randomWebcamId == null) {
                 Log.w(TAG, "onHandleIntent Could not get random webcam id");
-                sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+                sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             }
             webcamId = randomWebcamId;
@@ -85,33 +96,10 @@ public class WorldTourService extends IntentService {
 
         sharedPreferences.edit().putLong(Constants.PREF_CURRENT_WEBCAM_ID, webcamId).commit();
 
-        sendBroadcast(new Intent(ACTION_UPDATE_START));
-
-        String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
-        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
-        Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
-        String url = null;
-        String httpReferer = null;
-        try {
-            if (cursor == null || !cursor.moveToFirst()) {
-                Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + webcamId);
-
-                // The currently selected webcam doesn't exist.
-                // This could happen after a database refresh from network (a non-working cam has been deleted).
-                // Default to the Eiffel Tower.
-                sharedPreferences.edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT).commit();
-
-                sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
-                return;
-            }
-            url = cursor.getString(0);
-            httpReferer = cursor.getString(1);
-        } finally {
-            if (cursor != null) cursor.close();
-        }
+        sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_START));
 
         // Download the wallpaper into a file
-        boolean ok = downloadWallPaper(url, httpReferer, webcamId);
+        boolean ok = downloadWallPaper(webcamId, sharedPreferences);
         if (!ok) return;
 
         // If the dimmed setting is enabled, create a dimmed version of the image
@@ -137,7 +125,7 @@ public class WorldTourService extends IntentService {
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                     PendingIntent pendingIntent = getAlarmPendingIntent(this);
                     alarmManager.cancel(pendingIntent);
-                    sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+                    sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                     return;
                 }
             }
@@ -152,26 +140,70 @@ public class WorldTourService extends IntentService {
                 WallpaperManager.getInstance(this).setStream(imageInputStream);
             } catch (IOException e) {
                 Log.w(TAG, "onHandleIntent Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
-                sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+                sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             } finally {
                 IoUtil.close(imageInputStream);
             }
         }
 
-        sendBroadcast(new Intent(ACTION_UPDATE_END_SUCCESS));
+        sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_SUCCESS));
     }
 
-    private boolean downloadWallPaper(String url, String httpReferer, long webcamId) {
-        if (Config.LOGD) Log.d(TAG, "downloadWallPaper url=" + url + " httpReferer=" + httpReferer + " webcamId=" + webcamId);
+
+    /*
+     * Widgets.
+     */
+
+    private void updateWidgets() {
+        if (Config.LOGD) Log.d(TAG, "updateWidgets");
+    }
+
+
+    private static class DownloadInfo {
+        public String url;
+        public String httpReferer;
+    }
+
+    private DownloadInfo getDownloadInfo(long webcamId, SharedPreferences sharedPreferences) {
+        String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
+        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
+        Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
+        DownloadInfo res = new DownloadInfo();
+        try {
+            if (cursor == null || !cursor.moveToFirst()) {
+                Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + webcamId);
+
+                // The currently selected webcam doesn't exist.
+                // This could happen after a database refresh from network (a non-working cam has been deleted).
+                // Default to the Eiffel Tower.
+                sharedPreferences.edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT).commit();
+
+                sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+                return null;
+            }
+            res.url = cursor.getString(0);
+            res.httpReferer = cursor.getString(1);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return res;
+    }
+
+    private boolean downloadWallPaper(long webcamId, SharedPreferences sharedPreferences) {
+        if (Config.LOGD) Log.d(TAG, "downloadWallPaper webcamId=" + webcamId);
+
+        DownloadInfo downloadInfo = getDownloadInfo(webcamId, sharedPreferences);
+        if (downloadInfo == null) return false;
+
         Options options = new Options();
-        options.referer = httpReferer;
+        options.referer = downloadInfo.httpReferer;
         InputStream inputStream;
         try {
-            inputStream = HttpUtil.getAsStream(url);
+            inputStream = HttpUtil.getAsStream(downloadInfo.url);
         } catch (IOException e) {
             Log.w(TAG, "downloadWallPaper Could not download webcam with webcamId=" + webcamId, e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
 
@@ -181,14 +213,14 @@ public class WorldTourService extends IntentService {
         } catch (FileNotFoundException e) {
             // Should never happen
             Log.e(TAG, "downloadWallPaper Could not open a file", e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         try {
             IoUtil.copy(inputStream, outputStream);
         } catch (IOException e) {
             Log.w(TAG, "downloadWallPaper Could not download webcam with webcamId=" + webcamId, e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
             IoUtil.close(inputStream, outputStream);
@@ -205,7 +237,7 @@ public class WorldTourService extends IntentService {
             bitmap = BitmapFactory.decodeStream(input);
         } catch (FileNotFoundException e) {
             Log.w(TAG, "saveDimmedVersion Could not read saved image", e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
             IoUtil.close(input);
@@ -213,7 +245,7 @@ public class WorldTourService extends IntentService {
 
         if (bitmap == null) {
             Log.w(TAG, "saveDimmedVersion Could not decode saved image as a bitmap");
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
 
@@ -236,14 +268,14 @@ public class WorldTourService extends IntentService {
         } catch (FileNotFoundException e) {
             // Should never happen
             Log.e(TAG, "saveDimmedVersion Could not open a file", e);
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         boolean ok = bitmap.compress(CompressFormat.JPEG, 90, outputStream);
         IoUtil.close(outputStream);
         if (!ok) {
             Log.w(TAG, "saveDimmedVersion Could not encode dimmed image");
-            sendBroadcast(new Intent(ACTION_UPDATE_END_FAILURE));
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         return true;

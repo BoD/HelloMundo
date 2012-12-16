@@ -85,4 +85,7 @@
     <string name="welcome_2_txtText">You\'re done!\nChoose \"Help\" to see this again.</string>
     <string name="welcome_next">Next</string>
 
+    <!-- App Widgets -->
+    <string name="appwidget_webcam_label">WorldTour Webcam</string>
+
 </resources>

@@ -7,5 +7,6 @@
     <dimen name="welcome_marginTop">4dp</dimen>
     <dimen name="welcome_marginTop_arrowUp">10dp</dimen>
     <dimen name="welcome_showCase_margin">6dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 
 </resources>

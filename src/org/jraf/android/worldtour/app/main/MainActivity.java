@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicReference;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -30,6 +31,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,7 +39,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
@@ -119,9 +120,9 @@ public class MainActivity extends SherlockFragmentActivity {
     protected void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WorldTourService.ACTION_UPDATE_START);
-        intentFilter.addAction(WorldTourService.ACTION_UPDATE_END_FAILURE);
-        intentFilter.addAction(WorldTourService.ACTION_UPDATE_END_SUCCESS);
+        intentFilter.addAction(WorldTourService.ACTION_UPDATE_WALLPAPER_START);
+        intentFilter.addAction(WorldTourService.ACTION_UPDATE_WALLPAPER_END_FAILURE);
+        intentFilter.addAction(WorldTourService.ACTION_UPDATE_WALLPAPER_END_SUCCESS);
         registerReceiver(mBroadcastReceiver, intentFilter);
         mBroadcastReceiverRegistered = true;
     }
@@ -268,17 +269,17 @@ public class MainActivity extends SherlockFragmentActivity {
         public void onReceive(Context context, Intent intent) {
             if (Config.LOGD) Log.d(TAG, "onReceive context=" + context + " intent=" + intent);
             String action = intent.getAction();
-            if (WorldTourService.ACTION_UPDATE_START.equals(action)) {
+            if (WorldTourService.ACTION_UPDATE_WALLPAPER_START.equals(action)) {
                 updateWebcamName();
                 setLoading(true);
-            } else if (WorldTourService.ACTION_UPDATE_END_SUCCESS.equals(action)) {
+            } else if (WorldTourService.ACTION_UPDATE_WALLPAPER_END_SUCCESS.equals(action)) {
                 setLoading(false);
                 updateWebcamImage();
                 if (PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
                         Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT)) {
                     Toast.makeText(MainActivity.this, R.string.main_toast_wallpaperUpdated, Toast.LENGTH_SHORT).show();
                 }
-            } else if (WorldTourService.ACTION_UPDATE_END_FAILURE.equals(action)) {
+            } else if (WorldTourService.ACTION_UPDATE_WALLPAPER_END_FAILURE.equals(action)) {
                 setLoading(false);
                 // TODO
             }
@@ -573,13 +574,26 @@ public class MainActivity extends SherlockFragmentActivity {
             IoUtil.close(inputStream, outputStream);
         }
 
-        String uriStr = MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), currentWebcamInfo.name,
-                currentWebcamInfo.getShareText());
-        currentWebcamInfo.uriStr = uriStr;
+        // Scan it
+        final AtomicReference<Uri> scannedImageUri = new AtomicReference<Uri>();
+        MediaScannerUtil.scanFile(this, new String[] { file.getPath() }, null, new OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String p, Uri uri) {
+                if (Config.LOGD) Log.d(TAG, "onScanCompleted path=" + p + " uri=" + uri);
+                scannedImageUri.set(uri);
+            }
+        });
 
-        // Tell the media scanner about the new file so that it is immediately available to the user.
-        MediaScannerUtil.scanFile(MainActivity.this, new String[] { file.toString() }, null, null);
-
+        // Wait until the media scanner has found our file
+        long start = System.currentTimeMillis();
+        while (scannedImageUri.get() == null) {
+            if (Config.LOGD) Log.d(TAG, "saveAndInsertImage Waiting 250ms for media scanner...");
+            SystemClock.sleep(250);
+            if (System.currentTimeMillis() - start > 5000) {
+                throw new Exception("MediaScanner did not scan the file " + file + " after 5000ms");
+            }
+        }
+        currentWebcamInfo.uriStr = scannedImageUri.get().toString();
         return currentWebcamInfo;
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.jraf.android.latoureiffel"
-    android:versionCode="0"
     android:versionName="${versionName}" >
 
     <uses-sdk
@@ -44,6 +44,19 @@
             <intent-filter>
                 <action android:name="android.intent.action.WALLPAPER_CHANGED" />
             </intent-filter>
+        </receiver>
+
+        <!-- Webcam widget -->
+        <receiver
+            android:name="org.jraf.android.worldtour.app.appwidget.WebcamAppWidgetProvider"
+            android:label="@string/appwidget_webcam_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_webcam" />
         </receiver>
 
         <!-- Main -->
@@ -92,6 +105,15 @@
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+
+        <!-- Webcam App Widget Configure -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.appwidget.WebcamConfigureActivity"
+            tools:ignore="ExportedActivity" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

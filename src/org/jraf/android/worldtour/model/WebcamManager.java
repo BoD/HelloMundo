@@ -46,7 +46,7 @@ public class WebcamManager {
 
     private static final WebcamManager INSTANCE = new WebcamManager();
 
-    public synchronized static WebcamManager get() {
+    public static WebcamManager get() {
         return INSTANCE;
     }
 

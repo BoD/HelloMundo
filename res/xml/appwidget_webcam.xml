@@ -1,0 +1,11 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="org.jraf.android.worldtour.app.appwidget.WebcamConfigureActivity"
+    android:initialKeyguardLayout="@layout/appwidget_webcam"
+    android:initialLayout="@layout/appwidget_webcam"
+    android:minHeight="110dp"
+    android:minResizeHeight="40dp"
+    android:minResizeWidth="40dp"
+    android:minWidth="110dp"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen|keyguard" />

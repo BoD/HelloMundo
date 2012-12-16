@@ -38,6 +38,9 @@ public class WorldtourProvider extends ContentProvider {
     private static final int URI_TYPE_WEBCAM = 0;
     private static final int URI_TYPE_WEBCAM_ID = 1;
 
+    private static final int URI_TYPE_APPWIDGET = 2;
+    private static final int URI_TYPE_APPWIDGET_ID = 3;
+
 
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -45,6 +48,9 @@ public class WorldtourProvider extends ContentProvider {
     static {
         URI_MATCHER.addURI(AUTHORITY, WebcamColumns.TABLE_NAME, URI_TYPE_WEBCAM);
         URI_MATCHER.addURI(AUTHORITY, WebcamColumns.TABLE_NAME + "/#", URI_TYPE_WEBCAM_ID);
+
+        URI_MATCHER.addURI(AUTHORITY, AppwidgetColumns.TABLE_NAME, URI_TYPE_APPWIDGET);
+        URI_MATCHER.addURI(AUTHORITY, AppwidgetColumns.TABLE_NAME + "/#", URI_TYPE_APPWIDGET_ID);
 
     }
 
@@ -64,6 +70,11 @@ public class WorldtourProvider extends ContentProvider {
                 return TYPE_CURSOR_DIR + WebcamColumns.TABLE_NAME;
             case URI_TYPE_WEBCAM_ID:
                 return TYPE_CURSOR_ITEM + WebcamColumns.TABLE_NAME;
+
+            case URI_TYPE_APPWIDGET:
+                return TYPE_CURSOR_DIR + AppwidgetColumns.TABLE_NAME;
+            case URI_TYPE_APPWIDGET_ID:
+                return TYPE_CURSOR_ITEM + AppwidgetColumns.TABLE_NAME;
 
         }
         return null;
@@ -160,12 +171,19 @@ public class WorldtourProvider extends ContentProvider {
                 res.orderBy = WebcamColumns.DEFAULT_ORDER;
                 break;
 
+            case URI_TYPE_APPWIDGET:
+            case URI_TYPE_APPWIDGET_ID:
+                res.table = res.tableWithJoins = AppwidgetColumns.TABLE_NAME;
+                res.orderBy = AppwidgetColumns.DEFAULT_ORDER;
+                break;
+
             default:
                 throw new IllegalArgumentException("The uri '" + uri + "' is not supported by this ContentProvider");
         }
 
         switch (matchedId) {
             case URI_TYPE_WEBCAM_ID:
+            case URI_TYPE_APPWIDGET_ID:
                 id = uri.getLastPathSegment();
         }
         if (id != null) {

@@ -1,0 +1,10 @@
+[
+	{
+		"name": "appwidget_id",
+		"type": "integer"
+	},
+	{
+		"name": "webcam_id",
+		"type": "text"
+	},
+]

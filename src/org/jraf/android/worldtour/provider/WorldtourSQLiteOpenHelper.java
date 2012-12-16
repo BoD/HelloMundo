@@ -49,6 +49,13 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
             + WebcamColumns.COORDINATES + " TEXT "
             + " );";
 
+    private static final String SQL_CREATE_TABLE_APPWIDGET = "CREATE TABLE IF NOT EXISTS "
+            + AppwidgetColumns.TABLE_NAME + " ( "
+            + AppwidgetColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + AppwidgetColumns.APPWIDGET_ID + " INTEGER, "
+            + AppwidgetColumns.WEBCAM_ID + " TEXT "
+            + " );";
+
     // @formatter:on
 
     public WorldtourSQLiteOpenHelper(Context context) {
@@ -59,6 +66,7 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         if (Config.LOGD) Log.d(TAG, "onCreate");
         db.execSQL(SQL_CREATE_TABLE_WEBCAM);
+        db.execSQL(SQL_CREATE_TABLE_APPWIDGET);
     }
 
     @Override

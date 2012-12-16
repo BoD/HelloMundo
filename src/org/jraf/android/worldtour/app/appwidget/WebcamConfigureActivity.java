@@ -13,10 +13,13 @@ package org.jraf.android.worldtour.app.appwidget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.os.Bundle;
 
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
+import org.jraf.android.worldtour.app.service.WorldTourService;
+import org.jraf.android.worldtour.model.AppwidgetManager;
 
 public class WebcamConfigureActivity extends Activity {
     private static final int REQUEST_PICK_WEBCAM = 0;
@@ -29,6 +32,7 @@ public class WebcamConfigureActivity extends Activity {
         if (extras != null) {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
+        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return;
         startActivityForResult(new Intent(this, PickWebcamActivity.class), REQUEST_PICK_WEBCAM);
     }
 
@@ -43,8 +47,13 @@ public class WebcamConfigureActivity extends Activity {
             return;
         }
 
+        long webcamId = ContentUris.parseId(data.getData());
+        AppwidgetManager.get().insertOrUpdate(this, mAppWidgetId, webcamId);
+
+        startService(new Intent(this, WorldTourService.class));
+
         setResult(RESULT_OK, resultValue);
         finish();
-
     }
+
 }

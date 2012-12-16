@@ -24,6 +24,7 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
+import android.appwidget.AppWidgetManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -36,13 +37,17 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.RemoteViews;
 
+import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.HttpUtil;
 import org.jraf.android.util.HttpUtil.Options;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamManager;
+import org.jraf.android.worldtour.provider.AppwidgetColumns;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
@@ -59,6 +64,10 @@ public class WorldTourService extends IntentService {
 
     private static final int THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
 
+    private static enum Mode {
+        WALLPAPER, APPWIDGET,
+    }
+
     public WorldTourService() {
         super("WorldTourService");
     }
@@ -66,8 +75,14 @@ public class WorldTourService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
-        updateWallpaper(intent);
-        updateWidgets();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        refreshDatabaseFromNetworkIfNeeded(sharedPreferences);
+
+        boolean avoidNight = sharedPreferences.getBoolean(Constants.PREF_AVOID_NIGHT, Constants.PREF_AVOID_NIGHT_DEFAULT);
+
+        updateWallpaper(intent, sharedPreferences, avoidNight);
+        updateWidgets(intent, sharedPreferences, avoidNight);
     }
 
 
@@ -75,23 +90,18 @@ public class WorldTourService extends IntentService {
      * Wallpaper.
      */
 
-    private void updateWallpaper(Intent intent) {
+    private void updateWallpaper(Intent intent, SharedPreferences sharedPreferences, boolean avoidNight) {
         if (Config.LOGD) Log.d(TAG, "updateWallpaper");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        refreshDatabaseFromNetworkIfNeeded(sharedPreferences);
-
         long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
-        boolean avoidNight = sharedPreferences.getBoolean(Constants.PREF_AVOID_NIGHT, Constants.PREF_AVOID_NIGHT_DEFAULT);
         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
             Long randomWebcamId = getRandomWebcamId(avoidNight);
             if (randomWebcamId == null) {
-                Log.w(TAG, "onHandleIntent Could not get random webcam id");
+                Log.w(TAG, "updateWallpaper Could not get random webcam id");
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             }
             webcamId = randomWebcamId;
-            if (Config.LOGD) Log.d(TAG, "onHandleIntent Random cam: " + webcamId);
+            if (Config.LOGD) Log.d(TAG, "updateWallpaper Random cam: " + webcamId);
         }
 
         sharedPreferences.edit().putLong(Constants.PREF_CURRENT_WEBCAM_ID, webcamId).commit();
@@ -99,7 +109,7 @@ public class WorldTourService extends IntentService {
         sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_START));
 
         // Download the wallpaper into a file
-        boolean ok = downloadWallPaper(webcamId, sharedPreferences);
+        boolean ok = downloadImage(webcamId, sharedPreferences, Mode.WALLPAPER, -1);
         if (!ok) return;
 
         // If the dimmed setting is enabled, create a dimmed version of the image
@@ -111,13 +121,13 @@ public class WorldTourService extends IntentService {
 
         // If enabled, update the wallpaper with the contents of the file
         boolean enabled = sharedPreferences.getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
-        if (Config.LOGD) Log.d(TAG, "onHandleIntent enabled=" + enabled);
+        if (Config.LOGD) Log.d(TAG, "updateWallpaper enabled=" + enabled);
         if (enabled) {
             // If this is triggered by an alarm, we first check if the current wallpaper is a live wallpaper.
             // This would mean the current wallpaper has been manually changed by the user, and so we should disable ourself.
             if (intent.getBooleanExtra(WorldTourService.EXTRA_FROM_ALARM, false)) {
                 if (WallpaperManager.getInstance(this).getWallpaperInfo() != null) {
-                    if (Config.LOGD) Log.d(TAG, "onHandleIntent Current wallpaper is a live wallpaper: disabling service and alarm");
+                    if (Config.LOGD) Log.d(TAG, "updateWallpaper Current wallpaper is a live wallpaper: disabling service and alarm");
                     // Disable setting
                     sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
 
@@ -136,10 +146,10 @@ public class WorldTourService extends IntentService {
             // Set wallpaper
             FileInputStream imageInputStream = null;
             try {
-                imageInputStream = openFileInput(wantDimmed ? Constants.FILE_IMAGE_DIMMED : Constants.FILE_IMAGE);
+                imageInputStream = openFileInput(wantDimmed ? Constants.FILE_IMAGE_WALLPAPER_DIMMED : Constants.FILE_IMAGE_WALLPAPER);
                 WallpaperManager.getInstance(this).setStream(imageInputStream);
             } catch (IOException e) {
-                Log.w(TAG, "onHandleIntent Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
+                Log.w(TAG, "updateWallpaper Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             } finally {
@@ -155,8 +165,41 @@ public class WorldTourService extends IntentService {
      * Widgets.
      */
 
-    private void updateWidgets() {
+    private void updateWidgets(Intent intent, SharedPreferences sharedPreferences, boolean avoidNight) {
         if (Config.LOGD) Log.d(TAG, "updateWidgets");
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        String[] projection = { AppwidgetColumns.APPWIDGET_ID, AppwidgetColumns.WEBCAM_ID };
+        Cursor cursor = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
+        try {
+            while (cursor.moveToNext()) {
+                int appwidgetId = cursor.getInt(0);
+                long webcamId = cursor.getLong(1);
+
+                if (Config.LOGD) Log.d(TAG, "updateWidgets appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
+
+                if (webcamId == Constants.WEBCAM_ID_RANDOM) {
+                    Long randomWebcamId = getRandomWebcamId(avoidNight);
+                    if (randomWebcamId == null) {
+                        Log.w(TAG, "updateWidgets Could not get random webcam id");
+                        continue;
+                    }
+                    webcamId = randomWebcamId;
+                    if (Config.LOGD) Log.d(TAG, "updateWidgets Random cam: " + webcamId);
+                }
+
+                // Download the wallpaper into a file
+                boolean ok = downloadImage(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                if (!ok) continue;
+
+                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
+                Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET).getPath());
+                remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);
+
+                appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
     }
 
 
@@ -165,21 +208,24 @@ public class WorldTourService extends IntentService {
         public String httpReferer;
     }
 
-    private DownloadInfo getDownloadInfo(long webcamId, SharedPreferences sharedPreferences) {
+    private DownloadInfo getDownloadInfo(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
         String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
         Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
         Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
         DownloadInfo res = new DownloadInfo();
         try {
             if (cursor == null || !cursor.moveToFirst()) {
-                Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + webcamId);
+                Log.w(TAG, "getDownloadInfo Could not find webcam with webcamId=" + webcamId);
 
                 // The currently selected webcam doesn't exist.
                 // This could happen after a database refresh from network (a non-working cam has been deleted).
                 // Default to the Eiffel Tower.
-                sharedPreferences.edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT).commit();
-
-                sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+                if (mode == Mode.WALLPAPER) {
+                    sharedPreferences.edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT).commit();
+                    sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+                } else {
+                    AppwidgetManager.get().insertOrUpdate(this, appWidgetId, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+                }
                 return null;
             }
             res.url = cursor.getString(0);
@@ -190,10 +236,10 @@ public class WorldTourService extends IntentService {
         return res;
     }
 
-    private boolean downloadWallPaper(long webcamId, SharedPreferences sharedPreferences) {
-        if (Config.LOGD) Log.d(TAG, "downloadWallPaper webcamId=" + webcamId);
+    private boolean downloadImage(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
+        if (Config.LOGD) Log.d(TAG, "downloadImage webcamId=" + webcamId);
 
-        DownloadInfo downloadInfo = getDownloadInfo(webcamId, sharedPreferences);
+        DownloadInfo downloadInfo = getDownloadInfo(webcamId, sharedPreferences, mode, appWidgetId);
         if (downloadInfo == null) return false;
 
         Options options = new Options();
@@ -202,25 +248,29 @@ public class WorldTourService extends IntentService {
         try {
             inputStream = HttpUtil.getAsStream(downloadInfo.url);
         } catch (IOException e) {
-            Log.w(TAG, "downloadWallPaper Could not download webcam with webcamId=" + webcamId, e);
-            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+            Log.w(TAG, "downloadImage Could not download webcam with webcamId=" + webcamId, e);
+            if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
 
         FileOutputStream outputStream;
         try {
-            outputStream = openFileOutput(Constants.FILE_IMAGE, MODE_PRIVATE);
+            if (mode == Mode.WALLPAPER) {
+                outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER, MODE_PRIVATE);
+            } else {
+                outputStream = openFileOutput(Constants.FILE_IMAGE_APPWIDGET, MODE_PRIVATE);
+            }
         } catch (FileNotFoundException e) {
             // Should never happen
-            Log.e(TAG, "downloadWallPaper Could not open a file", e);
-            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+            Log.e(TAG, "downloadImage Could not open a file", e);
+            if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         try {
             IoUtil.copy(inputStream, outputStream);
         } catch (IOException e) {
-            Log.w(TAG, "downloadWallPaper Could not download webcam with webcamId=" + webcamId, e);
-            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+            Log.w(TAG, "downloadImage Could not download webcam with webcamId=" + webcamId, e);
+            if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
             IoUtil.close(inputStream, outputStream);
@@ -233,7 +283,7 @@ public class WorldTourService extends IntentService {
         Bitmap bitmap;
         FileInputStream input = null;
         try {
-            input = openFileInput(Constants.FILE_IMAGE);
+            input = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
             bitmap = BitmapFactory.decodeStream(input);
         } catch (FileNotFoundException e) {
             Log.w(TAG, "saveDimmedVersion Could not read saved image", e);
@@ -264,7 +314,7 @@ public class WorldTourService extends IntentService {
         // Now save the bitmap to a file
         FileOutputStream outputStream;
         try {
-            outputStream = openFileOutput(Constants.FILE_IMAGE_DIMMED, MODE_PRIVATE);
+            outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER_DIMMED, MODE_PRIVATE);
         } catch (FileNotFoundException e) {
             // Should never happen
             Log.e(TAG, "saveDimmedVersion Could not open a file", e);

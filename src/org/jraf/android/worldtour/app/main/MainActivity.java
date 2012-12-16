@@ -402,7 +402,7 @@ public class MainActivity extends SherlockFragmentActivity {
     }
 
     private void updateWebcamImage() {
-        if (!new File(getFilesDir(), Constants.FILE_IMAGE).exists()) {
+        if (!new File(getFilesDir(), Constants.FILE_IMAGE_WALLPAPER).exists()) {
             // The service has never been started, there is no file yet: start it now
             startService(new Intent(this, WorldTourService.class));
             mImgPreviewFrame.setVisibility(View.INVISIBLE);
@@ -413,7 +413,7 @@ public class MainActivity extends SherlockFragmentActivity {
             protected Bitmap doInBackground(Void... params) {
                 InputStream inputStream = null;
                 try {
-                    inputStream = openFileInput(Constants.FILE_IMAGE);
+                    inputStream = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
                     return BitmapFactory.decodeStream(inputStream);
                 } catch (IOException e) {
                     Log.w(TAG, "Could not open image file", e);
@@ -566,7 +566,7 @@ public class MainActivity extends SherlockFragmentActivity {
         String fileName = getFileName(currentWebcamInfo);
         File file = new File(path, fileName);
         path.mkdirs();
-        InputStream inputStream = openFileInput(Constants.FILE_IMAGE);
+        InputStream inputStream = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
         OutputStream outputStream = new FileOutputStream(file);
         try {
             IoUtil.copy(inputStream, outputStream);

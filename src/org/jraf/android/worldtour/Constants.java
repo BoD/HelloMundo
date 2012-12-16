@@ -64,8 +64,9 @@ public class Constants {
     public static final String PREF_WELCOME_RESUME_INDEX = "PREF_WELCOME_RESUME_INDEX";
     public static final String PREF_SEEN_WELCOME = "PREF_SEEN_WELCOME";
 
-    public static final String FILE_IMAGE = "image";
-    public static final String FILE_IMAGE_DIMMED = "image_dimmed";
+    public static final String FILE_IMAGE_WALLPAPER = "image_wallpaper";
+    public static final String FILE_IMAGE_WALLPAPER_DIMMED = "image_wallpaper_dimmed";
+    public static final String FILE_IMAGE_APPWIDGET = "image_appwidget";
 
     static {
         SPECIAL_CAMS.add(WEBCAM_PUBLIC_ID_EARTH_AMERICA);

@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -165,38 +167,45 @@ public class WorldTourService extends IntentService {
      * Widgets.
      */
 
-    private void updateWidgets(Intent intent, SharedPreferences sharedPreferences, boolean avoidNight) {
+    private void updateWidgets(Intent intent, final SharedPreferences sharedPreferences, final boolean avoidNight) {
         if (Config.LOGD) Log.d(TAG, "updateWidgets");
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         String[] projection = { AppwidgetColumns.APPWIDGET_ID, AppwidgetColumns.WEBCAM_ID };
-        Cursor cursor = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
+        final Cursor cursor = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
         try {
+            ExecutorService threadPool = Executors.newFixedThreadPool(cursor.getCount());
             while (cursor.moveToNext()) {
-                int appwidgetId = cursor.getInt(0);
-                long webcamId = cursor.getLong(1);
+                threadPool.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int appwidgetId = cursor.getInt(0);
+                        long webcamId = cursor.getLong(1);
 
-                if (Config.LOGD) Log.d(TAG, "updateWidgets appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
+                        if (Config.LOGD) Log.d(TAG, "updateWidgets appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
 
-                if (webcamId == Constants.WEBCAM_ID_RANDOM) {
-                    Long randomWebcamId = getRandomWebcamId(avoidNight);
-                    if (randomWebcamId == null) {
-                        Log.w(TAG, "updateWidgets Could not get random webcam id");
-                        continue;
+                        if (webcamId == Constants.WEBCAM_ID_RANDOM) {
+                            Long randomWebcamId = getRandomWebcamId(avoidNight);
+                            if (randomWebcamId == null) {
+                                Log.w(TAG, "updateWidgets Could not get random webcam id");
+                                return;
+                            }
+                            webcamId = randomWebcamId;
+                            if (Config.LOGD) Log.d(TAG, "updateWidgets Random cam: " + webcamId);
+                        }
+
+                        // Download the wallpaper into a file
+                        boolean ok = downloadImage(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                        if (!ok) return;
+
+                        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
+                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET).getPath());
+                        remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);
+
+                        appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
                     }
-                    webcamId = randomWebcamId;
-                    if (Config.LOGD) Log.d(TAG, "updateWidgets Random cam: " + webcamId);
-                }
-
-                // Download the wallpaper into a file
-                boolean ok = downloadImage(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
-                if (!ok) continue;
-
-                RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
-                Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET).getPath());
-                remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);
-
-                appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
+                });
             }
+            threadPool.shutdown();
         } finally {
             if (cursor != null) cursor.close();
         }

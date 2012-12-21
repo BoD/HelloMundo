@@ -26,14 +26,14 @@
 
     <!-- Show info -->
     <string-array name="preferences_showInfo_labels">
-        <item>No</item>
-        <item>Yes, always</item>
-        <item>Yes, only in random mode</item>
+        <item>Never</item>
+        <item>Only in random mode</item>
+        <item>Always</item>
     </string-array>
     <string-array name="preferences_showInfo_values">
         <item>0</item>
-        <item>1</item>
         <item>2</item>
+        <item>1</item>
     </string-array>
 
 </resources>

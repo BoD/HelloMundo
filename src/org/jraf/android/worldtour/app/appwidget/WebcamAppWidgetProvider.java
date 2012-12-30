@@ -12,7 +12,13 @@
 package org.jraf.android.worldtour.app.appwidget;
 
 import android.appwidget.AppWidgetProvider;
+import android.content.Context;
+
+import org.jraf.android.worldtour.model.AppwidgetManager;
 
 public class WebcamAppWidgetProvider extends AppWidgetProvider {
-
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        AppwidgetManager.get().delete(context, appWidgetIds);
+    }
 }

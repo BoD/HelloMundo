@@ -27,6 +27,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import org.jraf.android.latoureiffel.R;
@@ -47,6 +49,7 @@ import org.jraf.android.util.HttpUtil.Options;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.appwidget.WebcamConfigureActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.AppwidgetColumns;
@@ -173,15 +176,23 @@ public class WorldTourService extends IntentService {
         String[] projection = { AppwidgetColumns.APPWIDGET_ID, AppwidgetColumns.WEBCAM_ID };
         final Cursor cursor = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
         try {
-            ExecutorService threadPool = Executors.newFixedThreadPool(cursor.getCount());
+            int count = cursor.getCount();
+            if (count == 0) return;
+            ExecutorService threadPool = Executors.newFixedThreadPool(count);
             while (cursor.moveToNext()) {
                 threadPool.submit(new Runnable() {
                     @Override
                     public void run() {
                         int appwidgetId = cursor.getInt(0);
                         long webcamId = cursor.getLong(1);
-
                         if (Config.LOGD) Log.d(TAG, "updateWidgets appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
+
+                        AppWidgetProviderInfo info = appWidgetManager.getAppWidgetInfo(appwidgetId);
+                        if (info == null) {
+                            // This widget has been deleted: remove it from the db
+                            AppwidgetManager.get().delete(WorldTourService.this, appwidgetId);
+                            return;
+                        }
 
                         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
                             Long randomWebcamId = getRandomWebcamId(avoidNight);
@@ -198,8 +209,19 @@ public class WorldTourService extends IntentService {
                         if (!ok) return;
 
                         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
-                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET).getPath());
+                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId).getPath());
                         remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);
+                        remoteViews.setViewVisibility(R.id.pgbLoading, View.GONE);
+                        remoteViews.setViewVisibility(R.id.imgPreviewFrame, View.VISIBLE);
+
+                        // onClickListener to change the selected webcam
+                        Intent onClickIntent = new Intent(WorldTourService.this, WebcamConfigureActivity.class);
+                        onClickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                        onClickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId);
+                        onClickIntent.setData(Uri.parse("custom:" + System.currentTimeMillis())); // Need a unique data so the system doesn't try to recycle the pending intent
+                        onClickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(WorldTourService.this, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        remoteViews.setOnClickPendingIntent(R.id.imgPreviewFrame, pendingIntent);
 
                         appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
                     }
@@ -267,7 +289,7 @@ public class WorldTourService extends IntentService {
             if (mode == Mode.WALLPAPER) {
                 outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER, MODE_PRIVATE);
             } else {
-                outputStream = openFileOutput(Constants.FILE_IMAGE_APPWIDGET, MODE_PRIVATE);
+                outputStream = openFileOutput(Constants.FILE_IMAGE_APPWIDGET + "_" + appWidgetId, MODE_PRIVATE);
             }
         } catch (FileNotFoundException e) {
             // Should never happen

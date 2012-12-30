@@ -11,14 +11,18 @@
  */
 package org.jraf.android.worldtour.model;
 
+import java.util.List;
+
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.jraf.android.util.Blocking;
+import org.jraf.android.util.CollectionUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.AppwidgetColumns;
@@ -58,5 +62,14 @@ public class AppwidgetManager {
         } else {
             contentResolver.update(ContentUris.withAppendedId(AppwidgetColumns.CONTENT_URI, appWidgetLineId), values, null, null);
         }
+    }
+
+    @Blocking
+    public void delete(Context context, int... appWidgetIds) {
+        List<Integer> idList = CollectionUtil.asList(appWidgetIds);
+        if (Config.LOGD) Log.d(TAG, "delete appWidgetIds=" + idList);
+        String selection = AppwidgetColumns.APPWIDGET_ID + " in (" + TextUtils.join(",", idList) + ")";
+        ContentResolver contentResolver = context.getContentResolver();
+        contentResolver.delete(AppwidgetColumns.CONTENT_URI, selection, null);
     }
 }

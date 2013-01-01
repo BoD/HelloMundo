@@ -79,8 +79,8 @@
 
     <!-- Welcome -->
     <string name="welcome_0_txtTitle">Welcome to WorldTour!</string>
-    <string name="welcome_0_txtText">Press this button to pick a webcam from the list…</string>
-    <string name="welcome_1_txtText">Switch ON to automatically refresh your wallpaper every 30 minutes…</string>
+    <string name="welcome_0_txtText">1. Press this button to pick a webcam from the list…</string>
+    <string name="welcome_1_txtText">2. Switch ON to automatically refresh your wallpaper every 30 minutes…</string>
     <string name="welcome_2_txtTitle">Enjoy the view!</string>
     <string name="welcome_2_txtText">You\'re done!\nChoose \"Help\" to see this again.</string>
     <string name="welcome_next">Next</string>

@@ -41,14 +41,14 @@ public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
         if (wallpaperEnabled) {
             PendingIntent wallpaperPendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(context);
             // Set the alarm to trigger in 1 minute (allows for the network to be up)
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, wallpaperPendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, interval, wallpaperPendingIntent);
         }
 
         int widgetCount = AppwidgetManager.get().getWidgetCount(context);
         if (widgetCount > 0) {
             PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
             // Set the alarm to trigger in 1 minute (allows for the network to be up)
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, interval, widgetsPendingIntent);
         }
     }
 }

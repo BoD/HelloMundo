@@ -20,6 +20,8 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -65,6 +67,13 @@ public class AppwidgetManager {
         } else {
             contentResolver.update(ContentUris.withAppendedId(AppwidgetColumns.CONTENT_URI, appWidgetLineId), values, null, null);
         }
+
+        // Schedule alarm after insertion
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREF_UPDATE_INTERVAL,
+                Constants.PREF_UPDATE_INTERVAL_DEFAULT));
+        PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
     }
 
     @Blocking
@@ -78,6 +87,7 @@ public class AppwidgetManager {
         // Disable alarm if there are no more widgets
         int count = getWidgetCount(context);
         if (count == 0) {
+            if (Config.LOGD) Log.d(TAG, "delete Count=0, canceling alarm");
             PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(widgetsPendingIntent);
@@ -88,7 +98,9 @@ public class AppwidgetManager {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(AppwidgetColumns.CONTENT_URI, null, null, null, null);
         try {
-            return cursor.getCount();
+            int res = cursor.getCount();
+            if (Config.LOGD) Log.d(TAG, "getWidgetCount res=" + res);
+            return res;
         } finally {
             if (cursor != null) cursor.close();
         }

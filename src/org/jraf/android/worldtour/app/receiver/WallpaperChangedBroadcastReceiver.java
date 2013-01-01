@@ -44,7 +44,7 @@ public class WallpaperChangedBroadcastReceiver extends BroadcastReceiver {
 
             // Disable alarm
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(context);
+            PendingIntent pendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(context);
             alarmManager.cancel(pendingIntent);
         }
     }

@@ -69,6 +69,7 @@ import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.app.welcome.WelcomeActivity;
+import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 import org.jraf.android.worldtour.provider.WebcamType;
@@ -180,7 +181,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 if (Config.LOGD) Log.d(TAG, "onActivityResult selectedWebcamId=" + selectedWebcamId);
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, selectedWebcamId).commit();
                 updateWebcamRandom();
-                startService(new Intent(this, WorldTourService.class));
+                WorldTourService.refreshWallpaperNow(this);
                 break;
 
             case REQUEST_SETTINGS:
@@ -236,7 +237,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
             case R.id.menu_refresh:
                 if (mLoading) return true;
-                startService(new Intent(this, WorldTourService.class));
+                WorldTourService.refreshAllNow(this);
                 return true;
 
             case R.id.menu_save:
@@ -310,19 +311,26 @@ public class MainActivity extends SherlockFragmentActivity {
     };
 
     private void setAlarm(boolean enabled) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(MainActivity.this);
-        if (enabled) {
-            long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
-                    Constants.PREF_UPDATE_INTERVAL_DEFAULT));
+        long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString(Constants.PREF_UPDATE_INTERVAL,
+                Constants.PREF_UPDATE_INTERVAL_DEFAULT));
 
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PendingIntent wallpaperPendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(MainActivity.this);
+        if (enabled) {
             // Set the alarm
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, wallpaperPendingIntent);
 
             // Update the wallpaper now
-            startService(new Intent(MainActivity.this, WorldTourService.class));
+            WorldTourService.refreshWallpaperNow(this);
         } else {
-            alarmManager.cancel(pendingIntent);
+            alarmManager.cancel(wallpaperPendingIntent);
+        }
+
+        int widgetCount = AppwidgetManager.get().getWidgetCount(this);
+        if (widgetCount > 0) {
+            PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(this);
+            // Set the alarm to trigger in 1 minute (allows for the network to be up)
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
         }
     }
 
@@ -404,7 +412,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private void updateWebcamImage() {
         if (!new File(getFilesDir(), Constants.FILE_IMAGE_WALLPAPER).exists()) {
             // The service has never been started, there is no file yet: start it now
-            startService(new Intent(this, WorldTourService.class));
+            WorldTourService.refreshWallpaperNow(this);
             mImgPreviewFrame.setVisibility(View.INVISIBLE);
             return;
         }

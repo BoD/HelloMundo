@@ -61,6 +61,11 @@ public class WorldTourService extends IntentService {
     private static final String TAG = Constants.TAG + WorldTourService.class.getSimpleName();
 
     private static final String PREFIX = WorldTourService.class.getName() + ".";
+
+    public static final String ACTION_UPDATE_WALLPAPER = PREFIX + "ACTION_UPDATE_WALLPAPER";
+    public static final String ACTION_UPDATE_WIDGETS = PREFIX + "ACTION_UPDATE_WIDGETS";
+    public static final String ACTION_UPDATE_ALL = PREFIX + "ACTION_UPDATE_ALL";
+
     public static final String ACTION_UPDATE_WALLPAPER_START = PREFIX + "ACTION_UPDATE_WALLPAPER_START";
     public static final String ACTION_UPDATE_WALLPAPER_END_SUCCESS = PREFIX + "ACTION_UPDATE_WALLPAPER_END_SUCCESS";
     public static final String ACTION_UPDATE_WALLPAPER_END_FAILURE = PREFIX + "ACTION_UPDATE_WALLPAPER_END_FAILURE";
@@ -86,8 +91,13 @@ public class WorldTourService extends IntentService {
 
         boolean avoidNight = sharedPreferences.getBoolean(Constants.PREF_AVOID_NIGHT, Constants.PREF_AVOID_NIGHT_DEFAULT);
 
-        updateWallpaper(intent, sharedPreferences, avoidNight);
-        updateWidgets(intent, sharedPreferences, avoidNight);
+        String action = intent.getAction();
+        if (ACTION_UPDATE_ALL.equals(action) || ACTION_UPDATE_WALLPAPER.equals(action)) {
+            updateWallpaper(intent, sharedPreferences, avoidNight);
+        }
+        if (ACTION_UPDATE_ALL.equals(action) || ACTION_UPDATE_WIDGETS.equals(action)) {
+            updateWidgets(intent, sharedPreferences, avoidNight);
+        }
     }
 
 
@@ -138,7 +148,7 @@ public class WorldTourService extends IntentService {
 
                     // Disable alarm
                     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                    PendingIntent pendingIntent = getAlarmPendingIntent(this);
+                    PendingIntent pendingIntent = getWallpaperAlarmPendingIntent(this);
                     alarmManager.cancel(pendingIntent);
                     sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                     return;
@@ -177,14 +187,17 @@ public class WorldTourService extends IntentService {
         final Cursor cursor = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
         try {
             int count = cursor.getCount();
+            if (Config.LOGD) Log.d(TAG, "updateWidgets count=" + count);
             if (count == 0) return;
             ExecutorService threadPool = Executors.newFixedThreadPool(count);
             while (cursor.moveToNext()) {
+                final int appwidgetId = cursor.getInt(0);
+                final long finalWebcamId = cursor.getLong(1);
+                if (Config.LOGD) Log.d(TAG, "updateWidgets Submitting runnable");
                 threadPool.submit(new Runnable() {
                     @Override
                     public void run() {
-                        int appwidgetId = cursor.getInt(0);
-                        long webcamId = cursor.getLong(1);
+                        long webcamId = finalWebcamId;
                         if (Config.LOGD) Log.d(TAG, "updateWidgets appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
 
                         AppWidgetProviderInfo info = appWidgetManager.getAppWidgetInfo(appwidgetId);
@@ -430,11 +443,42 @@ public class WorldTourService extends IntentService {
         return !isLight;
     }
 
-    public static PendingIntent getAlarmPendingIntent(Context context) {
+
+    /*
+     * Convenience methods.
+     */
+
+    public static PendingIntent getWallpaperAlarmPendingIntent(Context context) {
         Intent intent = new Intent(context, WorldTourService.class);
+        intent.setAction(ACTION_UPDATE_WALLPAPER);
         intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, true);
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    public static PendingIntent getWidgetsAlarmPendingIntent(Context context) {
+        Intent intent = new Intent(context, WorldTourService.class);
+        intent.setAction(ACTION_UPDATE_WIDGETS);
+        intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, true);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public static void refreshWallpaperNow(Context context) {
+        Intent intent = new Intent(context, WorldTourService.class);
+        intent.setAction(ACTION_UPDATE_WALLPAPER);
+        context.startService(intent);
+    }
+
+    public static void refreshWidgetsNow(Context context) {
+        Intent intent = new Intent(context, WorldTourService.class);
+        intent.setAction(ACTION_UPDATE_WIDGETS);
+        context.startService(intent);
+    }
+
+
+    public static void refreshAllNow(Context context) {
+        Intent intent = new Intent(context, WorldTourService.class);
+        intent.setAction(ACTION_UPDATE_ALL);
+        context.startService(intent);
+    }
 
 }

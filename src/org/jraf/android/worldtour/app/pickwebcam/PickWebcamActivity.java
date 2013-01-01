@@ -125,7 +125,7 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
                     editor.commit();
 
                     // Invoke service to download the default image now.
-                    startService(new Intent(PickWebcamActivity.this, WorldTourService.class));
+                    WorldTourService.refreshWallpaperNow(PickWebcamActivity.this);
                 }
             }
 

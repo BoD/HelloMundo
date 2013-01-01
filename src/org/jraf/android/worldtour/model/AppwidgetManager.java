@@ -13,6 +13,8 @@ package org.jraf.android.worldtour.model;
 
 import java.util.List;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -25,6 +27,7 @@ import org.jraf.android.util.Blocking;
 import org.jraf.android.util.CollectionUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.provider.AppwidgetColumns;
 
 public class AppwidgetManager {
@@ -71,5 +74,23 @@ public class AppwidgetManager {
         String selection = AppwidgetColumns.APPWIDGET_ID + " in (" + TextUtils.join(",", idList) + ")";
         ContentResolver contentResolver = context.getContentResolver();
         contentResolver.delete(AppwidgetColumns.CONTENT_URI, selection, null);
+
+        // Disable alarm if there are no more widgets
+        int count = getWidgetCount(context);
+        if (count == 0) {
+            PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(widgetsPendingIntent);
+        }
+    }
+
+    public int getWidgetCount(Context context) {
+        ContentResolver contentResolver = context.getContentResolver();
+        Cursor cursor = contentResolver.query(AppwidgetColumns.CONTENT_URI, null, null, null, null);
+        try {
+            return cursor.getCount();
+        } finally {
+            if (cursor != null) cursor.close();
+        }
     }
 }

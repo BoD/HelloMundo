@@ -23,6 +23,7 @@ import android.util.Log;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.service.WorldTourService;
+import org.jraf.android.worldtour.model.AppwidgetManager;
 
 public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = Constants.TAG + BootCompletedBroadcastReceiver.class.getSimpleName();
@@ -30,18 +31,24 @@ public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Config.LOGD) Log.d(TAG, "onReceive context=" + context + " intent=" + intent);
-        boolean enabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
+        boolean wallpaperEnabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
                 Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
-        if (Config.LOGD) Log.d(TAG, "onReceive enabled=" + enabled);
-        if (enabled) {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pendingIntent = WorldTourService.getAlarmPendingIntent(context);
-            long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREF_UPDATE_INTERVAL,
-                    Constants.PREF_UPDATE_INTERVAL_DEFAULT));
+        if (Config.LOGD) Log.d(TAG, "onReceive wallpaperEnabled=" + wallpaperEnabled);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREF_UPDATE_INTERVAL,
+                Constants.PREF_UPDATE_INTERVAL_DEFAULT));
 
+        if (wallpaperEnabled) {
+            PendingIntent wallpaperPendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(context);
             // Set the alarm to trigger in 1 minute (allows for the network to be up)
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, wallpaperPendingIntent);
+        }
+
+        int widgetCount = AppwidgetManager.get().getWidgetCount(context);
+        if (widgetCount > 0) {
+            PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
+            // Set the alarm to trigger in 1 minute (allows for the network to be up)
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
         }
     }
-
 }

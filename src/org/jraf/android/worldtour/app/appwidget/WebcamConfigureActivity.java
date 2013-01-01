@@ -50,7 +50,7 @@ public class WebcamConfigureActivity extends Activity {
         long webcamId = ContentUris.parseId(data.getData());
         AppwidgetManager.get().insertOrUpdate(this, mAppWidgetId, webcamId);
 
-        startService(new Intent(this, WorldTourService.class));
+        WorldTourService.refreshWidgetsNow(this);
 
         setResult(RESULT_OK, resultValue);
         finish();

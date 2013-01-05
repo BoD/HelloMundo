@@ -43,11 +43,14 @@ public class WelcomeActivity extends FragmentActivity {
     public static final String EXTRA_RECT_PICK = PREFIX + "EXTRA_RECT_PICK";
     public static final String EXTRA_RECT_SWITCH = PREFIX + "EXTRA_RECT_SWITCH";
 
+    protected static final int NB_PAGES = 4;
+
     private ViewPager mViewPager;
     private Button mBtnNext;
     private ImageView mImgDot0;
     private ImageView mImgDot1;
     private ImageView mImgDot2;
+    private ImageView mImgDot3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class WelcomeActivity extends FragmentActivity {
         mImgDot0 = (ImageView) findViewById(R.id.imgDot0);
         mImgDot1 = (ImageView) findViewById(R.id.imgDot1);
         mImgDot2 = (ImageView) findViewById(R.id.imgDot2);
+        mImgDot3 = (ImageView) findViewById(R.id.imgDot3);
         mOnPageChangeListener.onPageSelected(0);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -74,7 +78,8 @@ public class WelcomeActivity extends FragmentActivity {
         editor.commit();
     }
 
-    private void setShowCasePosition(View view, Rect rect) {
+    private void setShowCasePosition(View view, Rect r) {
+        Rect rect = new Rect(r);
         if (rect.top > 0) {
             int margin = getResources().getDimensionPixelSize(R.dimen.welcome_showCase_margin);
             rect.inset(-margin, -margin);
@@ -113,7 +118,7 @@ public class WelcomeActivity extends FragmentActivity {
     private final OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            if (position == 2) return;
+            if (position >= 2) return;
             View view = mPagerAdapter.getView(position);
             TextView txtText = (TextView) view.findViewById(R.id.txtText);
             int alpha = (int) (255 * (1f - positionOffset * 3));
@@ -123,10 +128,6 @@ public class WelcomeActivity extends FragmentActivity {
 
             ImageView imgArrowUp = (ImageView) view.findViewById(R.id.imgArrowUp);
             imgArrowUp.setAlpha(alpha);
-
-            //            ImageView imgShowCase = (ImageView) view.findViewById(R.id.imgShowCase);
-            //            imgShowCase.setAlpha(alpha);
-            //            imgShowCase.getBackground().setAlpha(255 - alpha);
 
             ImageView imgShowCaseHide = (ImageView) view.findViewById(R.id.imgShowCase_hide);
             imgShowCaseHide.setVisibility(View.VISIBLE);
@@ -140,6 +141,7 @@ public class WelcomeActivity extends FragmentActivity {
                     mImgDot0.setSelected(true);
                     mImgDot1.setSelected(false);
                     mImgDot2.setSelected(false);
+                    mImgDot3.setSelected(false);
                     mBtnNext.setText(R.string.welcome_next);
                     mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_next, 0);
                     break;
@@ -148,6 +150,7 @@ public class WelcomeActivity extends FragmentActivity {
                     mImgDot0.setSelected(false);
                     mImgDot1.setSelected(true);
                     mImgDot2.setSelected(false);
+                    mImgDot3.setSelected(false);
                     mBtnNext.setText(R.string.welcome_next);
                     mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_next, 0);
                     break;
@@ -156,6 +159,16 @@ public class WelcomeActivity extends FragmentActivity {
                     mImgDot0.setSelected(false);
                     mImgDot1.setSelected(false);
                     mImgDot2.setSelected(true);
+                    mImgDot3.setSelected(false);
+                    mBtnNext.setText(R.string.welcome_next);
+                    mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_next, 0);
+                    break;
+
+                case 3:
+                    mImgDot0.setSelected(false);
+                    mImgDot1.setSelected(false);
+                    mImgDot2.setSelected(false);
+                    mImgDot3.setSelected(true);
                     mBtnNext.setText(R.string.common_done);
                     mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done, 0);
                     break;
@@ -170,7 +183,7 @@ public class WelcomeActivity extends FragmentActivity {
         @Override
         public void onClick(View v) {
             int currentItem = mViewPager.getCurrentItem();
-            if (currentItem < 2) {
+            if (currentItem < NB_PAGES - 1) {
                 mViewPager.setCurrentItem(currentItem + 1, true);
             } else {
                 finish();
@@ -192,7 +205,7 @@ public class WelcomeActivity extends FragmentActivity {
      */
 
     private class WelcomePagerAdapter extends PagerAdapter {
-        private final View[] mViews = new View[3];
+        private final View[] mViews = new View[NB_PAGES];
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
@@ -201,12 +214,15 @@ public class WelcomeActivity extends FragmentActivity {
             TextView txtText = (TextView) view.findViewById(R.id.txtText);
             TextView txtText2 = (TextView) view.findViewById(R.id.txtText2);
             ImageView imgArrowUp = (ImageView) view.findViewById(R.id.imgArrowUp);
+            ImageView imgWidget = (ImageView) view.findViewById(R.id.imgWidget);
+            View imgShowCase = view.findViewById(R.id.imgShowCase);
             int imgArrowUpWidth = getResources().getDimensionPixelSize(R.dimen.welcome_imgArrowUp_width);
             int marginTop = getResources().getDimensionPixelSize(R.dimen.welcome_marginTop_arrowUp);
             switch (position) {
                 case 0:
                     txtTitle.setText(R.string.welcome_0_txtTitle);
                     txtText.setText(R.string.welcome_0_txtText);
+                    imgWidget.setVisibility(View.GONE);
                     Rect rectPick = getIntent().getParcelableExtra(EXTRA_RECT_PICK);
                     LayoutParams layoutParams = imgArrowUp.getLayoutParams();
                     ((RelativeLayout.LayoutParams) layoutParams).topMargin = rectPick.bottom + marginTop;
@@ -218,20 +234,28 @@ public class WelcomeActivity extends FragmentActivity {
                 case 1:
                     txtTitle.setVisibility(View.INVISIBLE);
                     txtText.setText(R.string.welcome_1_txtText);
+                    imgWidget.setVisibility(View.GONE);
                     Rect rectSwitch = getIntent().getParcelableExtra(EXTRA_RECT_SWITCH);
                     setShowCasePosition(view, rectSwitch);
                     layoutParams = imgArrowUp.getLayoutParams();
                     ((RelativeLayout.LayoutParams) layoutParams).topMargin = rectSwitch.bottom + marginTop;
                     ((RelativeLayout.LayoutParams) layoutParams).leftMargin = rectSwitch.centerX() - imgArrowUpWidth / 2;
                     imgArrowUp.setLayoutParams(layoutParams);
-
                     break;
 
                 case 2:
                     imgArrowUp.setVisibility(View.GONE);
-                    txtTitle.setText(R.string.welcome_2_txtTitle);
+                    txtTitle.setVisibility(View.INVISIBLE);
                     txtText2.setText(R.string.welcome_2_txtText);
-                    View imgShowCase = view.findViewById(R.id.imgShowCase);
+                    imgWidget.setVisibility(View.VISIBLE);
+                    imgShowCase.setBackgroundResource(R.color.welcome_bg);
+                    break;
+
+                case 3:
+                    imgArrowUp.setVisibility(View.GONE);
+                    txtTitle.setText(R.string.welcome_3_txtTitle);
+                    txtText2.setText(R.string.welcome_3_txtText);
+                    imgWidget.setVisibility(View.GONE);
                     imgShowCase.setBackgroundResource(R.color.welcome_bg);
                     break;
             }
@@ -250,7 +274,7 @@ public class WelcomeActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return NB_PAGES;
         }
 
         @Override

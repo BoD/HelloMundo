@@ -22,6 +22,13 @@
         android:layout_height="wrap_content"
         android:src="@drawable/welcome_arrow_up" />
 
+    <ImageView
+        android:id="@+id/imgWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/welcome_widget" />
+
     <TextView
         android:id="@+id/txtText"
         android:layout_width="@dimen/welcome_txtText_width"
@@ -40,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="@dimen/welcome_txtText2_marginBottom"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

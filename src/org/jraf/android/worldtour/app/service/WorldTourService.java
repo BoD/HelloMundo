@@ -38,6 +38,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -110,7 +111,9 @@ public class WorldTourService extends IntentService {
     private void updateWallpaper(Intent intent, SharedPreferences sharedPreferences, boolean avoidNight) {
         if (Config.LOGD) Log.d(TAG, "updateWallpaper");
         long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+        boolean isRandom = false;
         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
+            isRandom = true;
             Long randomWebcamId = getRandomWebcamId(avoidNight);
             if (randomWebcamId == null) {
                 Log.w(TAG, "updateWallpaper Could not get random webcam id");
@@ -125,14 +128,19 @@ public class WorldTourService extends IntentService {
 
         sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_START));
 
+        WebcamInfo webcamInfo = getWebcamInfo(webcamId, sharedPreferences, Mode.WALLPAPER, -1);
+        if (webcamInfo == null) return;
+
         // Download the wallpaper into a file
-        boolean ok = downloadImage(webcamId, sharedPreferences, Mode.WALLPAPER, -1);
+        boolean ok = downloadImage(webcamId, webcamInfo, sharedPreferences, Mode.WALLPAPER, -1);
         if (!ok) return;
 
-        // If the dimmed setting is enabled, create a dimmed version of the image
+        // If the dimmed setting or the 'show webcam info' setting is enabled create an edited version of the image
         boolean wantDimmed = sharedPreferences.getBoolean(Constants.PREF_DIMMED, Constants.PREF_DIMMED_DEFAULT);
-        if (wantDimmed) {
-            ok = saveDimmedVersion();
+        String showInfoPref = sharedPreferences.getString(Constants.PREF_SHOW_INFO, Constants.PREF_SHOW_INFO_DEFAULT);
+        boolean wantShowInfo = Constants.PREF_SHOW_INFO_ALWAYS.equals(showInfoPref) || (isRandom && Constants.PREF_SHOW_INFO_ONLY_RANDOM.equals(showInfoPref));
+        if (wantDimmed || wantShowInfo) {
+            ok = saveEditedVersion(wantDimmed, wantShowInfo, webcamInfo);
             if (!ok) return;
         }
 
@@ -163,7 +171,7 @@ public class WorldTourService extends IntentService {
             // Set wallpaper
             FileInputStream imageInputStream = null;
             try {
-                imageInputStream = openFileInput(wantDimmed ? Constants.FILE_IMAGE_WALLPAPER_DIMMED : Constants.FILE_IMAGE_WALLPAPER);
+                imageInputStream = openFileInput(wantDimmed || wantShowInfo ? Constants.FILE_IMAGE_WALLPAPER_EDITED : Constants.FILE_IMAGE_WALLPAPER);
                 WallpaperManager.getInstance(this).setStream(imageInputStream);
             } catch (IOException e) {
                 Log.w(TAG, "updateWallpaper Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
@@ -219,8 +227,11 @@ public class WorldTourService extends IntentService {
                             if (Config.LOGD) Log.d(TAG, "updateWidgets Random cam: " + webcamId);
                         }
 
+                        WebcamInfo webcamInfo = getWebcamInfo(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                        if (webcamInfo == null) return;
+
                         // Download the wallpaper into a file
-                        boolean ok = downloadImage(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                        boolean ok = downloadImage(webcamId, webcamInfo, sharedPreferences, Mode.APPWIDGET, appwidgetId);
                         if (Config.LOGD) Log.d(TAG, "updateWidgets ok=" + ok);
                         if (!ok) return;
 
@@ -263,16 +274,18 @@ public class WorldTourService extends IntentService {
         if (Config.LOGD) Log.d(TAG, "updateWidgets bitmap.getByteCount()=" + bitmap.getByteCount());
     }
 
-    private static class DownloadInfo {
+    private static class WebcamInfo {
         public String url;
         public String httpReferer;
+        public String name;
+        public String location;
     }
 
-    private DownloadInfo getDownloadInfo(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
-        String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
+    private WebcamInfo getWebcamInfo(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
+        String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER, WebcamColumns.NAME, WebcamColumns.LOCATION };
         Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
         Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
-        DownloadInfo res = new DownloadInfo();
+        WebcamInfo res = new WebcamInfo();
         try {
             if (cursor == null || !cursor.moveToFirst()) {
                 Log.w(TAG, "getDownloadInfo Could not find webcam with webcamId=" + webcamId);
@@ -290,23 +303,22 @@ public class WorldTourService extends IntentService {
             }
             res.url = cursor.getString(0);
             res.httpReferer = cursor.getString(1);
+            res.name = cursor.getString(2);
+            res.location = cursor.getString(3);
         } finally {
             if (cursor != null) cursor.close();
         }
         return res;
     }
 
-    private boolean downloadImage(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
+    private boolean downloadImage(long webcamId, WebcamInfo webcamInfo, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
         if (Config.LOGD) Log.d(TAG, "downloadImage webcamId=" + webcamId);
 
-        DownloadInfo downloadInfo = getDownloadInfo(webcamId, sharedPreferences, mode, appWidgetId);
-        if (downloadInfo == null) return false;
-
         Options options = new Options();
-        options.referer = downloadInfo.httpReferer;
+        options.referer = webcamInfo.httpReferer;
         InputStream inputStream;
         try {
-            inputStream = HttpUtil.getAsStream(downloadInfo.url);
+            inputStream = HttpUtil.getAsStream(webcamInfo.url);
         } catch (IOException e) {
             Log.w(TAG, "downloadImage Could not download webcam with webcamId=" + webcamId, e);
             if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
@@ -338,15 +350,15 @@ public class WorldTourService extends IntentService {
         return true;
     }
 
-    private boolean saveDimmedVersion() {
-        if (Config.LOGD) Log.d(TAG, "saveDimmedVersion");
+    private boolean saveEditedVersion(boolean dimmed, boolean showInfo, WebcamInfo webcamInfo) {
+        if (Config.LOGD) Log.d(TAG, "saveEditedVersion dimmed=" + dimmed + " showInfo=" + showInfo);
         Bitmap bitmap;
         FileInputStream input = null;
         try {
             input = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
             bitmap = BitmapFactory.decodeStream(input);
         } catch (FileNotFoundException e) {
-            Log.w(TAG, "saveDimmedVersion Could not read saved image", e);
+            Log.w(TAG, "saveEditedVersion Could not read saved image", e);
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
@@ -354,7 +366,7 @@ public class WorldTourService extends IntentService {
         }
 
         if (bitmap == null) {
-            Log.w(TAG, "saveDimmedVersion Could not decode saved image as a bitmap");
+            Log.w(TAG, "saveEditedVersion Could not decode saved image as a bitmap");
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
@@ -367,24 +379,35 @@ public class WorldTourService extends IntentService {
         }
         bitmap = bitmap.copy(config, true);
 
-        // Draw a 70% gray color layer on top of the bitmap
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawColor(0x4D000000);
+        if (dimmed) {
+            // Draw a 70% gray color layer on top of the bitmap
+            canvas.drawColor(0x4D000000);
+        }
+
+        if (showInfo) {
+            Paint paint = new Paint();
+            String text = webcamInfo.name + ", " + webcamInfo.location;
+            float textWidth = paint.measureText(text);
+            paint.setColor(getResources().getColor(R.color.wallpaper_showInfo_text));
+            paint.setShadowLayer(1, 0, 0, 0xff000000);
+            canvas.drawText(text, bitmap.getWidth() / 2 - textWidth / 2, 38, paint);
+        }
 
         // Now save the bitmap to a file
         FileOutputStream outputStream;
         try {
-            outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER_DIMMED, MODE_PRIVATE);
+            outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER_EDITED, MODE_PRIVATE);
         } catch (FileNotFoundException e) {
             // Should never happen
-            Log.e(TAG, "saveDimmedVersion Could not open a file", e);
+            Log.e(TAG, "saveEditedVersion Could not open a file", e);
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         boolean ok = bitmap.compress(CompressFormat.JPEG, 90, outputStream);
         IoUtil.close(outputStream);
         if (!ok) {
-            Log.w(TAG, "saveDimmedVersion Could not encode dimmed image");
+            Log.w(TAG, "saveEditedVersion Could not encode dimmed image");
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }

@@ -15,7 +15,7 @@
         android:title="@string/preferences_dimmed_title" />
 
     <ListPreference
-        android:defaultValue="2"
+        android:defaultValue="1"
         android:entries="@array/preferences_showInfo_labels"
         android:entryValues="@array/preferences_showInfo_values"
         android:key="PREF_SHOW_INFO"

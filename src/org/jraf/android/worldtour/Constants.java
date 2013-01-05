@@ -64,8 +64,15 @@ public class Constants {
     public static final String PREF_WELCOME_RESUME_INDEX = "PREF_WELCOME_RESUME_INDEX";
     public static final String PREF_SEEN_WELCOME = "PREF_SEEN_WELCOME";
 
+    public static final String PREF_SHOW_INFO = "PREF_SHOW_INFO";
+    public static final String PREF_SHOW_INFO_NEVER = "0";
+    public static final String PREF_SHOW_INFO_ONLY_RANDOM = "1";
+    public static final String PREF_SHOW_INFO_ALWAYS = "2";
+    public static final String PREF_SHOW_INFO_DEFAULT = PREF_SHOW_INFO_ONLY_RANDOM;
+
+
     public static final String FILE_IMAGE_WALLPAPER = "image_wallpaper";
-    public static final String FILE_IMAGE_WALLPAPER_DIMMED = "image_wallpaper_dimmed";
+    public static final String FILE_IMAGE_WALLPAPER_EDITED = "image_wallpaper_edited";
     public static final String FILE_IMAGE_APPWIDGET = "image_appwidget";
 
     static {
@@ -76,5 +83,4 @@ public class Constants {
     }
 
     public static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
-
 }

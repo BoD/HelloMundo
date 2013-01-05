@@ -46,7 +46,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Webcam widget -->
+        <!-- Webcam widget (2x2) -->
         <receiver
             android:name="org.jraf.android.worldtour.app.appwidget.WebcamAppWidgetProvider"
             android:label="@string/appwidget_webcam_label" >
@@ -57,6 +57,21 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/appwidget_webcam" />
+        </receiver>
+
+        <!-- Webcam widget (3x3) -->
+        <receiver
+            android:name="org.jraf.android.worldtour.app.appwidget.WebcamAppWidgetProvider3x3"
+            android:enabled="@bool/appwidget_webcam_3x3_enabled"
+            android:label="@string/appwidget_webcam_label_3x3" >
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_webcam_3x3" />
         </receiver>
 
         <!-- Main -->

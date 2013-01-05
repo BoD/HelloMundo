@@ -13,12 +13,19 @@ package org.jraf.android.worldtour.app.appwidget;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.util.Log;
 
+import org.jraf.android.util.CollectionUtil;
+import org.jraf.android.worldtour.Config;
+import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 
 public class WebcamAppWidgetProvider extends AppWidgetProvider {
+    private static final String TAG = Constants.TAG + WebcamAppWidgetProvider.class.getSimpleName();
+
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        if (Config.LOGD) Log.d(TAG, "onDeleted context=" + context + " appWidgetIds=" + CollectionUtil.asList(appWidgetIds));
         AppwidgetManager.get().delete(context, appWidgetIds);
     }
 }

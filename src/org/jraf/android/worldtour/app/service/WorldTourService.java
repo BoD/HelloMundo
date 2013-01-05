@@ -22,6 +22,7 @@ import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
@@ -38,6 +39,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -219,10 +221,18 @@ public class WorldTourService extends IntentService {
 
                         // Download the wallpaper into a file
                         boolean ok = downloadImage(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                        if (Config.LOGD) Log.d(TAG, "updateWidgets ok=" + ok);
                         if (!ok) return;
 
                         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
-                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId).getPath());
+                        BitmapFactory.Options opts = new BitmapFactory.Options();
+                        // We don't need transparency
+                        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                        // The bitmap must be < 1M because appWidgetManager.updateAppWidget() results in an IPC transaction
+                        // (see https://groups.google.com/forum/?fromgroups=#!topic/android-developers/3jSq5cEWbEA)
+                        opts.inSampleSize = 2;
+                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId).getPath(), opts);
+                        logBitmapSize(bitmap);
                         remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);
                         remoteViews.setViewVisibility(R.id.pgbLoading, View.GONE);
                         remoteViews.setViewVisibility(R.id.imgPreviewFrame, View.VISIBLE);
@@ -237,6 +247,7 @@ public class WorldTourService extends IntentService {
                         remoteViews.setOnClickPendingIntent(R.id.imgPreviewFrame, pendingIntent);
 
                         appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
+                        if (Config.LOGD) Log.d(TAG, "updateWidgets updateAppWidget has been called");
                     }
                 });
             }
@@ -246,6 +257,11 @@ public class WorldTourService extends IntentService {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+    private void logBitmapSize(Bitmap bitmap) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) return;
+        if (Config.LOGD) Log.d(TAG, "updateWidgets bitmap.getByteCount()=" + bitmap.getByteCount());
+    }
 
     private static class DownloadInfo {
         public String url;

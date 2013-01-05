@@ -87,6 +87,7 @@
     <string name="welcome_next">Next</string>
 
     <!-- App Widgets -->
-    <string name="appwidget_webcam_label">WorldTour Webcam</string>
+    <string name="appwidget_webcam_label">WorldTour Webcam (2x2)</string>
+    <string name="appwidget_webcam_label_3x3">WorldTour Webcam (3x3)</string>
 
 </resources>

@@ -64,7 +64,6 @@
             android:name="org.jraf.android.worldtour.app.appwidget.WebcamAppWidgetProvider3x3"
             android:enabled="@bool/appwidget_webcam_3x3_enabled"
             android:label="@string/appwidget_webcam_label_3x3" >
-
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -124,6 +123,8 @@
         <!-- Webcam App Widget Configure -->
         <activity
             android:name="org.jraf.android.worldtour.app.appwidget.WebcamConfigureActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=":WebcamConfigureActivity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

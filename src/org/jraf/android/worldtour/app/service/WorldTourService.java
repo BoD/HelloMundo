@@ -390,7 +390,7 @@ public class WorldTourService extends IntentService {
             String text = webcamInfo.name + ", " + webcamInfo.location;
             float textWidth = paint.measureText(text);
             paint.setColor(getResources().getColor(R.color.wallpaper_showInfo_text));
-            paint.setShadowLayer(1, 0, 0, 0xff000000);
+            paint.setShadowLayer(2, 0, 0, 0x88000000);
             canvas.drawText(text, bitmap.getWidth() / 2 - textWidth / 2, 38, paint);
         }
 

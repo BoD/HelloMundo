@@ -215,6 +215,7 @@ public class WelcomeActivity extends FragmentActivity {
             TextView txtText2 = (TextView) view.findViewById(R.id.txtText2);
             ImageView imgArrowUp = (ImageView) view.findViewById(R.id.imgArrowUp);
             ImageView imgWidget = (ImageView) view.findViewById(R.id.imgWidget);
+            ImageView imgLogo = (ImageView) view.findViewById(R.id.imgLogo);
             View imgShowCase = view.findViewById(R.id.imgShowCase);
             int imgArrowUpWidth = getResources().getDimensionPixelSize(R.dimen.welcome_imgArrowUp_width);
             int marginTop = getResources().getDimensionPixelSize(R.dimen.welcome_marginTop_arrowUp);
@@ -223,6 +224,7 @@ public class WelcomeActivity extends FragmentActivity {
                     txtTitle.setText(R.string.welcome_0_txtTitle);
                     txtText.setText(R.string.welcome_0_txtText);
                     imgWidget.setVisibility(View.GONE);
+                    imgLogo.setVisibility(View.VISIBLE);
                     Rect rectPick = getIntent().getParcelableExtra(EXTRA_RECT_PICK);
                     LayoutParams layoutParams = imgArrowUp.getLayoutParams();
                     ((RelativeLayout.LayoutParams) layoutParams).topMargin = rectPick.bottom + marginTop;
@@ -235,6 +237,7 @@ public class WelcomeActivity extends FragmentActivity {
                     txtTitle.setVisibility(View.INVISIBLE);
                     txtText.setText(R.string.welcome_1_txtText);
                     imgWidget.setVisibility(View.GONE);
+                    imgLogo.setVisibility(View.GONE);
                     Rect rectSwitch = getIntent().getParcelableExtra(EXTRA_RECT_SWITCH);
                     setShowCasePosition(view, rectSwitch);
                     layoutParams = imgArrowUp.getLayoutParams();
@@ -248,6 +251,7 @@ public class WelcomeActivity extends FragmentActivity {
                     txtTitle.setVisibility(View.INVISIBLE);
                     txtText2.setText(R.string.welcome_2_txtText);
                     imgWidget.setVisibility(View.VISIBLE);
+                    imgLogo.setVisibility(View.GONE);
                     imgShowCase.setBackgroundResource(R.color.welcome_bg);
                     break;
 
@@ -256,6 +260,7 @@ public class WelcomeActivity extends FragmentActivity {
                     txtTitle.setText(R.string.welcome_3_txtTitle);
                     txtText2.setText(R.string.welcome_3_txtText);
                     imgWidget.setVisibility(View.GONE);
+                    imgLogo.setVisibility(View.GONE);
                     imgShowCase.setBackgroundResource(R.color.welcome_bg);
                     break;
             }

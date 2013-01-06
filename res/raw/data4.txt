@@ -43,4 +43,5 @@
 60;Rio Gilão with Roman bridge;Tavira, Portugal;www.verdeland.com;www.verdeland.com/webcam/CamImageON.jpg;lubek.b.free.fr/thumb_60.png;2010-04-04;Europe/Lisbon;-;-;-;-;37.126869,-7.64981
 62;Piata Unirii;Timisoara, Romania;www.banaterra.eu/romana;rps.jraf.org/is/resize/www.banaterra.ro/imaginiwebcam/webcamunirii1.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_62.png;2010-04-04;Europe/Bucharest;-;-;-;-;45.752676,21.225071
 63;Truck Cam;The USA;www.bigrigtravels.net/broadcastpage.html;rps.jraf.org/is/resize/bigrigtravels.net/truckcam/truckcam.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_63.png;2010-04-04;America/Panama;-;-;-;-;-
+64;Downtown Los Angeles;Los Angeles, CA, USA;abclocal.go.com/kabc/feature?section=weather/photos&id=5790008;abclocal.go.com/three/kabc/webcam/web2-1.jpg;lubek.b.free.fr/thumb_64.png;2013-01-06;America/Los_Angeles;-;-;-;-;34.05101,-118.254355
 #end;;;;;;;;;;;;

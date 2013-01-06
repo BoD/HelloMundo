@@ -131,8 +131,8 @@ public class MainActivity extends SherlockFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        boolean enabled = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
-                Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean enabled = sharedPreferences.getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
         mSwiOnOff.setOnCheckedChangeListener(null);
         mSwiOnOff.setChecked(enabled);
         mSwiOnOff.setOnCheckedChangeListener(mOnOffOnCheckedChangeListener);
@@ -142,7 +142,6 @@ public class MainActivity extends SherlockFragmentActivity {
             return;
         }
 
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         final boolean firstRun = sharedPreferences.getBoolean(Constants.PREF_FIRST_RUN, true);
         new SimpleAsyncTask() {
             @Override
@@ -228,7 +227,10 @@ public class MainActivity extends SherlockFragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pick:
-                startActivityForResult(new Intent(this, PickWebcamActivity.class), REQUEST_PICK_WEBCAM);
+                long selectedWebcamId = PreferenceManager.getDefaultSharedPreferences(this).getLong(Constants.PREF_SELECTED_WEBCAM_ID,
+                        Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+                startActivityForResult(new Intent(this, PickWebcamActivity.class).putExtra(PickWebcamActivity.EXTRA_CURRENT_WEBCAM_ID, selectedWebcamId),
+                        REQUEST_PICK_WEBCAM);
                 return true;
 
             case R.id.menu_settings:
@@ -342,7 +344,11 @@ public class MainActivity extends SherlockFragmentActivity {
     private final OnClickListener mImgPreviewOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            startActivityForResult(new Intent(MainActivity.this, PickWebcamActivity.class), REQUEST_PICK_WEBCAM);
+            long selectedWebcamId = PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getLong(Constants.PREF_SELECTED_WEBCAM_ID,
+                    Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+            startActivityForResult(
+                    new Intent(MainActivity.this, PickWebcamActivity.class).putExtra(PickWebcamActivity.EXTRA_CURRENT_WEBCAM_ID, selectedWebcamId),
+                    REQUEST_PICK_WEBCAM);
         }
     };
 

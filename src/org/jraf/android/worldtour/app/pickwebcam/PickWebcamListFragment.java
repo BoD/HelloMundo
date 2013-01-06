@@ -48,10 +48,15 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
     private WebcamAdapter mAdapter;
     private boolean mHasAnimated;
 
+    private long mCurrentWebcamId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new WebcamAdapter(getActivity(), this);
+        if (savedInstanceState != null && savedInstanceState.getLong("mCurrentWebcamId", Constants.WEBCAM_ID_NONE) != Constants.WEBCAM_ID_NONE) {
+            mCurrentWebcamId = savedInstanceState.getLong("mCurrentWebcamId", Constants.WEBCAM_ID_NONE);
+        }
+        mAdapter = new WebcamAdapter(getActivity(), this, mCurrentWebcamId);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -76,6 +81,12 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         return res;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putLong("mCurrentWebcamId", mCurrentWebcamId);
+        super.onSaveInstanceState(outState);
+    }
+
     private View getHeaderView(ListView listView) {
         View res = getActivity().getLayoutInflater().inflate(R.layout.pick_webcam_item, listView, false);
         LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
@@ -85,6 +96,10 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         res.findViewById(R.id.btnExtend).setVisibility(View.GONE);
         ((TextView) res.findViewById(R.id.txtName)).setText(R.string.pickWebcam_random);
         ((TextView) res.findViewById(R.id.txtLocationAndTime)).setText(R.string.pickWebcam_subtitle);
+
+        if (mCurrentWebcamId == Constants.WEBCAM_ID_RANDOM) {
+            res.findViewById(R.id.layMainItem).setSelected(true);
+        }
         return res;
     }
 
@@ -193,5 +208,9 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
                 .add(AlertDialogFragment.newInstance(0, R.string.common_confirmation, R.string.pickWebcam_deleteConfirmDialog_message, 0, android.R.string.yes,
                         android.R.string.no, id), Constants.FRAGMENT_DIALOG).commit();
 
+    }
+
+    public void setCurrentWebcamId(long currentWebcamId) {
+        mCurrentWebcamId = currentWebcamId;
     }
 }

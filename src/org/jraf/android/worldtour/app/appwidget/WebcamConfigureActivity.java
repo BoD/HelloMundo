@@ -17,6 +17,7 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.model.AppwidgetManager;
@@ -24,6 +25,8 @@ import org.jraf.android.worldtour.model.AppwidgetManager;
 public class WebcamConfigureActivity extends Activity {
     private static final int REQUEST_PICK_WEBCAM = 0;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private static final String PREFIX = WebcamConfigureActivity.class.getName() + ".";
+    public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,9 @@ public class WebcamConfigureActivity extends Activity {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return;
-        startActivityForResult(new Intent(this, PickWebcamActivity.class), REQUEST_PICK_WEBCAM);
+        startActivityForResult(
+                new Intent(this, PickWebcamActivity.class).putExtra(PickWebcamActivity.EXTRA_CURRENT_WEBCAM_ID,
+                        getIntent().getLongExtra(EXTRA_CURRENT_WEBCAM_ID, Constants.WEBCAM_ID_NONE)), REQUEST_PICK_WEBCAM);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class Constants {
     public static final String WEBCAM_PUBLIC_ID_EIFFEL_TOWER = "0";
 
     public static final long WEBCAM_ID_RANDOM = -1;
-
+    public static final long WEBCAM_ID_NONE = -2;
 
     public static final long INTERVAL_1_MINUTE = 60 * 1000;
     public static final long INTERVAL_10_MINUTES = 10 * 60 * 1000;

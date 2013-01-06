@@ -8,8 +8,10 @@
     <!-- Main item -->
 
     <RelativeLayout
+        android:id="@+id/layMainItem"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cell_webcam_collapsed_height" >
+        android:layout_height="@dimen/cell_webcam_collapsed_height"
+        android:background="@color/pick_webcam_item_bg" >
 
         <org.jraf.android.util.ui.LoadingImageView
             android:id="@+id/imgThumbnail"

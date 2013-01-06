@@ -41,6 +41,8 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
     private static final String TAG = Constants.TAG + PickWebcamActivity.class.getSimpleName();
 
     private static final int REQUEST_NEW_WEBCAM = 0;
+    private static final String PREFIX = PickWebcamActivity.class.getName() + ".";
+    public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
 
     private final Handler mHandler = new Handler();
 
@@ -51,7 +53,9 @@ public class PickWebcamActivity extends SherlockFragmentActivity implements Aler
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.findFragmentById(R.id.conList) == null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.conList, new PickWebcamListFragment());
+            PickWebcamListFragment pickWebcamListFragment = new PickWebcamListFragment();
+            pickWebcamListFragment.setCurrentWebcamId(getIntent().getLongExtra(EXTRA_CURRENT_WEBCAM_ID, Constants.WEBCAM_ID_NONE));
+            transaction.add(R.id.conList, pickWebcamListFragment);
             transaction.commit();
         }
     }

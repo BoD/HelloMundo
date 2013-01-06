@@ -42,11 +42,13 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final HashSet<Long> mExtendedIds = new HashSet<Long>(5);
     private final HashMap<String, String> mLocalTimeCache = new HashMap<String, String>(50);
     private ListView mListView;
+    private final long mCurrentWebcamId;
 
-    public WebcamAdapter(Context context, WebcamCallbacks webcamCallbacks) {
+    public WebcamAdapter(Context context, WebcamCallbacks webcamCallbacks, long currentWebcamId) {
         super(context, R.layout.pick_webcam_item, null, false);
         mExtendedHeight = context.getResources().getDimensionPixelSize(R.dimen.cell_webcam_extended_height);
         mWebcamCallbacks = webcamCallbacks;
+        mCurrentWebcamId = currentWebcamId;
     }
 
     public void setListView(ListView listView) {
@@ -83,7 +85,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         }
 
         // Thumbnail
-        LoadingImageView imgThumbnail = (LoadingImageView) ViewHolder.get(view, R.id.imgThumbnail);
+        LoadingImageView imgThumbnail = ViewHolder.get(view, R.id.imgThumbnail);
         if (isUserWebcam) {
             imgThumbnail.setImageResource(R.drawable.ic_thumbnail_user_defined);
         } else {
@@ -92,7 +94,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         }
 
         // Location & time
-        TextView txtLocationAndTime = (TextView) ViewHolder.get(view, R.id.txtLocationAndTime);
+        TextView txtLocationAndTime = ViewHolder.get(view, R.id.txtLocationAndTime);
         if (isUserWebcam) {
             txtLocationAndTime.setText(R.string.common_userDefined);
         } else {
@@ -106,7 +108,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         }
 
         // Source url
-        TextView txtSourceUrl = (TextView) ViewHolder.get(view, R.id.txtSourceUrl);
+        TextView txtSourceUrl = ViewHolder.get(view, R.id.txtSourceUrl);
         String sourceUrl;
         if (isUserWebcam) {
             sourceUrl = cursor.getString(10);
@@ -132,8 +134,8 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
         // Show on map / delete
         View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);
-        ImageView imgShowOnMap = (ImageView) ViewHolder.get(view, R.id.imgShowOnMap);
-        TextView txtShowOnMap = (TextView) ViewHolder.get(view, R.id.txtShowOnMap);
+        ImageView imgShowOnMap = ViewHolder.get(view, R.id.imgShowOnMap);
+        TextView txtShowOnMap = ViewHolder.get(view, R.id.txtShowOnMap);
         if (isUserWebcam) {
             imgShowOnMap.setImageResource(R.drawable.ic_ext_delete);
             txtShowOnMap.setText(R.string.pickWebcam_delete);
@@ -156,6 +158,10 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         View btnPreview = ViewHolder.get(view, R.id.btnPreview);
         btnPreview.setTag(id);
         btnPreview.setOnClickListener(mPreviewOnClickListener);
+
+        // Current webcam
+        View layMainItem = ViewHolder.get(view, R.id.layMainItem);
+        layMainItem.setSelected(id == mCurrentWebcamId);
     }
 
     private String getLocalTime(Context context, String timeZone) {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Update interval -->
+    <string-array name="preferences_updateInterval_labels">
+        <item>Toutes les minute\n(mauvais pour la batterie)</item>
+        <item>Toutes les 10 minutes</item>
+        <item>Toutes les 20 minutes</item>
+        <item>Toutes les 30 minutes\n(recommandé)</item>
+        <item>Une fois par heure\n(mieux pour la batterie)</item>
+    </string-array>
+    <string-array name="preferences_updateInterval_labels_title">
+        <item>Toutes les minute</item>
+        <item>Toutes les 10 minutes</item>
+        <item>Toutes les 20 minutes</item>
+        <item>Toutes les 30 minutes</item>
+        <item>Une fois par heure</item>
+    </string-array>
+
+    <!-- Show info -->
+    <string-array name="preferences_showInfo_labels">
+        <item>Jamais</item>
+        <item>Seulement en mode aléatoire</item>
+        <item>Toujours</item>
+    </string-array>
+
+</resources>

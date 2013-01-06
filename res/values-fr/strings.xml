@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WorldTour</string>
+
+    <!-- Common -->
+    <string name="common_pleaseWait">Veuillez patienter…</string>
+    <string name="common_toast_unexpectedError">Un problème innatendu est survenu.\nVeuillez réésssayer.</string>
+    <string name="common_discard">Annuler</string>
+    <string name="common_done">Valider</string>
+    <string name="common_userDefined">Webcam personnalisée</string>
+    <string name="common_confirmation">Confirmation</string>
+
+    <!-- Global -->
+    <string name="global_ad">(Publicité)</string>
+
+    <!-- Menu -->
+    <string name="menu_pick">Choisir une webcam</string>
+    <string name="menu_refresh">Mettre à jour le papier-peint</string>
+    <string name="menu_share">Partager l\'image actuelle</string>
+    <string name="menu_save">Enregistrer l\'image actuelle</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="menu_about">À propos</string>
+    <string name="menu_help">Aide</string>
+    <string name="menu_newWebcam">Nouvelle webcam</string>
+
+    <!-- Main -->
+    <string name="main_txtWallpaperAutoUpdate">M.à.j. automatique</string>
+    <string name="main_toast_wallpaperUpdated">Papier-peint mis à jour.</string>
+    <string name="main_toast_fileSaved">Image enregistrée dans l\'album WorldTour.</string>
+    <string name="main_dialog_noSdCard">Le stockage externe n\'est pas disponible actuellement.</string>
+    <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s.  Vue sur WorldTour pour Android.</string>
+    <string name="main_previewFrame_weight">100</string>
+
+    <!-- Pick webcam -->
+    <string name="pickWebcam_random">Aléatoire</string>
+    <string name="pickWebcam_subtitle">Une webcam différente à chaque fois</string>
+    <string name="pickWebcam_source">Source : %1$s</string>
+    <string name="pickWebcam_previewDialog_cantPreviewToast">Impossible de télécharger l\'image.</string>
+    <string name="pickWebcam_exclFromRandom">Excl. d\'aléatoire</string>
+    <string name="pickWebcam_delete">Supprimer</string>
+    <string name="pickWebcam_showOnMap">Carte</string>
+    <string name="pickWebcam_preview">Aperçu</string>
+    <string name="pickWebcam_deleteConfirmDialog_message">Êtes-vous sûr de vouloir supprimer cette webcam ?</string>
+    <string name="pickWebcam_webcamDeletedToast">Webcam supprimée.</string>
+    <string name="pickWebcam_webcamAddedToast">Webcam ajoutée.</string>
+
+    <!-- Preferences -->
+    <string name="preferences_updateInterval_title">Fréquence de mise à jour</string>
+    <string name="preferences_dimmed_title">Papier-peint assombri</string>
+    <string name="preferences_dimmed_summary">Rend le papier-peint assombri, pour améliorer la visibilité des icônes </string>
+    <string name="preferences_showInfo_title">Afficher les infos de la webcam</string>
+    <string name="preferences_showInfo_summary">Affiche le nom, la localisation et l\'heure locale de la webcam sur le papier-peint</string>
+    <string name="preferences_avoidNight_title">Eviter la nuit</string>
+    <string name="preferences_avoidNight_summary">En mode aléatoire, evite les endroits où il fait nuit</string>
+
+    <!-- Add user webcam -->
+    <string name="addUserWebcam_edtName_hint">Nom</string>
+    <string name="addUserWebcam_edtUrl_hint">URL de la webcam</string>
+    <string name="addUserWebcam_http">http://</string>
+    <string name="addUserWebcam_txtInfo1">Vous pouvez ajouter une webcam à la liste si vous en connaissez l\'URL.</string>
+    <string name="addUserWebcam_txtInfo2">Note : seules les cams de type \'photo\' (et non vidéo) sont supportées.</string>
+
+    <!-- About -->
+    <string name="about_txtInfo1"><b>BoD WorldTour</b> v${versionName}\nBuilt on ${buildDate}</string>
+    <string name="about_txtInfo2">Copyright 2012 Benoit \'BoD\' Lubek.  All Rights Reserved.</string>
+    <string name="about_email">→ BoD@JRAF.org</string>
+    <string name="about_web">→ JRAF.org/android</string>
+    <string name="about_btnShare">Partager</string>
+    <string name="about_btnRate">Donner un avis</string>
+    <string name="about_btnOtherApps">Autres applis</string>
+    <string name="about_btnEula"><u>License d\'utilisation</u></string>
+    <string name="about_shareText_subject">Essayez WorldTour !</string>
+    <string name="about_shareText_body">WorldTour pour Android est une appli excellente !\nTestez là ici :\nhttp://play.google.com/store/apps/details?id=%s</string>
+    <string name="about_btnDonate">Faire un don</string>
+
+    <!-- Eula -->
+    <string name="eula_title">License d\'utilisation</string>
+
+    <!-- Welcome -->
+    <string name="welcome_0_txtTitle">Bienvenue à WorldTour !</string>
+    <string name="welcome_0_txtText">1. Pressez ce boutton pour choisir une webcam de la liste…</string>
+    <string name="welcome_1_txtText">2. Activez pour mettre à jour automatiquement le papier-peint toutes les 30 minutes…</string>
+    <string name="welcome_2_txtText">3. Vous pouvez aussi ajouter une widget sur le bureau.</string>
+    <string name="welcome_3_txtTitle">Profitez de la vue !</string>
+    <string name="welcome_3_txtText">C\'est tout !\nChoisissez \"Aide\" pour revoir ceci.</string>
+    <string name="welcome_next">Suivant</string>
+
+    <!-- App Widgets -->
+    <string name="appwidget_webcam_label">Webcam WorldTour (2x2)</string>
+    <string name="appwidget_webcam_label_3x3">Webcam WorldTour (3x3)</string>
+
+</resources>

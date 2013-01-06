@@ -5,7 +5,7 @@
 4;The Earth (Europe);The Earth;www.fourmilab.ch/cgi-bin/Earth;rps.jraf.org/is/resize/www.fourmilab.ch/cgi-bin/Earth?di=154E23F2567AB877DC2A57B641CB2B9CA74E5E7C06382013D812A35389F7CBABAECD48240A4829A690CEA04E18A32630A9B37934842D10B8293ACF5E892973A2&__width=768&__height=576&__composite=true;lubek.b.free.fr/thumb_4.png;2009-03-23;Europe/London;-;-;-;-;-
 7;Statue of Liberty;New York City, NY, USA;earthcam.com;images.earthcam.com/ec_metros/ourcams/liberty.jpg;lubek.b.free.fr/thumb_7.png;2009-03-21;America/New_York;-;-;-;-;40.690177,-74.0457
 1;Lake Arrowhead;San Bernardino, CA, USA;www.golakearrowhead.com;www.golakearrowhead.com/index.php?url=webcams/view;lubek.b.free.fr/thumb_1.png;2009-03-21;America/Los_Angeles;-;-;-;-;34.25629,-117.191326
-8;Space Needle;Seattle, WA, USA;earthcam.com;images.earthcam.com/ec_metros/ourcams/marqueen.jpg;lubek.b.free.fr/thumb_8.png;2009-03-21;US/Pacific;-;-;-;-;47.620549,-122.34905
+8;Space Needle;Seattle, WA, USA;ibsys.com;images.ibsys.com/sea/images/weather/auto/queenannecam_640x480.jpg;lubek.b.free.fr/thumb_8.png;2009-03-21;US/Pacific;-;-;-;-;47.620549,-122.34905
 5;Basilica di S.Pietro;Vatican;www.vaticanstate.va;www.vaticanstate.va/images/webcam/bracciocarlo.jpg;lubek.b.free.fr/thumb_5.png;2009-03-21;Europe/Vatican;-;-;-;-;41.902161,12.454121
 17;Cupola di S.Pietro;Vatican;www.vaticanstate.va;www.vaticanstate.va/images/webcam/radiovaticana.jpg;lubek.b.free.fr/thumb_17.png;2009-04-05;Europe/Vatican;-;-;-;-;41.902161,12.454121
 10;Penguins in Antarctica;Antarctica;www.martingrund.de/pinguine;antarctica.martingrund.de/ohig-pingi-z.jpg;lubek.b.free.fr/thumb_10.png;2009-03-23;America/Santo_Domingo;-;-;-;-;-63.550234,-58.944397
@@ -16,13 +16,13 @@
 18;Hume Lake;Hume Lake, CA, USA;www.humelake.org;cast.humemedia.com/webcams/lake/latest.jpg;lubek.b.free.fr/thumb_18.png;2009-04-05;America/Los_Angeles;-;-;-;-;36.791377,-118.905523
 20;Boston Harbor;Boston, MA, USA;earthcam.com;images.earthcam.com/ec_metros/ourcams/bostonaqu2.jpg;lubek.b.free.fr/thumb_20.png;2009-04-13;America/New_York;-;-;-;-;42.358409,-71.05927
 23;The Sun;NASA Goddard Space Flight Center;umbra.nascom.nasa.gov/eit;rps.jraf.org/is/resize/umbra.nascom.nasa.gov/images/latest_aia_304.gif?t=t&__width=800&__height=600;lubek.b.free.fr/thumb_23.png;2009-04-18;America/Los_Angeles;-;-;-;-;-
-24;Cologne Cathedral;Cologne, Germany;www.koelner-dom.de;www.wdr.de/themen/global/webcams/domcam/domcam_live.jpg;lubek.b.free.fr/thumb_24.png;2009-04-19;Europe/Amsterdam;-;640x480;-;-;50.940978,6.958643
+24;Cologne Cathedral;Cologne, Germany;www.koelner-dom.de;www.wdr.de/themen/global/webcams/domcam/domcam_960_live.jpg;lubek.b.free.fr/thumb_24.png;2009-04-19;Europe/Amsterdam;-;640x480;-;-;50.940978,6.958643
 26;Nest Cam;Bornheim, Germany;www.pfalzstorch.de;www.martingrund.de/pfalzstorch/livebilder/nestz6we4f.jpg;lubek.b.free.fr/thumb_26.png;2009-04-26;Europe/Amsterdam;-;-;-;-;50.763852,6.986918
 27;Charles Bridge;Prague, Czech Republic;www.webcams.travel;rps.jraf.org/is/resize/webcam.pis.cz/Upload/videochb1.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_27.png;2009-05-03;Europe/Prague;-;-;-;-;50.08652,14.411134
 28;Minack Theatre;Porthcurno, Cornwall, England;www.minack.com;www.minack.com/webcams/webcam.jpg;lubek.b.free.fr/thumb_28.png;2009-05-03;Europe/London;-;600x480;-;-;50.041812,-5.650594
 29;Emmanuel College;Cambridge, England;www.emma.cam.ac.uk;131.111.133.11/axis-cgi/jpg/image.cgi?resolution=640x480;lubek.b.free.fr/thumb_29.png;2009-05-06;Europe/London;-;-;-;-;52.203507,0.123677
 30;Laundry Cam;Kitakyushu, Japan;www.wash-house.jp;210.157.199.232/SnapshotJPEG?Resolution=640x480&Quality=Clarity;lubek.b.free.fr/thumb_30.png;2009-05-23;Asia/Tokyo;-;-;0:00;23:59;33.842475,130.879333
-31;Akropolis;Athens, Greece;www.hellenic-foundation.gr;62.103.68.28:86/record/current.jpg;lubek.b.free.fr/thumb_31.png;2009-05-23;Europe/Athens;-;-;-;-;37.97918,23.716647
+#31;Akropolis;Athens, Greece;www.hellenic-foundation.gr;62.103.68.28:86/record/current.jpg;lubek.b.free.fr/thumb_31.png;2009-05-23;Europe/Athens;-;-;-;-;37.97918,23.716647
 33;Stechelberg;Stechelberg, Switzerland;www.stechelberg.ch;www.stechelberg.ch/cam/cam.jpg;lubek.b.free.fr/thumb_33.png;2009-05-23;Europe/Zurich;-;-;-;-;46.545332,7.903011
 36;Denver Skyline;Denver, CO, USA;www.colorado.gov/airquality;www.colorado.gov/airquality/live_image/chpark.jpg;lubek.b.free.fr/thumb_36.png;2009-05-23;America/Denver;-;640x480;-;-;39.740199,-104.983601
 37;New York City;New York City, NY, USA;wirednewyork.com;wirednewyork.com/images/webcams/wired-new-york-webcam1.jpg;lubek.b.free.fr/thumb_37.png;2009-05-27;America/New_York;-;640x480;-;-;40.714273,-74.005537
@@ -32,7 +32,7 @@
 42;Giraffes;Cheyenne Mountain Zoo, Colorado Springs, CO, USA;www.cmzoo.org;www.cmzoo.org/giraffeCam.jpg;lubek.b.free.fr/thumb_42.png;2009-06-29;US/Mountain;-;-;-;-;38.769974,-104.854916
 43;St. John;Cruz Bay Ferry Dock, St. John, VI, USA;www.stjohnspice.com;stjohnspice.com/spicecam1.jpg;lubek.b.free.fr/thumb_43.png;2009-08-09;America/Virgin;-;640x480;-;-;18.337376,-64.725866
 45;Bondi Beach;Sydney, Australia;www.northbondirsl.com.au/cam.html;www.northbondirsl.com.au/images/netcam.jpg;lubek.b.free.fr/thumb_45.png;2009-09-13;Australia/Sydney;-;-;-;-;-33.892189,151.277264
-47;Positano village;Positano, Italy;www.sirenuse.it;www.campaniameteo.it/webcampositano/zoo001.jpg;lubek.b.free.fr/thumb_47.png;2009-09-19;Europe/Paris;-;-;-;-;40.629818,14.486482
+#47;Positano village;Positano, Italy;www.sirenuse.it;www.campaniameteo.it/webcampositano/zoo001.jpg;lubek.b.free.fr/thumb_47.png;2009-09-19;Europe/Paris;-;-;-;-;40.629818,14.486482
 48;Weggis;Weggis, Switzerland;www.weggiscam.ch;www.weggiscam.ch/images/ro2.jpg;lubek.b.free.fr/thumb_48.png;2009-10-06;Europe/Paris;-;-;-;-;47.032146,8.43426
 49;Port of Tinos;Tinos, Greece;vifra.gr/tinos/tinos_cam4.htm;www.vifra.gr/tinos/current.jpg;lubek.b.free.fr/thumb_49.png;2009-10-06;Europe/Athens;-;-;-;-;37.580093,25.171738
 51;San Francisco Skyline;San Francisco, CA, USA;webmarin.com;webmarin.com/images/wc/Camera.jpg;lubek.b.free.fr/thumb_51.png;2009-10-10;America/Los_Angeles;-;640x480;-;-;37.77532,-122.418809

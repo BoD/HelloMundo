@@ -20,10 +20,17 @@
             android:scaleType="centerCrop" />
     </FrameLayout>
 
-    <ProgressBar
+    <!-- Need to wrap the ProgressBar because of this issue: http://code.google.com/p/android/issues/detail?id=11040 -->
+
+    <FrameLayout
         android:id="@+id/pgbLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center" >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
 </FrameLayout>

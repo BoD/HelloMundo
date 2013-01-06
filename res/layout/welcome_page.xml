@@ -64,6 +64,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/welcome_txtText2_marginBottom"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

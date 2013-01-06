@@ -2,5 +2,6 @@
 <resources>
 
     <string name="main_previewFrame_weight">40</string>
+    <string name="about_txtInfo2">Copyright 2009–2013 Benoit \'BoD\' Lubek.  All Rights Reserved.</string>
 
 </resources>

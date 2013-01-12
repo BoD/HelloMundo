@@ -18,7 +18,7 @@
 23;The Sun;NASA Goddard Space Flight Center;umbra.nascom.nasa.gov/eit;rps.jraf.org/is/resize/umbra.nascom.nasa.gov/images/latest_aia_304.gif?t=t&__width=800&__height=600;lubek.b.free.fr/thumb_23.png;2009-04-18;America/Los_Angeles;-;-;-;-;-
 24;Cologne Cathedral;Cologne, Germany;www.koelner-dom.de;www.wdr.de/themen/global/webcams/domcam/domcam_960_live.jpg;lubek.b.free.fr/thumb_24.png;2009-04-19;Europe/Amsterdam;-;640x480;-;-;50.940978,6.958643
 26;Nest Cam;Bornheim, Germany;www.pfalzstorch.de;www.martingrund.de/pfalzstorch/livebilder/nestz6we4f.jpg;lubek.b.free.fr/thumb_26.png;2009-04-26;Europe/Amsterdam;-;-;-;-;50.763852,6.986918
-27;Charles Bridge;Prague, Czech Republic;www.webcams.travel;rps.jraf.org/is/resize/webcam.pis.cz/Upload/videochb1.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_27.png;2009-05-03;Europe/Prague;-;-;-;-;50.08652,14.411134
+27;Charles Bridge;Prague, Czech Republic;www.praguewelcome.cz/cs/multimedia/webkamery/karluv-most/;rps.jraf.org/is/resize/webcam.pis.cz/Upload/videochb1.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_27.png;2009-05-03;Europe/Prague;-;-;-;-;50.08652,14.411134
 28;Minack Theatre;Porthcurno, Cornwall, England;www.minack.com;www.minack.com/webcams/webcam.jpg;lubek.b.free.fr/thumb_28.png;2009-05-03;Europe/London;-;600x480;-;-;50.041812,-5.650594
 29;Emmanuel College;Cambridge, England;www.emma.cam.ac.uk;131.111.133.11/axis-cgi/jpg/image.cgi?resolution=640x480;lubek.b.free.fr/thumb_29.png;2009-05-06;Europe/London;-;-;-;-;52.203507,0.123677
 30;Laundry Cam;Kitakyushu, Japan;www.wash-house.jp;210.157.199.232/SnapshotJPEG?Resolution=640x480&Quality=Clarity;lubek.b.free.fr/thumb_30.png;2009-05-23;Asia/Tokyo;-;-;0:00;23:59;33.842475,130.879333

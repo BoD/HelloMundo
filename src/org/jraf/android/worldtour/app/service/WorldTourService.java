@@ -242,6 +242,8 @@ public class WorldTourService extends IntentService {
                         // The bitmap must be < 1M because appWidgetManager.updateAppWidget() results in an IPC transaction
                         // (see https://groups.google.com/forum/?fromgroups=#!topic/android-developers/3jSq5cEWbEA)
                         opts.inSampleSize = 2;
+                        // This makes the bitmap "bigger" but still uses the same amout of memory
+                        opts.inTargetDensity = 1;
                         Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId).getPath(), opts);
                         logBitmapSize(bitmap);
                         remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);

@@ -147,8 +147,8 @@ public class MainActivity extends SherlockFragmentActivity {
             @Override
             protected void background() throws Exception {
                 if (firstRun) {
-                    handleFirstRun();
                     sharedPreferences.edit().putBoolean(Constants.PREF_FIRST_RUN, false).commit();
+                    handleFirstRun();
                 }
             }
 

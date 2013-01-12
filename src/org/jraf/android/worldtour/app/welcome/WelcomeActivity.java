@@ -83,6 +83,7 @@ public class WelcomeActivity extends FragmentActivity {
         // Now reset the values
         Editor editor = sharedPreferences.edit();
         editor.putInt(Constants.PREF_WELCOME_RESUME_INDEX, -1);
+        // Mark the welcome screen as seen
         editor.putBoolean(Constants.PREF_SEEN_WELCOME, true);
         editor.commit();
     }

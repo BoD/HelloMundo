@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.jraf.android.latoureiffel"
-    android:sharedUserId="org.jraf.android"
     android:versionName="${versionName}" >
+
+    <!-- android:sharedUserId="org.jraf.android" -->
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -119,6 +120,7 @@
         <activity
             android:name="org.jraf.android.worldtour.app.welcome.WelcomeActivity"
             android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Welcome" />
 
         <!-- AdMob -->

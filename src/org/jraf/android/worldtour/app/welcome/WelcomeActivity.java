@@ -36,6 +36,11 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.Animator.AnimatorListener;
+import com.nineoldandroids.animation.ObjectAnimator;
+
+
 public class WelcomeActivity extends FragmentActivity {
     private static final String TAG = Constants.TAG + WelcomeActivity.class.getSimpleName();
 
@@ -47,6 +52,7 @@ public class WelcomeActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
     private Button mBtnNext;
+    private Button mBtnDone;
     private ImageView mImgDot0;
     private ImageView mImgDot1;
     private ImageView mImgDot2;
@@ -61,6 +67,9 @@ public class WelcomeActivity extends FragmentActivity {
         mViewPager.setOnPageChangeListener(mOnPageChangeListener);
         mBtnNext = (Button) findViewById(R.id.btnNext);
         mBtnNext.setOnClickListener(mNextOnClickListener);
+        mBtnDone = (Button) findViewById(R.id.btnDone);
+        mBtnDone.setOnClickListener(mDoneOnClickListener);
+
         mImgDot0 = (ImageView) findViewById(R.id.imgDot0);
         mImgDot1 = (ImageView) findViewById(R.id.imgDot1);
         mImgDot2 = (ImageView) findViewById(R.id.imgDot2);
@@ -116,6 +125,8 @@ public class WelcomeActivity extends FragmentActivity {
     private final WelcomePagerAdapter mPagerAdapter = new WelcomePagerAdapter();
 
     private final OnPageChangeListener mOnPageChangeListener = new OnPageChangeListener() {
+        private int mPreviousPosition;
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             if (position >= 2) return;
@@ -136,14 +147,15 @@ public class WelcomeActivity extends FragmentActivity {
 
         @Override
         public void onPageSelected(int position) {
+            final int animDuration = 200;
             switch (position) {
                 case 0:
                     mImgDot0.setSelected(true);
                     mImgDot1.setSelected(false);
                     mImgDot2.setSelected(false);
                     mImgDot3.setSelected(false);
-                    mBtnNext.setText(R.string.welcome_next);
-                    mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_next, 0);
+                    mBtnNext.setVisibility(View.VISIBLE);
+                    mBtnDone.setVisibility(View.INVISIBLE);
                     break;
 
                 case 1:
@@ -151,8 +163,8 @@ public class WelcomeActivity extends FragmentActivity {
                     mImgDot1.setSelected(true);
                     mImgDot2.setSelected(false);
                     mImgDot3.setSelected(false);
-                    mBtnNext.setText(R.string.welcome_next);
-                    mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_next, 0);
+                    mBtnNext.setVisibility(View.VISIBLE);
+                    mBtnDone.setVisibility(View.INVISIBLE);
                     break;
 
                 case 2:
@@ -160,8 +172,34 @@ public class WelcomeActivity extends FragmentActivity {
                     mImgDot1.setSelected(false);
                     mImgDot2.setSelected(true);
                     mImgDot3.setSelected(false);
-                    mBtnNext.setText(R.string.welcome_next);
-                    mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_next, 0);
+
+                    if (mPreviousPosition == 3) {
+                        // Flip animation
+                        ObjectAnimator anim1 = ObjectAnimator.ofFloat(mBtnDone, "rotationX", 0, -90);
+                        anim1.addListener(new AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {}
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {}
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                mBtnDone.setVisibility(View.INVISIBLE);
+                                mBtnNext.setVisibility(View.VISIBLE);
+                                ObjectAnimator.ofFloat(mBtnNext, "rotationX", 90, 0).setDuration(animDuration / 2).start();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {}
+                        });
+                        anim1.setDuration(animDuration / 2);
+                        anim1.start();
+                    } else {
+                        mBtnNext.setVisibility(View.VISIBLE);
+                        mBtnDone.setVisibility(View.INVISIBLE);
+                    }
+
                     break;
 
                 case 3:
@@ -169,10 +207,37 @@ public class WelcomeActivity extends FragmentActivity {
                     mImgDot1.setSelected(false);
                     mImgDot2.setSelected(false);
                     mImgDot3.setSelected(true);
-                    mBtnNext.setText(R.string.common_done);
-                    mBtnNext.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done, 0);
+
+                    if (mPreviousPosition == 2) {
+                        // Flip animation
+                        ObjectAnimator anim1 = ObjectAnimator.ofFloat(mBtnNext, "rotationX", 0, 90);
+                        anim1.addListener(new AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {}
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {}
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                mBtnNext.setVisibility(View.INVISIBLE);
+                                mBtnDone.setVisibility(View.VISIBLE);
+                                ObjectAnimator.ofFloat(mBtnDone, "rotationX", -90, 0).setDuration(animDuration / 2).start();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {}
+                        });
+                        anim1.setDuration(animDuration / 2);
+                        anim1.start();
+                    } else {
+                        mBtnNext.setVisibility(View.INVISIBLE);
+                        mBtnDone.setVisibility(View.VISIBLE);
+                    }
+
                     break;
             }
+            mPreviousPosition = position;
         }
 
         @Override
@@ -183,13 +248,17 @@ public class WelcomeActivity extends FragmentActivity {
         @Override
         public void onClick(View v) {
             int currentItem = mViewPager.getCurrentItem();
-            if (currentItem < NB_PAGES - 1) {
-                mViewPager.setCurrentItem(currentItem + 1, true);
-            } else {
-                finish();
-            }
+            mViewPager.setCurrentItem(currentItem + 1, true);
         }
     };
+
+    private final OnClickListener mDoneOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    };
+
 
     @Override
     public void onBackPressed() {

@@ -16,11 +16,22 @@
 
         <Button
             android:id="@+id/btnNext"
-            android:layout_width="116dp"
+            android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:drawableRight="@drawable/ic_next"
+            android:maxLines="1"
             android:text="@string/welcome_next" />
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableRight="@drawable/ic_done"
+            android:maxLines="1"
+            android:text="@string/common_done"
+            android:visibility="gone" />
 
         <!-- Dots -->
 

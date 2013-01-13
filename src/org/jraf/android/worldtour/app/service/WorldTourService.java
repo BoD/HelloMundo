@@ -16,11 +16,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -52,7 +54,7 @@ import org.jraf.android.util.HttpUtil.Options;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.app.appwidget.WebcamConfigureActivity;
+import org.jraf.android.worldtour.app.appwidget.webcam.WebcamConfigureActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.AppwidgetColumns;
@@ -72,6 +74,7 @@ public class WorldTourService extends IntentService {
     public static final String ACTION_UPDATE_WALLPAPER_START = PREFIX + "ACTION_UPDATE_WALLPAPER_START";
     public static final String ACTION_UPDATE_WALLPAPER_END_SUCCESS = PREFIX + "ACTION_UPDATE_WALLPAPER_END_SUCCESS";
     public static final String ACTION_UPDATE_WALLPAPER_END_FAILURE = PREFIX + "ACTION_UPDATE_WALLPAPER_END_FAILURE";
+    public static final String ACTION_UPDATE_WIDGETS_END = PREFIX + "ACTION_UPDATE_WIDGETS_END";
 
     private static final String EXTRA_FROM_ALARM = "EXTRA_FROM_ALARM";
 
@@ -200,11 +203,12 @@ public class WorldTourService extends IntentService {
             if (Config.LOGD) Log.d(TAG, "updateWidgets count=" + count);
             if (count == 0) return;
             ExecutorService threadPool = Executors.newFixedThreadPool(count);
+            ArrayList<Future<?>> futureList = new ArrayList<Future<?>>(cursor.getCount());
             while (cursor.moveToNext()) {
                 final int appwidgetId = cursor.getInt(0);
                 final long finalWebcamId = cursor.getLong(1);
                 if (Config.LOGD) Log.d(TAG, "updateWidgets Submitting runnable");
-                threadPool.submit(new Runnable() {
+                Future<?> future = threadPool.submit(new Runnable() {
                     @Override
                     public void run() {
                         long webcamId = finalWebcamId;
@@ -264,8 +268,20 @@ public class WorldTourService extends IntentService {
                         if (Config.LOGD) Log.d(TAG, "updateWidgets updateAppWidget has been called");
                     }
                 });
+
+                futureList.add(future);
             }
             threadPool.shutdown();
+            // Wait for all tasks to complete (blocking)
+            for (Future<?> future : futureList) {
+                try {
+                    future.get();
+                } catch (Exception e) {
+                    Log.w(TAG, "updateWidgets future.get() threw an exception", e);
+                }
+            }
+            // Inform listeners that all the widgets have been updated
+            sendBroadcast(new Intent(ACTION_UPDATE_WIDGETS_END));
         } finally {
             if (cursor != null) cursor.close();
         }
@@ -497,6 +513,13 @@ public class WorldTourService extends IntentService {
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    public static PendingIntent getUpdateAllPendingIntent(Context context) {
+        Intent intent = new Intent(context, WorldTourService.class);
+        intent.setAction(ACTION_UPDATE_ALL);
+        intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, false);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     public static PendingIntent getWidgetsAlarmPendingIntent(Context context) {
         Intent intent = new Intent(context, WorldTourService.class);
         intent.setAction(ACTION_UPDATE_WIDGETS);
@@ -504,20 +527,19 @@ public class WorldTourService extends IntentService {
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public static void refreshWallpaperNow(Context context) {
+    public static void updateWallpaperNow(Context context) {
         Intent intent = new Intent(context, WorldTourService.class);
         intent.setAction(ACTION_UPDATE_WALLPAPER);
         context.startService(intent);
     }
 
-    public static void refreshWidgetsNow(Context context) {
+    public static void updateWidgetsNow(Context context) {
         Intent intent = new Intent(context, WorldTourService.class);
         intent.setAction(ACTION_UPDATE_WIDGETS);
         context.startService(intent);
     }
 
-
-    public static void refreshAllNow(Context context) {
+    public static void updateAllNow(Context context) {
         Intent intent = new Intent(context, WorldTourService.class);
         intent.setAction(ACTION_UPDATE_ALL);
         context.startService(intent);

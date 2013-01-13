@@ -89,5 +89,6 @@
     <!-- App Widgets -->
     <string name="appwidget_webcam_label">WorldTour Webcam (2x2)</string>
     <string name="appwidget_webcam_label_3x3">WorldTour Webcam (3x3)</string>
+    <string name="appwidget_refresh_label">WorldTour Refresh</string>
 
 </resources>

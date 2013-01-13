@@ -180,7 +180,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 if (Config.LOGD) Log.d(TAG, "onActivityResult selectedWebcamId=" + selectedWebcamId);
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, selectedWebcamId).commit();
                 updateWebcamRandom();
-                WorldTourService.refreshWallpaperNow(this);
+                WorldTourService.updateWallpaperNow(this);
                 break;
 
             case REQUEST_SETTINGS:
@@ -239,7 +239,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
             case R.id.menu_refresh:
                 if (mLoading) return true;
-                WorldTourService.refreshAllNow(this);
+                WorldTourService.updateAllNow(this);
                 return true;
 
             case R.id.menu_save:
@@ -323,7 +323,7 @@ public class MainActivity extends SherlockFragmentActivity {
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, wallpaperPendingIntent);
 
             // Update the wallpaper now
-            WorldTourService.refreshWallpaperNow(this);
+            WorldTourService.updateWallpaperNow(this);
         } else {
             alarmManager.cancel(wallpaperPendingIntent);
         }
@@ -418,7 +418,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private void updateWebcamImage() {
         if (!new File(getFilesDir(), Constants.FILE_IMAGE_WALLPAPER).exists()) {
             // The service has never been started, there is no file yet: start it now
-            WorldTourService.refreshWallpaperNow(this);
+            WorldTourService.updateWallpaperNow(this);
             mImgPreviewFrame.setVisibility(View.INVISIBLE);
             return;
         }

@@ -9,7 +9,7 @@
  *
  * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.worldtour.app.appwidget;
+package org.jraf.android.worldtour.app.appwidget.webcam;
 
 public class WebcamAppWidgetProvider3x3 extends WebcamAppWidgetProvider {
 

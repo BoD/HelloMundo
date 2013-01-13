@@ -9,7 +9,7 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.worldtour.app.appwidget;
+package org.jraf.android.worldtour.app.appwidget.webcam;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;

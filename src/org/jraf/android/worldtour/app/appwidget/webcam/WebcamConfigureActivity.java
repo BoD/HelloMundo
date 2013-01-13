@@ -9,7 +9,7 @@
  *
  * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
-package org.jraf.android.worldtour.app.appwidget;
+package org.jraf.android.worldtour.app.appwidget.webcam;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -55,7 +55,7 @@ public class WebcamConfigureActivity extends Activity {
         long webcamId = ContentUris.parseId(data.getData());
         AppwidgetManager.get().insertOrUpdate(this, mAppWidgetId, webcamId);
 
-        WorldTourService.refreshWidgetsNow(this);
+        WorldTourService.updateWidgetsNow(this);
 
         setResult(RESULT_OK, resultValue);
         finish();

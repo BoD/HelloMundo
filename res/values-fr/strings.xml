@@ -29,7 +29,8 @@
     <string name="main_toast_wallpaperUpdated">Papier-peint mis à jour.</string>
     <string name="main_toast_fileSaved">Image enregistrée dans l\'album WorldTour.</string>
     <string name="main_dialog_noSdCard">Le stockage externe n\'est pas disponible actuellement.</string>
-    <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s.  Vue sur WorldTour pour Android.</string>
+    <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s. Vue sur WorldTour pour Android.</string>
+    <string name="main_shareText_userWebcam">Image de \'%1$s\' prise au %3$s. Vue sur WorldTour pour Android.</string>
     <string name="main_previewFrame_weight">100</string>
     <string name="main_txtNoImageWarning">Impossible de télécharger l\'image.\nProblème de réseau ? Ré-essayez plus tard.</string>
 

@@ -520,48 +520,47 @@ public class MainActivity extends SherlockFragmentActivity {
         }, FRAGMENT_ASYNC_TASK).commit();
     }
 
-
-    protected String getFileName(WebcamInfo currentWebcamInfo) {
-        boolean specialCam = Constants.SPECIAL_CAMS.contains(currentWebcamInfo.publicId);
-        String location = currentWebcamInfo.location;
-        if (!specialCam) {
-            location += " - " + DateTimeUtil.getCurrentTimeForTimezone(this, currentWebcamInfo.timeZone);
-        } else {
-            location += " - " + DateTimeUtil.formatTime(this, new Date());
-        }
-
-        String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
-        res += currentWebcamInfo.name + " - ";
-        res += location;
-        res += ".jpg";
-
-        res = FileUtil.stripBadCharsForFileName(res, "_");
-        return res;
-    }
-
-    private class WebcamInfo {
+    private static class WebcamInfo {
         public String name;
         public String location;
         public String timeZone;
         public String publicId;
         public String uriStr;
+        public int type;
 
-        public String getShareText() {
-            String date = DateTimeUtil.formatDate(MainActivity.this, new Date()) + ", ";
-            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
+        public String getShareText(Context context) {
+            String date = DateTimeUtil.formatDate(context, new Date()) + ", ";
+            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId) || type == WebcamType.USER;
             if (!specialCam) {
-                date += DateTimeUtil.getCurrentTimeForTimezone(MainActivity.this, timeZone);
+                date += DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
             } else {
-                date += DateTimeUtil.formatTime(MainActivity.this, new Date());
+                date += DateTimeUtil.formatTime(context, new Date());
             }
-            return getString(R.string.main_shareText, name, location, date);
+            return context.getString(type == WebcamType.USER ? R.string.main_shareText_userWebcam : R.string.main_shareText, name, location, date);
+        }
+
+        public String getFileName(Context context) {
+            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId) || type == WebcamType.USER;
+            if (!specialCam) {
+                location += " - " + DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
+            } else {
+                location += " - " + DateTimeUtil.formatTime(context, new Date());
+            }
+
+            String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
+            res += name + " - ";
+            res += location;
+            res += ".jpg";
+
+            res = FileUtil.stripBadCharsForFileName(res, "_");
+            return res;
         }
     }
 
     private WebcamInfo getCurrentWebcamInfo() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
-        String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID };
+        String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE };
         Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
         Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
         try {
@@ -574,6 +573,7 @@ public class MainActivity extends SherlockFragmentActivity {
             res.location = cursor.getString(1);
             res.timeZone = cursor.getString(2);
             res.publicId = cursor.getString(3);
+            res.type = cursor.getInt(4);
             return res;
         } finally {
             if (cursor != null) cursor.close();
@@ -588,7 +588,7 @@ public class MainActivity extends SherlockFragmentActivity {
         if (currentWebcamInfo == null) {
             throw new Exception("Could not get current webcam info");
         }
-        String fileName = getFileName(currentWebcamInfo);
+        String fileName = currentWebcamInfo.getFileName(this);
         File file = new File(path, fileName);
         path.mkdirs();
         InputStream inputStream = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
@@ -653,7 +653,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 shareIntent.setType("image/jpeg");
 
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, mWebcamInfo.name);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText());
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText(MainActivity.this));
                 shareIntent.putExtra("sms_body", mWebcamInfo.name);
                 Uri uri = Uri.parse(mWebcamInfo.uriStr);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);

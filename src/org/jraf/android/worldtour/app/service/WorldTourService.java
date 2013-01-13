@@ -71,10 +71,11 @@ public class WorldTourService extends IntentService {
     public static final String ACTION_UPDATE_WIDGETS = PREFIX + "ACTION_UPDATE_WIDGETS";
     public static final String ACTION_UPDATE_ALL = PREFIX + "ACTION_UPDATE_ALL";
 
+    public static final String ACTION_UPDATE_START = PREFIX + "ACTION_UPDATE_START";
     public static final String ACTION_UPDATE_WALLPAPER_START = PREFIX + "ACTION_UPDATE_WALLPAPER_START";
     public static final String ACTION_UPDATE_WALLPAPER_END_SUCCESS = PREFIX + "ACTION_UPDATE_WALLPAPER_END_SUCCESS";
     public static final String ACTION_UPDATE_WALLPAPER_END_FAILURE = PREFIX + "ACTION_UPDATE_WALLPAPER_END_FAILURE";
-    public static final String ACTION_UPDATE_WIDGETS_END = PREFIX + "ACTION_UPDATE_WIDGETS_END";
+    public static final String ACTION_UPDATE_END = PREFIX + "ACTION_UPDATE_END";
 
     private static final String EXTRA_FROM_ALARM = "EXTRA_FROM_ALARM";
 
@@ -97,12 +98,21 @@ public class WorldTourService extends IntentService {
 
         boolean avoidNight = sharedPreferences.getBoolean(Constants.PREF_AVOID_NIGHT, Constants.PREF_AVOID_NIGHT_DEFAULT);
 
+        // Notify start of update
+        sendBroadcast(new Intent(ACTION_UPDATE_START));
+
         String action = intent.getAction();
         if (ACTION_UPDATE_ALL.equals(action) || ACTION_UPDATE_WALLPAPER.equals(action)) {
             updateWallpaper(intent, sharedPreferences, avoidNight);
         }
         if (ACTION_UPDATE_ALL.equals(action) || ACTION_UPDATE_WIDGETS.equals(action)) {
             updateWidgets(intent, sharedPreferences, avoidNight);
+        }
+
+        // If this is a wallpaper only update, notify end of update here.
+        // Otherwise the end of update notification is down inside updateWidgets().
+        if (ACTION_UPDATE_WALLPAPER.equals(action)) {
+            sendBroadcast(new Intent(ACTION_UPDATE_END));
         }
     }
 
@@ -203,7 +213,7 @@ public class WorldTourService extends IntentService {
             if (Config.LOGD) Log.d(TAG, "updateWidgets count=" + count);
             if (count == 0) return;
             ExecutorService threadPool = Executors.newFixedThreadPool(count);
-            ArrayList<Future<?>> futureList = new ArrayList<Future<?>>(cursor.getCount());
+            ArrayList<Future<?>> futureList = new ArrayList<Future<?>>(count);
             while (cursor.moveToNext()) {
                 final int appwidgetId = cursor.getInt(0);
                 final long finalWebcamId = cursor.getLong(1);
@@ -271,7 +281,6 @@ public class WorldTourService extends IntentService {
 
                 futureList.add(future);
             }
-            threadPool.shutdown();
             // Wait for all tasks to complete (blocking)
             for (Future<?> future : futureList) {
                 try {
@@ -280,8 +289,9 @@ public class WorldTourService extends IntentService {
                     Log.w(TAG, "updateWidgets future.get() threw an exception", e);
                 }
             }
+            threadPool.shutdown();
             // Inform listeners that all the widgets have been updated
-            sendBroadcast(new Intent(ACTION_UPDATE_WIDGETS_END));
+            sendBroadcast(new Intent(ACTION_UPDATE_END));
         } finally {
             if (cursor != null) cursor.close();
         }

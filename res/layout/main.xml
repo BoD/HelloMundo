@@ -60,6 +60,16 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop" />
             </FrameLayout>
+
+            <TextView
+                android:id="@+id/txtNoImageWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/main_txtNoImageWarning"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#888"
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 

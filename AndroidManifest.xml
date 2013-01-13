@@ -84,10 +84,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.jraf.android.worldtour.app.service.WorldTourService.ACTION_UPDATE_WALLPAPER_START" />
+                <action android:name="org.jraf.android.worldtour.app.service.WorldTourService.ACTION_UPDATE_START" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.jraf.android.worldtour.app.service.WorldTourService.ACTION_UPDATE_WIDGETS_END" />
+                <action android:name="org.jraf.android.worldtour.app.service.WorldTourService.ACTION_UPDATE_END" />
             </intent-filter>
 
             <meta-data

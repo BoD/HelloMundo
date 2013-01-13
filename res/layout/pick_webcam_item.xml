@@ -8,7 +8,7 @@
     <!-- Main item -->
 
     <RelativeLayout
-        android:id="@+id/layMainItem"
+        android:id="@+id/conMainItem"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cell_webcam_collapsed_height"
         android:background="@color/pick_webcam_item_bg" >
@@ -65,7 +65,7 @@
     <!-- Extented item -->
 
     <FrameLayout
-        android:id="@+id/layExtended"
+        android:id="@+id/conExtended"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:background="@drawable/extended_bg" >

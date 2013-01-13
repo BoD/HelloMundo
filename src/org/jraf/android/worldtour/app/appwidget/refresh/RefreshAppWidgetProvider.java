@@ -36,10 +36,14 @@ public class RefreshAppWidgetProvider extends AppWidgetProvider {
         if (Config.LOGD) Log.d(TAG, "onReceive intent=" + StringUtil.toString(intent));
 
         String action = intent.getAction();
-        if (WorldTourService.ACTION_UPDATE_WALLPAPER_START.equals(action)) {
+        if (WorldTourService.ACTION_UPDATE_START.equals(action)) {
+            if (sAnimate) {
+                // Already animating
+                return;
+            }
             sAnimate = true;
             startAnimationThread(context);
-        } else if (WorldTourService.ACTION_UPDATE_WIDGETS_END.equals(action)) {
+        } else if (WorldTourService.ACTION_UPDATE_END.equals(action)) {
             sAnimate = false;
         } else {
             super.onReceive(context, intent);

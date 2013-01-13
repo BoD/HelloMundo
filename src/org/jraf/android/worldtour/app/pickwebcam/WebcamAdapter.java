@@ -66,10 +66,10 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         boolean isUserWebcam = cursor.getInt(9) == WebcamType.USER;
 
         // Extend
-        View layExtended = ViewHolder.get(view, R.id.layExtended);
-        layExtended.setTag(id);
+        View conExtended = ViewHolder.get(view, R.id.conExtended);
+        conExtended.setTag(id);
         View btnExtend = ViewHolder.get(view, R.id.btnExtend);
-        btnExtend.setTag(layExtended);
+        btnExtend.setTag(conExtended);
 
         if (cursor.getPosition() == cursor.getCount() - 1) {
             btnExtend.setTag(R.id.lastItem, true);
@@ -77,7 +77,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             btnExtend.setTag(R.id.lastItem, false);
         }
         btnExtend.setOnClickListener(mExtendOnClickListener);
-        LayoutParams layoutParams = layExtended.getLayoutParams();
+        LayoutParams layoutParams = conExtended.getLayoutParams();
         if (mExtendedIds.contains(id)) {
             layoutParams.height = mExtendedHeight;
         } else {
@@ -160,8 +160,8 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         btnPreview.setOnClickListener(mPreviewOnClickListener);
 
         // Current webcam
-        View layMainItem = ViewHolder.get(view, R.id.layMainItem);
-        layMainItem.setSelected(id == mCurrentWebcamId);
+        View conMainItem = ViewHolder.get(view, R.id.conMainItem);
+        conMainItem.setSelected(id == mCurrentWebcamId);
     }
 
     private String getLocalTime(Context context, String timeZone) {
@@ -177,12 +177,12 @@ public class WebcamAdapter extends ResourceCursorAdapter {
     private final OnClickListener mExtendOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            View layExtended = (View) v.getTag();
-            long id = (Long) layExtended.getTag();
-            LayoutParams layoutParams = layExtended.getLayoutParams();
+            View conExtended = (View) v.getTag();
+            long id = (Long) conExtended.getTag();
+            LayoutParams layoutParams = conExtended.getLayoutParams();
             if (layoutParams.height == 0) {
                 // Extend
-                ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, true);
+                ExtendHeightAnimation animation = new ExtendHeightAnimation(conExtended, mExtendedHeight, true);
                 animation.setDuration(300);
                 if ((Boolean) v.getTag(R.id.lastItem) == true) {
                     animation.setAnimationListener(new AnimationListener() {
@@ -202,13 +202,13 @@ public class WebcamAdapter extends ResourceCursorAdapter {
                         }
                     });
                 }
-                layExtended.startAnimation(animation);
+                conExtended.startAnimation(animation);
                 mExtendedIds.add(id);
             } else {
                 // Collapse
-                ExtendHeightAnimation animation = new ExtendHeightAnimation(layExtended, mExtendedHeight, false);
+                ExtendHeightAnimation animation = new ExtendHeightAnimation(conExtended, mExtendedHeight, false);
                 animation.setDuration(300);
-                layExtended.startAnimation(animation);
+                conExtended.startAnimation(animation);
                 mExtendedIds.remove(id);
             }
         }

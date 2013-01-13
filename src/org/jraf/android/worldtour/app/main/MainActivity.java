@@ -91,12 +91,14 @@ public class MainActivity extends SherlockFragmentActivity {
     private boolean mLoading;
     private MenuItem mRefreshMenuItem;
     private boolean mNeedToUpdateWebcamInfo = true;
+    private boolean mImageAvailable;
 
     private Switch mSwiOnOff;
     private ImageView mImgPreview;
     private View mImgPreviewFrame;
     private TextView mTxtWebcamInfoName;
     private TextView mTxtWebcamInfoLocation;
+    private View mTxtNoImageWarning;
 
     private final Handler mHandler = new Handler();
 
@@ -110,6 +112,7 @@ public class MainActivity extends SherlockFragmentActivity {
         mImgPreviewFrame = findViewById(R.id.imgPreviewFrame);
         mTxtWebcamInfoName = (TextView) findViewById(R.id.txtWebcamInfo_name);
         mTxtWebcamInfoLocation = (TextView) findViewById(R.id.txtWebcamInfo_location);
+        mTxtNoImageWarning = findViewById(R.id.txtNoImageWarning);
 
         getSupportActionBar().setLogo(R.drawable.ic_home);
         setTitle(null);
@@ -284,10 +287,16 @@ public class MainActivity extends SherlockFragmentActivity {
                 }
             } else if (WorldTourService.ACTION_UPDATE_WALLPAPER_END_FAILURE.equals(action)) {
                 setLoading(false);
-                // TODO
+                if (!mImageAvailable) {
+                    setNoImageWarningVisible(true);
+                }
             }
         }
     };
+
+    private void setNoImageWarningVisible(boolean visible) {
+        mTxtNoImageWarning.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
 
 
     /*
@@ -351,7 +360,6 @@ public class MainActivity extends SherlockFragmentActivity {
                     REQUEST_PICK_WEBCAM);
         }
     };
-
 
 
     /*
@@ -420,8 +428,10 @@ public class MainActivity extends SherlockFragmentActivity {
             // The service has never been started, there is no file yet: start it now
             WorldTourService.updateWallpaperNow(this);
             mImgPreviewFrame.setVisibility(View.INVISIBLE);
+            mImageAvailable = false;
             return;
         }
+        setNoImageWarningVisible(false);
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
@@ -442,6 +452,7 @@ public class MainActivity extends SherlockFragmentActivity {
                 if (result == null) return;
                 mImgPreview.setImageBitmap(result);
                 mImgPreviewFrame.setVisibility(View.VISIBLE);
+                mImageAvailable = true;
             }
         }.execute();
     }

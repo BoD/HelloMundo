@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <RelativeLayout
-        android:id="@+id/layBottom"
+        android:id="@+id/conBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -74,17 +74,17 @@
     </RelativeLayout>
 
     <View
-        android:id="@+id/layBottom_gradient"
+        android:id="@+id/conBottom_gradient"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_above="@+id/layBottom"
+        android:layout_above="@+id/conBottom"
         android:background="@drawable/welcome_bottom_gradient" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_above="@+id/layBottom"
+        android:layout_above="@+id/conBottom"
         android:layout_alignParentTop="true" />
 
 </RelativeLayout>

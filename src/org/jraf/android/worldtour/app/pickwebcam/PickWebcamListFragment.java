@@ -98,7 +98,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         ((TextView) res.findViewById(R.id.txtLocationAndTime)).setText(R.string.pickWebcam_subtitle);
 
         if (mCurrentWebcamId == Constants.WEBCAM_ID_RANDOM) {
-            res.findViewById(R.id.layMainItem).setSelected(true);
+            res.findViewById(R.id.conMainItem).setSelected(true);
         }
         return res;
     }

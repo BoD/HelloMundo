@@ -31,6 +31,7 @@
     <string name="main_dialog_noSdCard">The external storage is currently not available.</string>
     <string name="main_shareText">Picure of \'%1$s\', %2$s, taken on %3$s.  Spotted on WorldTour for Android.</string>
     <string name="main_previewFrame_weight">100</string>
+    <string name="main_txtNoImageWarning">Could not download the image.\nNetwork problem?  Try to refresh later.</string>
 
     <!-- Pick webcam -->
     <string name="pickWebcam_random">Random</string>

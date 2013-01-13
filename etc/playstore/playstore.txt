@@ -1,0 +1,68 @@
+Description:
+
+WorldTour periodically sets your home wallpaper to beautiful pictures of places from all around the world!
+
+The images are fetched every 30 minutes from LIVE webcams so you can always see the current view of the location.
+Explore the world, and enjoy the view!
+
+Available webcams include:
+- The Eiffel Tower
+- Earth view from space
+- New York City
+- Penguins in Antarctica
+- The Grand Canyon
+...and more!
+
+You can choose a specific webcam or select random mode to be surprised at every refresh.
+A widget is also available if you prefer to keep your current wallpaper.
+The refresh frequency can be adjusted in the settings.
+You can also add your own webcams to the list.
+
+
+French:
+
+Worldtour change périodiquement votre papier-peint de bureau avec de sublimes images de lieux du monde entier !
+
+Les images sont récupérées toutes les 30 minutes depuis des webcams 'LIVE', vous pouvez donc toujours voir la vue actuelle de l'endroit.
+Explorez le monde, et profitez de la vue !
+
+Quelques exemples de webcams disponibles :
+- La Tour Eiffel
+- La Terre vue de l'espace
+- New York
+- Des pingouin en Antarctique
+- Le Grand Canyon
+... et bien d'autres !
+
+Vous pouvez choisir une webcam en particulier ou bien le mode aléatoire pour être surpris à chaque mise à jour.
+Une widget est aussi disponible si vous préférez conserver votre papier-peint actuel.
+La fréquence de mise à jour est configurable dans les options.
+Vous pouvez aussi ajouter vos propres webcams à la liste.
+
+------
+Promo text:
+
+WorldTour: explore the world, and enjoy the view!
+
+
+-------
+Recent changes:
+Your favorite Android app is back in version 2!
+- Complete UI / design overhaul
+- Added a widget so you can enjoy WorldTour while keeping your current wallpaper
+- You can now see a preview of a webcam before selecting it
+- Show locations on a map
+- Ability to add several custom webcams to the list
+- Removed non working webcams from the list
+- Bug fixes
+
+
+French:
+
+Votre appli Android préférée est de retour en version 2 !
+- Remaniement complet de l'interface et du design
+- Ajout d'une widget pour apprecier WorldTour tout en conservant votre papier-peint actuel
+- Possibilité de voir un aperçu de la webcam avant de la sélectionner
+- Affichez les lieus sur une carte
+- Possibilité d'ajouter plusieurs webcams à la liste
+- Corrections de bugs

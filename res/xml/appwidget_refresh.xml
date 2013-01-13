@@ -3,6 +3,7 @@
     android:initialLayout="@layout/appwidget_refresh"
     android:minHeight="40dp"
     android:minWidth="40dp"
+    android:previewImage="@drawable/widget_refresh_preview"
     android:resizeMode="none"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen|keyguard" />

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="about_btnRate">Donner un avis</string>
     <string name="main_txtWallpaperAutoUpdate">M.à.j. automatique du papier-peint</string>
-    <string name="about_txtInfo2">Copyright 2009–2013 Benoit \'BoD\' Lubek.  Tous Droits Reservés.</string>
+    <string name="about_txtInfo2">Copyright 2009–2013 Benoit \'BoD\' Lubek. Tous Droits Réservés.</string>
 
 </resources>

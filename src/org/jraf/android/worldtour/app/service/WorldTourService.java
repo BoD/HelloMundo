@@ -211,7 +211,11 @@ public class WorldTourService extends IntentService {
         try {
             int count = cursor.getCount();
             if (Config.LOGD) Log.d(TAG, "updateWidgets count=" + count);
-            if (count == 0) return;
+            if (count == 0) {
+                // Inform listeners that all the widgets have been updated
+                sendBroadcast(new Intent(ACTION_UPDATE_END));
+                return;
+            }
             ExecutorService threadPool = Executors.newFixedThreadPool(count);
             ArrayList<Future<?>> futureList = new ArrayList<Future<?>>(count);
             while (cursor.moveToNext()) {

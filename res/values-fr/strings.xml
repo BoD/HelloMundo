@@ -25,7 +25,7 @@
     <string name="menu_newWebcam">Nouvelle webcam</string>
 
     <!-- Main -->
-    <string name="main_txtWallpaperAutoUpdate">M.à.j. auto. papier-peint</string>
+    <string name="main_txtWallpaperAutoUpdate">M.à.j. automatique du papier-peint</string>
     <string name="main_toast_wallpaperUpdated">Papier-peint mis à jour.</string>
     <string name="main_toast_fileSaved">Image enregistrée dans l\'album WorldTour.</string>
     <string name="main_dialog_noSdCard">Le stockage externe n\'est pas disponible actuellement.</string>

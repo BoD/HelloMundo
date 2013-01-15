@@ -7,7 +7,7 @@ Explore the world, and enjoy the view!
 
 Available webcams include:
 - The Eiffel Tower
-- Earth view from space
+- Earth viewed from space
 - New York City
 - Penguins in Antarctica
 - The Grand Canyon
@@ -56,6 +56,8 @@ Your favorite Android app is back in version 2!
 - Removed non working webcams from the list
 - Bug fixes
 
+Note: this is a beta version, it could be a tad unstable, but known bugs will be fixed in a timely fashion! 
+
 
 French:
 
@@ -66,3 +68,5 @@ Votre appli Android préférée est de retour en version 2 !
 - Affichez les lieus sur une carte
 - Possibilité d'ajouter plusieurs webcams à la liste
 - Corrections de bugs
+
+Note : cette version est beta, elle peut être un peu instable, mais les bugs connus seront corrigés dans les meilleurs délais !

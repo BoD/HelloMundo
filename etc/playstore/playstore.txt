@@ -43,6 +43,10 @@ Vous pouvez aussi ajouter vos propres webcams à la liste.
 Promo text:
 
 WorldTour: explore the world, and enjoy the view!
+french :
+WorldTour : explorez le monde, et profitez de la vue !
+
+
 
 
 -------
@@ -69,4 +73,4 @@ Votre appli Android préférée est de retour en version 2 !
 - Possibilité d'ajouter plusieurs webcams à la liste
 - Corrections de bugs
 
-Note : cette version est beta, elle peut être un peu instable, mais les bugs connus seront corrigés dans les meilleurs délais !
+Note : cette version est beta et peut être un peu instable. Les bugs connus seront corrigés dans les meilleurs délais !

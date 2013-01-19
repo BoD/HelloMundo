@@ -148,7 +148,7 @@ public class WelcomeActivity extends FragmentActivity {
 
         @Override
         public void onPageSelected(int position) {
-            final int animDuration = 200;
+            final int animDuration = 250;
             switch (position) {
                 case 0:
                     mImgDot0.setSelected(true);
@@ -179,6 +179,9 @@ public class WelcomeActivity extends FragmentActivity {
                         ObjectAnimator anim1 = ObjectAnimator.ofFloat(mBtnDone, "rotationX", 0, -90);
                         anim1.addListener(new AnimatorListener() {
                             @Override
+                            public void onAnimationCancel(Animator animation) {}
+
+                            @Override
                             public void onAnimationStart(Animator animation) {}
 
                             @Override
@@ -186,13 +189,14 @@ public class WelcomeActivity extends FragmentActivity {
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
+                                // Need to call clearAnimation before setVisibility because NineOldAndroids uses Animation.setFillAfter(true)
+                                mBtnDone.clearAnimation();
                                 mBtnDone.setVisibility(View.INVISIBLE);
                                 mBtnNext.setVisibility(View.VISIBLE);
-                                ObjectAnimator.ofFloat(mBtnNext, "rotationX", 90, 0).setDuration(animDuration / 2).start();
+                                ObjectAnimator anim2 = ObjectAnimator.ofFloat(mBtnNext, "rotationX", 90, 0);
+                                anim2.setDuration(animDuration / 2);
+                                anim2.start();
                             }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {}
                         });
                         anim1.setDuration(animDuration / 2);
                         anim1.start();
@@ -220,14 +224,18 @@ public class WelcomeActivity extends FragmentActivity {
                             public void onAnimationRepeat(Animator animation) {}
 
                             @Override
-                            public void onAnimationEnd(Animator animation) {
-                                mBtnNext.setVisibility(View.INVISIBLE);
-                                mBtnDone.setVisibility(View.VISIBLE);
-                                ObjectAnimator.ofFloat(mBtnDone, "rotationX", -90, 0).setDuration(animDuration / 2).start();
-                            }
+                            public void onAnimationCancel(Animator animation) {}
 
                             @Override
-                            public void onAnimationCancel(Animator animation) {}
+                            public void onAnimationEnd(Animator animation) {
+                                // Need to call clearAnimation before setVisibility because NineOldAndroids uses Animation.setFillAfter(true)
+                                mBtnNext.clearAnimation();
+                                mBtnNext.setVisibility(View.INVISIBLE);
+                                mBtnDone.setVisibility(View.VISIBLE);
+                                ObjectAnimator anim2 = ObjectAnimator.ofFloat(mBtnDone, "rotationX", -90, 0);
+                                anim2.setDuration(animDuration / 2);
+                                anim2.start();
+                            }
                         });
                         anim1.setDuration(animDuration / 2);
                         anim1.start();

@@ -89,6 +89,7 @@ public class WelcomeActivity extends FragmentActivity {
     }
 
     private void setShowCasePosition(View view, Rect r) {
+        if (Config.LOGD) Log.d(TAG, "setShowCasePosition r=" + r);
         Rect rect = new Rect(r);
         if (rect.top > 0) {
             int margin = getResources().getDimensionPixelSize(R.dimen.welcome_showCase_margin);

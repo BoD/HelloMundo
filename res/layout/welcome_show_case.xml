@@ -16,7 +16,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="75dp"
-        android:background="@color/welcome_bg"
+        android:background="@color/welcome_showCaseHide_bg"
         android:visibility="invisible" />
 
     <ImageView

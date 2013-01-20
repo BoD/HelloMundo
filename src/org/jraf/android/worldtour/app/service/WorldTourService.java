@@ -54,8 +54,10 @@ import org.jraf.android.util.HttpUtil.Options;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.analytics.AnalyticsHelper;
 import org.jraf.android.worldtour.app.appwidget.webcam.WebcamConfigureActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
+import org.jraf.android.worldtour.model.WebcamInfo;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.AppwidgetColumns;
 import org.jraf.android.worldtour.provider.WebcamColumns;
@@ -124,6 +126,10 @@ public class WorldTourService extends IntentService {
     private void updateWallpaper(Intent intent, SharedPreferences sharedPreferences, boolean avoidNight) {
         if (Config.LOGD) Log.d(TAG, "updateWallpaper");
         long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+
+        // Analytics
+        AnalyticsHelper.get().sendEvent(TAG, "updateWallpaper", WebcamManager.get().getPublicId(this, webcamId));
+
         boolean isRandom = false;
         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
             isRandom = true;
@@ -151,7 +157,7 @@ public class WorldTourService extends IntentService {
         // If the dimmed setting or the 'show webcam info' setting is enabled create an edited version of the image
         boolean wantDimmed = sharedPreferences.getBoolean(Constants.PREF_DIMMED, Constants.PREF_DIMMED_DEFAULT);
         String showInfoPref = sharedPreferences.getString(Constants.PREF_SHOW_INFO, Constants.PREF_SHOW_INFO_DEFAULT);
-        boolean wantShowInfo = Constants.PREF_SHOW_INFO_ALWAYS.equals(showInfoPref) || (isRandom && Constants.PREF_SHOW_INFO_ONLY_RANDOM.equals(showInfoPref));
+        boolean wantShowInfo = Constants.PREF_SHOW_INFO_ALWAYS.equals(showInfoPref) || isRandom && Constants.PREF_SHOW_INFO_ONLY_RANDOM.equals(showInfoPref);
         if (wantDimmed || wantShowInfo) {
             ok = saveEditedVersion(wantDimmed, wantShowInfo, webcamInfo);
             if (!ok) return;
@@ -235,6 +241,9 @@ public class WorldTourService extends IntentService {
                             return;
                         }
 
+                        // Analytics
+                        AnalyticsHelper.get().sendEvent(TAG, "updateWidget", WebcamManager.get().getPublicId(WorldTourService.this, webcamId));
+
                         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
                             Long randomWebcamId = getRandomWebcamId(avoidNight);
                             if (randomWebcamId == null) {
@@ -305,13 +314,6 @@ public class WorldTourService extends IntentService {
     private void logBitmapSize(Bitmap bitmap) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) return;
         if (Config.LOGD) Log.d(TAG, "updateWidgets bitmap.getByteCount()=" + bitmap.getByteCount());
-    }
-
-    private static class WebcamInfo {
-        public String url;
-        public String httpReferer;
-        public String name;
-        public String location;
     }
 
     private WebcamInfo getWebcamInfo(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {

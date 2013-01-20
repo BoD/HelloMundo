@@ -19,16 +19,19 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.Blocking;
+import org.jraf.android.util.Blocking.Type;
 import org.jraf.android.util.HttpUtil;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
@@ -81,6 +84,7 @@ public class WebcamManager {
         preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
     }
 
+    @Blocking({ Type.DISK, Type.NETWORK })
     private ArrayList<String> insertWebcams(InputStream inputStream, ContentResolver contentResolver) throws IOException {
         ArrayList<String> publicIds = new ArrayList<String>(40);
         try {
@@ -181,6 +185,7 @@ public class WebcamManager {
         res.put(WebcamColumns.TYPE, WebcamType.SERVER);
     }
 
+    @Blocking(Type.DISK)
     public void insertUserWebcam(Context context, String name, String url) {
         ContentValues values = new ContentValues(12);
         values.put(WebcamColumns.PUBLIC_ID, "user_" + System.currentTimeMillis());
@@ -190,5 +195,24 @@ public class WebcamManager {
         values.put(WebcamColumns.TYPE, WebcamType.USER);
         ContentResolver contentResolver = context.getContentResolver();
         contentResolver.insert(WebcamColumns.CONTENT_URI, values);
+    }
+
+    @Blocking(Type.DISK)
+    public String getPublicId(Context context, long webcamId) {
+        if (webcamId == Constants.WEBCAM_ID_RANDOM) return "RANDOM";
+        if (webcamId == Constants.WEBCAM_ID_NONE) return "NONE"; // Should never happen
+
+        String[] projection = { WebcamColumns.PUBLIC_ID };
+        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
+        Cursor cursor = context.getContentResolver().query(webcamUri, projection, null, null, null);
+        try {
+            if (cursor == null || !cursor.moveToFirst()) {
+                Log.w(TAG, "getDownloadInfo Could not find webcam with webcamId=" + webcamId);
+                return "Unknown";
+            }
+            return cursor.getString(0);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
     }
 }

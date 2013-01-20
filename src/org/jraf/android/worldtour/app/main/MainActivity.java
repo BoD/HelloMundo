@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.app.AlarmManager;
@@ -55,7 +54,6 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.Blocking;
 import org.jraf.android.util.DateTimeUtil;
 import org.jraf.android.util.EnvironmentUtil;
-import org.jraf.android.util.FileUtil;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.MediaScannerUtil;
 import org.jraf.android.util.SimpleAsyncTask;
@@ -71,6 +69,7 @@ import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.app.welcome.WelcomeActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
+import org.jraf.android.worldtour.model.WebcamInfo;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 import org.jraf.android.worldtour.provider.WebcamType;
@@ -520,43 +519,6 @@ public class MainActivity extends AnalyticsSherlockFragmentActivity {
         }, FRAGMENT_ASYNC_TASK).commit();
     }
 
-    private static class WebcamInfo {
-        public String name;
-        public String location;
-        public String timeZone;
-        public String publicId;
-        public String uriStr;
-        public int type;
-
-        public String getShareText(Context context) {
-            String date = DateTimeUtil.formatDate(context, new Date()) + ", ";
-            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId) || type == WebcamType.USER;
-            if (!specialCam) {
-                date += DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
-            } else {
-                date += DateTimeUtil.formatTime(context, new Date());
-            }
-            return context.getString(type == WebcamType.USER ? R.string.main_shareText_userWebcam : R.string.main_shareText, name, location, date);
-        }
-
-        public String getFileName(Context context) {
-            boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId) || type == WebcamType.USER;
-            if (!specialCam) {
-                location += " - " + DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
-            } else {
-                location += " - " + DateTimeUtil.formatTime(context, new Date());
-            }
-
-            String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
-            res += name + " - ";
-            res += location;
-            res += ".jpg";
-
-            res = FileUtil.stripBadCharsForFileName(res, "_");
-            return res;
-        }
-    }
-
     private WebcamInfo getCurrentWebcamInfo() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
@@ -618,7 +580,7 @@ public class MainActivity extends AnalyticsSherlockFragmentActivity {
                 throw new Exception("MediaScanner did not scan the file " + file + " after 5000ms");
             }
         }
-        currentWebcamInfo.uriStr = scannedImageUri.get().toString();
+        currentWebcamInfo.localBitmapUriStr = scannedImageUri.get().toString();
         return currentWebcamInfo;
     }
 
@@ -655,7 +617,7 @@ public class MainActivity extends AnalyticsSherlockFragmentActivity {
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, mWebcamInfo.name);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText(MainActivity.this));
                 shareIntent.putExtra("sms_body", mWebcamInfo.name);
-                Uri uri = Uri.parse(mWebcamInfo.uriStr);
+                Uri uri = Uri.parse(mWebcamInfo.localBitmapUriStr);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
             }

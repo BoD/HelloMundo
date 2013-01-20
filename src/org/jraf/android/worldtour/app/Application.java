@@ -14,6 +14,8 @@ package org.jraf.android.worldtour.app;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 public class Application extends android.app.Application {
     public static int sVersionCode;
     public static String sVersionName;
@@ -25,6 +27,9 @@ public class Application extends android.app.Application {
                 PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                 sVersionCode = packageInfo.versionCode;
                 sVersionName = packageInfo.versionName;
+
+                // Google Analytics
+                EasyTracker.getInstance().setContext(this);
             } catch (NameNotFoundException e) {
                 // should never happen
                 throw new AssertionError(e);

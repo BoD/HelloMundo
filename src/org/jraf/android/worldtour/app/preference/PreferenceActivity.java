@@ -18,10 +18,9 @@ import android.preference.PreferenceManager;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.common.AnalyticsSherlockPreferenceActivity;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-
-public class PreferenceActivity extends SherlockPreferenceActivity {
+public class PreferenceActivity extends AnalyticsSherlockPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

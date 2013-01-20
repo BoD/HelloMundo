@@ -18,7 +18,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -35,13 +34,14 @@ import android.widget.TextView;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.common.AnalyticsFragmentActivity;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 
-public class WelcomeActivity extends FragmentActivity {
+public class WelcomeActivity extends AnalyticsFragmentActivity {
     private static final String TAG = Constants.TAG + WelcomeActivity.class.getSimpleName();
 
     private static final String PREFIX = WelcomeActivity.class.getName() + ".";

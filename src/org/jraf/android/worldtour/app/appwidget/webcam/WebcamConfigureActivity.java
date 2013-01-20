@@ -11,18 +11,18 @@
  */
 package org.jraf.android.worldtour.app.appwidget.webcam;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.os.Bundle;
 
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.common.AnalyticsActivity;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 
-public class WebcamConfigureActivity extends Activity {
+public class WebcamConfigureActivity extends AnalyticsActivity {
     private static final int REQUEST_PICK_WEBCAM = 0;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private static final String PREFIX = WebcamConfigureActivity.class.getName() + ".";

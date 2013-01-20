@@ -24,12 +24,12 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.SimpleAsyncTaskFragment;
 import org.jraf.android.util.validation.Validators;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.common.AnalyticsSherlockFragmentActivity;
 import org.jraf.android.worldtour.model.WebcamManager;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class AddUserWebcamActivity extends SherlockFragmentActivity {
+public class AddUserWebcamActivity extends AnalyticsSherlockFragmentActivity {
     protected static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
 
     private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();

@@ -18,11 +18,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.worldtour.app.common.AnalyticsSherlockActivity;
 
-import com.actionbarsherlock.app.SherlockActivity;
 
-
-public class AboutActivity extends SherlockActivity {
+public class AboutActivity extends AnalyticsSherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

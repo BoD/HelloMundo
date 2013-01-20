@@ -29,15 +29,15 @@ import org.jraf.android.util.dialog.AlertDialogListener;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity;
+import org.jraf.android.worldtour.app.common.AnalyticsSherlockFragmentActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class PickWebcamActivity extends SherlockFragmentActivity implements AlertDialogListener {
+public class PickWebcamActivity extends AnalyticsSherlockFragmentActivity implements AlertDialogListener {
     private static final String TAG = Constants.TAG + PickWebcamActivity.class.getSimpleName();
 
     private static final int REQUEST_NEW_WEBCAM = 0;

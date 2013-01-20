@@ -21,11 +21,10 @@ import android.webkit.WebView;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.StringUtil;
+import org.jraf.android.worldtour.app.common.AnalyticsSherlockActivity;
 
-import com.actionbarsherlock.app.SherlockActivity;
 
-
-public class EulaActivity extends SherlockActivity {
+public class EulaActivity extends AnalyticsSherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

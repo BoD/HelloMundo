@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Tracking ID -->
+    <string name="ga_trackingId" translatable="false" tools:ignore="TypographyDashes,UnusedResources">UA-73429-2</string>
+
+    <!-- Enable Activity tracking -->
+    <bool name="ga_autoActivityTracking" tools:ignore="UnusedResources">true</bool>
+
+    <!-- Enable automatic exception tracking -->
+    <bool name="ga_reportUncaughtExceptions" tools:ignore="UnusedResources">false</bool>
+
+    <!-- Debug logs -->
+    <bool name="ga_debug" tools:ignore="UnusedResources">true</bool>
+
+    <!-- Dispatch period: 10 seconds -->
+    <integer name="ga_dispatchPeriod" tools:ignore="UnusedResources">10</integer>
+
+    <!-- Session duration: 6 minutes -->
+    <integer name="ga_sessionTimeout" tools:ignore="UnusedResources">360</integer>
+
+</resources>

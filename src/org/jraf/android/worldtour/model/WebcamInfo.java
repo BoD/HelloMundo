@@ -44,15 +44,16 @@ public class WebcamInfo {
 
     public String getFileName(Context context) {
         boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId) || type == WebcamType.USER;
+        String locationStr;
         if (!specialCam) {
-            location += " - " + DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
+            locationStr = location + " - " + DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
         } else {
-            location += " - " + DateTimeUtil.formatTime(context, new Date());
+            locationStr = location + " - " + DateTimeUtil.formatTime(context, new Date());
         }
 
         String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
         res += name + " - ";
-        res += location;
+        res += locationStr;
         res += ".jpg";
 
         res = FileUtil.stripBadCharsForFileName(res, "_");

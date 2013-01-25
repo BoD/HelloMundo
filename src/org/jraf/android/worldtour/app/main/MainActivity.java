@@ -63,7 +63,7 @@ import org.jraf.android.util.ui.UiUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.about.AboutActivity;
-import org.jraf.android.worldtour.app.common.AnalyticsSherlockFragmentActivity;
+import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockFragmentActivity;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.preference.PreferenceActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
@@ -78,7 +78,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class MainActivity extends AnalyticsSherlockFragmentActivity {
+public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     private static String TAG = Constants.TAG + MainActivity.class.getSimpleName();
 
     private static final int REQUEST_PICK_WEBCAM = 0;

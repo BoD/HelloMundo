@@ -32,16 +32,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.app.common.AnalyticsFragmentActivity;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.ObjectAnimator;
 
 
-public class WelcomeActivity extends AnalyticsFragmentActivity {
+public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
     private static final String TAG = Constants.TAG + WelcomeActivity.class.getSimpleName();
 
     private static final String PREFIX = WelcomeActivity.class.getName() + ".";

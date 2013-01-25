@@ -18,10 +18,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.worldtour.app.common.AnalyticsSherlockActivity;
+import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockActivity;
 
 
-public class AboutActivity extends AnalyticsSherlockActivity {
+public class AboutActivity extends LifecycleDispatchSherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

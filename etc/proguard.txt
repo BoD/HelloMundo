@@ -1,0 +1,1 @@
+java -jar ~/Dev/android-sdk-linux/tools/proguard/lib/retrace.jar ~/gitrepo/worldtour2/etc/proguard/mapping_208_full.txt ~/tmp/exception.txt

@@ -487,8 +487,16 @@ public class WorldTourService extends IntentService {
                         return getRandomWebcamId(avoidNight);
                     }
                 } else {
-                    String coordinates = cursor.getString(1);
-                    boolean isNight = SunriseSunset.isNight(coordinates);
+                    boolean isNight;
+                    String coordinatesStr = cursor.getString(1);
+                    if (coordinatesStr == null) {
+                        isNight = false;
+                    } else {
+                        String[] split = coordinatesStr.split(",");
+                        double lat = Double.valueOf(split[0]);
+                        double lon = Double.valueOf(split[1]);
+                        isNight = SunriseSunset.isNight(lat, lon);
+                    }
                     if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
                     if (isNight) {
                         // Recurse

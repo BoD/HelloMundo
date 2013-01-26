@@ -64,7 +64,7 @@
     <string name="addUserWebcam_txtInfo2">Note: only \'photo\' (not video) cams are supported.</string>
 
     <!-- About -->
-    <string name="about_txtInfo1"><b>BoD WorldTour</b> v${versionName}\nBuilt on ${buildDate}</string>
+    <string name="about_txtInfo1"><b>BoD WorldTour</b> v${versionName}\nBuilt on ${buildDate}<font fgcolor="#FF888888"> – ${gitSha1}</font></string>
     <string name="about_txtInfo2">Copyright 2009–2013 Benoit \'BoD\' Lubek.\nAdditional code by Carmen Alvarez (c@rmen.ca).\nAll Rights Reserved.</string>
     <string name="about_email">→ BoD@JRAF.org</string>
     <string name="about_web">→ JRAF.org/android</string>

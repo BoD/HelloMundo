@@ -28,7 +28,8 @@
 #-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*,!code/allocation/variable
 
 # Fix for ActionBarSherlock
--keep class com.actionbarsherlock.** { *; } 
--keep interface com.actionbarsherlock.** { *; } 
+-keep class com.actionbarsherlock.** { *; }
+-keep interface com.actionbarsherlock.** { *; }
 
-
+# Keep file name / line numbers so we can fix crashes
+-keepattributes SourceFile,LineNumberTable

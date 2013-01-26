@@ -90,11 +90,29 @@ public class WebcamManager {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            ContentValues values = new ContentValues(12);
+            String lastLine = "";
+            boolean firstLine = true;
+            ArrayList<ContentValues> valuesList = new ArrayList<ContentValues>(60);
             while ((line = reader.readLine()) != null) {
+                // Check for specific first line (avoid networks that return a wifi login page)
+                if (firstLine) {
+                    if (!line.startsWith("#begin")) {
+                        throw new IOException("First line of database file doesn't start with '#begin'");
+                    }
+                    firstLine = false;
+                }
+                lastLine = line;
                 if (line.startsWith("#")) continue;
+                ContentValues values = new ContentValues(12);
                 parseLine(line, values);
+                valuesList.add(values);
+            }
+            // Check for specific last line (avoid any network problems)
+            if (!lastLine.startsWith("#end")) {
+                throw new IOException("Last line of database file doesn't start with '#end'");
+            }
 
+            for (ContentValues values : valuesList) {
                 // Already present?
                 Long id = null;
                 String publicId = values.getAsString(WebcamColumns.PUBLIC_ID);
@@ -118,7 +136,6 @@ public class WebcamManager {
                     // Found: existing object
                     contentResolver.update(WebcamColumns.CONTENT_URI, values, selection, selectionArgs);
                 }
-                values.clear();
             }
             return publicIds;
         } finally {

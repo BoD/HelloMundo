@@ -26,8 +26,10 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.app.saveshare.SaveShareHelper;
+import org.jraf.android.worldtour.app.saveshare.SaveShareListener;
 
-public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentActivity implements OnClickListener {
+public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentActivity implements OnClickListener, SaveShareListener {
     private static final String TAG = Constants.TAG + WebcamAppWidgetActionsActivity.class.getSimpleName();
 
     private static final String PREFIX = WebcamAppWidgetActionsActivity.class.getName() + ".";
@@ -79,15 +81,30 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
     public void onClick(DialogInterface dialog, int which) {
         if (Config.LOGD) Log.d(TAG, "onClick which=" + which);
         dialog.dismiss();
-        finish();
 
         switch (which) {
+            case 0:
+                // Share image
+                SaveShareHelper.get().shareImage(this, getSupportFragmentManager(), mAppWidgetId);
+                break;
+
+            case 1:
+                // Save image
+                SaveShareHelper.get().saveImage(this, getSupportFragmentManager(), mAppWidgetId);
+                break;
+
             case 2:
                 // Pick another webcam
                 Intent intent = getIntent();
                 intent.setClass(this, WebcamConfigureActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
+    }
+
+    @Override
+    public void onDone() {
+        finish();
     }
 }

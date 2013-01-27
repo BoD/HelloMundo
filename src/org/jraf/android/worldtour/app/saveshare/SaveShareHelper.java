@@ -112,6 +112,10 @@ public class SaveShareHelper {
                     return;
                 }
                 Toast.makeText(context, R.string.main_toast_fileSaved, Toast.LENGTH_SHORT).show();
+
+                if (getActivity() instanceof SaveShareListener) {
+                    ((SaveShareListener) getActivity()).onDone();
+                }
             }
         }, FRAGMENT_ASYNC_TASK).commit();
     }
@@ -148,6 +152,10 @@ public class SaveShareHelper {
                 Uri uri = Uri.parse(mWebcamInfo.localBitmapUriStr);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
                 context.startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
+
+                if (context instanceof SaveShareListener) {
+                    ((SaveShareListener) context).onDone();
+                }
             }
         }.execute();
     }
@@ -159,7 +167,7 @@ public class SaveShareHelper {
             webcamId = getCurrentWallpaperWebcamId(context);
         } else {
             webcamId = AppwidgetManager.get().getWebcamId(context, appwidgetId);
-            if (webcamId == -1) throw new Exception("Could not get webcamId for appwidgetId=" + appwidgetId);
+            if (webcamId == Constants.WEBCAM_ID_NONE) throw new Exception("Could not get webcamId for appwidgetId=" + appwidgetId);
         }
 
         // 2.1 equivalent of File path = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);

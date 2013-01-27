@@ -119,7 +119,7 @@ public class AppwidgetManager {
             if (cursor.moveToFirst()) {
                 return cursor.getLong(0);
             }
-            return -1;
+            return Constants.WEBCAM_ID_NONE;
         } finally {
             if (cursor != null) cursor.close();
         }

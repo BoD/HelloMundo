@@ -21,6 +21,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
@@ -28,6 +32,7 @@ import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.saveshare.SaveShareHelper;
 import org.jraf.android.worldtour.app.saveshare.SaveShareListener;
+import org.jraf.android.worldtour.app.service.WorldTourService;
 
 public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentActivity implements OnClickListener, SaveShareListener {
     private static final String TAG = Constants.TAG + WebcamAppWidgetActionsActivity.class.getSimpleName();
@@ -60,46 +65,114 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), com.actionbarsherlock.R.style.Theme_Sherlock_Light));
-            builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+            final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), com.actionbarsherlock.R.style.Theme_Sherlock);
+            //            final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), android.R.style.Theme_Light);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(contextWithTheme);
+            builder.setNegativeButton(android.R.string.cancel, null);
+            //            builder.setItems(getResources().getStringArray(R.array.webcamAppwidget_actions_labels), new OnClickListener() {
+            //                @Override
+            //                public void onClick(DialogInterface dialog, int which) {
+            //                    ((OnClickListener) getActivity()).onClick(dialog, which);
+            //                }
+            //            });
+            builder.setAdapter(new ArrayAdapter<String>(contextWithTheme, android.R.layout.simple_list_item_1, android.R.id.text1, getResources()
+                    .getStringArray(R.array.webcamAppwidget_actions_labels)) {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    getActivity().finish();
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    TextView res = (TextView) super.getView(position, convertView, parent);
+                    int icon = 0;
+                    switch (position) {
+                        case 0:
+                            // Pick another webcam
+                            icon = R.drawable.ic_action_pick;
+                            break;
+
+                        case 1:
+                            // Refresh
+                            icon = R.drawable.ic_action_refresh;
+                            break;
+
+                        case 2:
+                            // Share image
+                            icon = R.drawable.ic_action_share;
+                            break;
+
+                        case 3:
+                            // Save image
+                            icon = R.drawable.ic_action_save;
+                            break;
+
+
+                    }
+                    res.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
+                    res.setCompoundDrawablePadding(contextWithTheme.getResources().getDimensionPixelSize(R.dimen.webcamAppwidgetActions_iconPadding));
+
+
+
+                    return res;
                 }
-            });
-            builder.setItems(getResources().getStringArray(R.array.webcamAppwidget_actions_labels), new OnClickListener() {
+            }, new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     ((OnClickListener) getActivity()).onClick(dialog, which);
                 }
             });
-            return builder.create();
+            AlertDialog dialog = builder.create();
+            dialog.getListView().setBackgroundResource(R.drawable.abs__ab_solid_dark_holo);
+            return dialog;
+        }
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            if (Config.LOGD) Log.d(TAG, "onDismiss");
+            getActivity().finish();
+        }
+
+        @Override
+        public void onDestroyView() {
+            // Workaround for http://code.google.com/p/android/issues/detail?id=17423
+            if (getDialog() != null) {
+                getDialog().setOnDismissListener(null);
+            }
+            super.onDestroyView();
         }
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (Config.LOGD) Log.d(TAG, "onClick which=" + which);
+        // We don't finish the activity right now, so remove the OnDismissListener
+        ((Dialog) dialog).setOnDismissListener(null);
         dialog.dismiss();
 
         switch (which) {
+
             case 0:
-                // Share image
-                SaveShareHelper.get().shareImage(this, getSupportFragmentManager(), mAppWidgetId);
-                break;
-
-            case 1:
-                // Save image
-                SaveShareHelper.get().saveImage(this, getSupportFragmentManager(), mAppWidgetId);
-                break;
-
-            case 2:
                 // Pick another webcam
                 Intent intent = getIntent();
                 intent.setClass(this, WebcamConfigureActivity.class);
                 startActivity(intent);
                 finish();
                 break;
+
+            case 1:
+                // Refresh
+                WorldTourService.updateWidgetsNow(this);
+                finish();
+                break;
+
+            case 2:
+                // Share image
+                SaveShareHelper.get().shareImage(this, getSupportFragmentManager(), mAppWidgetId);
+                break;
+
+            case 3:
+                // Save image
+                SaveShareHelper.get().saveImage(this, getSupportFragmentManager(), mAppWidgetId);
+                break;
+
+
         }
     }
 

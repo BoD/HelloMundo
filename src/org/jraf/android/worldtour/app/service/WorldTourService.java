@@ -269,9 +269,9 @@ public class WorldTourService extends IntentService {
                         // The bitmap must be < 1M because appWidgetManager.updateAppWidget() results in an IPC transaction
                         // (see https://groups.google.com/forum/?fromgroups=#!topic/android-developers/3jSq5cEWbEA)
                         opts.inSampleSize = 2;
-                        // This makes the bitmap "bigger" but still uses the same amout of memory
+                        // This makes the bitmap "bigger" but still uses the same amount of memory
                         opts.inTargetDensity = 1;
-                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId).getPath(), opts);
+                        Bitmap bitmap = BitmapFactory.decodeFile(getFileStreamPath(AppwidgetManager.get().getFileName(appwidgetId)).getPath(), opts);
                         logBitmapSize(bitmap);
                         remoteViews.setImageViewBitmap(R.id.imgPreview, bitmap);
                         remoteViews.setViewVisibility(R.id.pgbLoading, View.GONE);
@@ -365,7 +365,7 @@ public class WorldTourService extends IntentService {
             if (mode == Mode.WALLPAPER) {
                 outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER, MODE_PRIVATE);
             } else {
-                outputStream = openFileOutput(Constants.FILE_IMAGE_APPWIDGET + "_" + appWidgetId, MODE_PRIVATE);
+                outputStream = openFileOutput(AppwidgetManager.get().getFileName(appWidgetId), MODE_PRIVATE);
             }
         } catch (FileNotFoundException e) {
             // Should never happen

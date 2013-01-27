@@ -105,4 +105,23 @@ public class AppwidgetManager {
             if (cursor != null) cursor.close();
         }
     }
+
+    public String getFileName(int appwidgetId) {
+        return Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId;
+    }
+
+    public long getWebcamId(Context context, int appwidgetId) {
+        String[] projection = { AppwidgetColumns.WEBCAM_ID };
+        String selection = AppwidgetColumns.APPWIDGET_ID + "=?";
+        String[] selectionArgs = { "" + appwidgetId };
+        final Cursor cursor = context.getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+        try {
+            if (cursor.moveToFirst()) {
+                return cursor.getLong(0);
+            }
+            return -1;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+    }
 }

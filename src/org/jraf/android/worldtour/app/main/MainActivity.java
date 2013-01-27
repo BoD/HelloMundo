@@ -12,11 +12,8 @@
 package org.jraf.android.worldtour.app.main;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.concurrent.atomic.AtomicReference;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -30,15 +27,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.media.MediaScannerConnection.OnScanCompletedListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,12 +47,8 @@ import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.Blocking;
 import org.jraf.android.util.DateTimeUtil;
-import org.jraf.android.util.EnvironmentUtil;
 import org.jraf.android.util.IoUtil;
-import org.jraf.android.util.MediaScannerUtil;
 import org.jraf.android.util.SimpleAsyncTask;
-import org.jraf.android.util.SimpleAsyncTaskFragment;
-import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.util.ui.UiUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -66,10 +56,10 @@ import org.jraf.android.worldtour.app.about.AboutActivity;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockFragmentActivity;
 import org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.worldtour.app.preference.PreferenceActivity;
+import org.jraf.android.worldtour.app.saveshare.SaveShareHelper;
 import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.app.welcome.WelcomeActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
-import org.jraf.android.worldtour.model.WebcamInfo;
 import org.jraf.android.worldtour.model.WebcamManager;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 import org.jraf.android.worldtour.provider.WebcamType;
@@ -83,8 +73,6 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
 
     private static final int REQUEST_PICK_WEBCAM = 0;
     private static final int REQUEST_SETTINGS = 1;
-
-    private static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
 
     private boolean mBroadcastReceiverRegistered;
     private boolean mLoading;
@@ -245,11 +233,11 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
                 return true;
 
             case R.id.menu_save:
-                saveCurrentImage();
+                SaveShareHelper.get().saveImage(this, getSupportFragmentManager(), SaveShareHelper.WALLPAPER);
                 return true;
 
             case R.id.menu_share:
-                shareCurrentImage();
+                SaveShareHelper.get().shareImage(this, getSupportFragmentManager(), SaveShareHelper.WALLPAPER);
                 return true;
 
             case R.id.menu_help:
@@ -468,160 +456,6 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         } else {
             mRefreshMenuItem.setActionView(null);
         }
-    }
-
-
-    /*
-     * Save current image.
-     */
-
-    private void saveCurrentImage() {
-        if (Config.LOGD) Log.d(TAG, "saveCurrentImage");
-        if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), Constants.FRAGMENT_DIALOG)
-                    .commit();
-            return;
-        }
-
-        getSupportFragmentManager().beginTransaction().add(new SimpleAsyncTaskFragment() {
-            private boolean mTaskFinished;
-
-            @Override
-            protected void onPreExecute() {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!mTaskFinished) {
-                            ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-                            progressDialogFragment.show(getFragmentManager(), Constants.FRAGMENT_DIALOG);
-                        }
-                    }
-                }, 500);
-            }
-
-            @Override
-            protected void background() throws Exception {
-                saveAndInsertImage();
-            }
-
-            @Override
-            protected void postExecute(boolean ok) {
-                mTaskFinished = true;
-                DialogFragment dialogFragment = (DialogFragment) getFragmentManager().findFragmentByTag(Constants.FRAGMENT_DIALOG);
-                if (dialogFragment != null) dialogFragment.dismissAllowingStateLoss();
-                if (!ok) {
-                    Toast.makeText(MainActivity.this, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Toast.makeText(MainActivity.this, R.string.main_toast_fileSaved, Toast.LENGTH_SHORT).show();
-            }
-        }, FRAGMENT_ASYNC_TASK).commit();
-    }
-
-    private WebcamInfo getCurrentWebcamInfo() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
-        String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE };
-        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
-        Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
-        try {
-            if (cursor == null || !cursor.moveToFirst()) {
-                Log.e(TAG, "Could not find webcam with id=" + currentWebcamId);
-                return null;
-            }
-            WebcamInfo res = new WebcamInfo();
-            res.name = cursor.getString(0);
-            res.location = cursor.getString(1);
-            res.timeZone = cursor.getString(2);
-            res.publicId = cursor.getString(3);
-            res.type = cursor.getInt(4);
-            return res;
-        } finally {
-            if (cursor != null) cursor.close();
-        }
-    }
-
-    private WebcamInfo saveAndInsertImage() throws Exception {
-        // 2.1 equivalent of File path = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);
-        File picturesPath = new File(Environment.getExternalStorageDirectory(), "Pictures");
-        File path = new File(picturesPath, "WorldTour");
-        WebcamInfo currentWebcamInfo = getCurrentWebcamInfo();
-        if (currentWebcamInfo == null) {
-            throw new Exception("Could not get current webcam info");
-        }
-        String fileName = currentWebcamInfo.getFileName(this);
-        File file = new File(path, fileName);
-        path.mkdirs();
-        InputStream inputStream = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
-        OutputStream outputStream = new FileOutputStream(file);
-        try {
-            IoUtil.copy(inputStream, outputStream);
-        } finally {
-            IoUtil.close(inputStream, outputStream);
-        }
-
-        // Scan it
-        final AtomicReference<Uri> scannedImageUri = new AtomicReference<Uri>();
-        MediaScannerUtil.scanFile(this, new String[] { file.getPath() }, null, new OnScanCompletedListener() {
-            @Override
-            public void onScanCompleted(String p, Uri uri) {
-                if (Config.LOGD) Log.d(TAG, "onScanCompleted path=" + p + " uri=" + uri);
-                scannedImageUri.set(uri);
-            }
-        });
-
-        // Wait until the media scanner has found our file
-        long start = System.currentTimeMillis();
-        while (scannedImageUri.get() == null) {
-            if (Config.LOGD) Log.d(TAG, "saveAndInsertImage Waiting 250ms for media scanner...");
-            SystemClock.sleep(250);
-            if (System.currentTimeMillis() - start > 5000) {
-                throw new Exception("MediaScanner did not scan the file " + file + " after 5000ms");
-            }
-        }
-        currentWebcamInfo.localBitmapUriStr = scannedImageUri.get().toString();
-        return currentWebcamInfo;
-    }
-
-
-    /*
-     * Share current image.
-     */
-
-    private void shareCurrentImage() {
-        if (Config.LOGD) Log.d(TAG, "shareCurrentImage");
-        if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), Constants.FRAGMENT_DIALOG)
-                    .commit();
-            return;
-        }
-        new SimpleAsyncTask() {
-            private WebcamInfo mWebcamInfo;
-
-            @Override
-            protected void background() throws Exception {
-                mWebcamInfo = saveAndInsertImage();
-            }
-
-            @Override
-            protected void postExecute(boolean ok) {
-                if (!ok) {
-                    Toast.makeText(MainActivity.this, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("image/jpeg");
-
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, mWebcamInfo.name);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText(MainActivity.this));
-                shareIntent.putExtra("sms_body", mWebcamInfo.name);
-                Uri uri = Uri.parse(mWebcamInfo.localBitmapUriStr);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
-            }
-        }.execute();
     }
 
 

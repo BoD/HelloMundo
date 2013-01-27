@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.StringUtil;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -47,6 +48,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Config.LOGD) Log.d(TAG, "onCreate intent=" + StringUtil.toString(getIntent()));
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -152,6 +154,10 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
                 // Pick another webcam
                 Intent intent = getIntent();
                 intent.setClass(this, WebcamConfigureActivity.class);
+                if (getIntent().getExtras() != null) {
+                    intent.putExtra(WebcamConfigureActivity.EXTRA_CURRENT_WEBCAM_ID,
+                            getIntent().getLongExtra(EXTRA_CURRENT_WEBCAM_ID, AppWidgetManager.INVALID_APPWIDGET_ID));
+                }
                 startActivity(intent);
                 finish();
                 break;

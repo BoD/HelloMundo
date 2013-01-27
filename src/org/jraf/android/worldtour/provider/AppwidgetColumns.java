@@ -11,6 +11,7 @@ public class AppwidgetColumns implements BaseColumns {
 
     public static final String APPWIDGET_ID = "appwidget_id";
     public static final String WEBCAM_ID = "webcam_id";
+    public static final String CURRENT_WEBCAM_ID = "current_webcam_id";
 
     public static final String DEFAULT_ORDER = _ID;
 }

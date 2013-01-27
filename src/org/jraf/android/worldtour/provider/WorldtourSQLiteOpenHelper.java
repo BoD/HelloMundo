@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  *
- * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
 package org.jraf.android.worldtour.provider;
 
@@ -23,7 +23,7 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = Constants.TAG + WorldtourSQLiteOpenHelper.class.getSimpleName();
 
     public static final String DATABASE_NAME = "worldtour.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // @formatter:off
     private static final String SQL_CREATE_TABLE_WEBCAM = "CREATE TABLE IF NOT EXISTS "
@@ -53,8 +53,14 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
             + AppwidgetColumns.TABLE_NAME + " ( "
             + AppwidgetColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + AppwidgetColumns.APPWIDGET_ID + " INTEGER, "
-            + AppwidgetColumns.WEBCAM_ID + " TEXT "
+            + AppwidgetColumns.WEBCAM_ID + " TEXT, "
+            + AppwidgetColumns.CURRENT_WEBCAM_ID + " TEXT "
             + " );";
+    
+    private static final String SQL_UPDATE_TABLE_APPWIDGET_1  = "ALTER TABLE "
+            + AppwidgetColumns.TABLE_NAME + " "
+            + "ADD COLUMN " + AppwidgetColumns.CURRENT_WEBCAM_ID + " TEXT "
+            + " ;";
 
     // @formatter:on
 
@@ -72,5 +78,8 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (Config.LOGD) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        if (newVersion == 1) {
+            db.execSQL(SQL_UPDATE_TABLE_APPWIDGET_1);
+        }
     }
 }

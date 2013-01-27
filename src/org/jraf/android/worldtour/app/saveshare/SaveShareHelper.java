@@ -166,7 +166,7 @@ public class SaveShareHelper {
         if (appwidgetId == WALLPAPER) {
             webcamId = getCurrentWallpaperWebcamId(context);
         } else {
-            webcamId = AppwidgetManager.get().getWebcamId(context, appwidgetId);
+            webcamId = AppwidgetManager.get().getCurrentWebcamId(context, appwidgetId);
             if (webcamId == Constants.WEBCAM_ID_NONE) throw new Exception("Could not get webcamId for appwidgetId=" + appwidgetId);
         }
 

@@ -44,8 +44,8 @@ public class AppwidgetManager {
     private AppwidgetManager() {}
 
     @Blocking
-    public void insertOrUpdate(Context context, int appWidgetId, long webcamId) {
-        if (Config.LOGD) Log.d(TAG, "insertOrUpdate appWidgetId=" + appWidgetId + " webcamId=" + webcamId);
+    public void insertOrUpdate(Context context, int appWidgetId, long webcamId, long currentWebcamId) {
+        if (Config.LOGD) Log.d(TAG, "insertOrUpdate appWidgetId=" + appWidgetId + " webcamId=" + webcamId + " currentWebcamId=" + currentWebcamId);
         String[] projection = { AppwidgetColumns._ID };
         String selection = AppwidgetColumns.APPWIDGET_ID + "=?";
         String[] selectionArgs = { "" + appWidgetId };
@@ -62,6 +62,7 @@ public class AppwidgetManager {
         ContentValues values = new ContentValues(2);
         values.put(AppwidgetColumns.APPWIDGET_ID, appWidgetId);
         values.put(AppwidgetColumns.WEBCAM_ID, webcamId);
+        values.put(AppwidgetColumns.CURRENT_WEBCAM_ID, currentWebcamId);
         if (appWidgetLineId == -1) {
             contentResolver.insert(AppwidgetColumns.CONTENT_URI, values);
         } else {
@@ -110,8 +111,8 @@ public class AppwidgetManager {
         return Constants.FILE_IMAGE_APPWIDGET + "_" + appwidgetId;
     }
 
-    public long getWebcamId(Context context, int appwidgetId) {
-        String[] projection = { AppwidgetColumns.WEBCAM_ID };
+    public long getCurrentWebcamId(Context context, int appwidgetId) {
+        String[] projection = { AppwidgetColumns.CURRENT_WEBCAM_ID };
         String selection = AppwidgetColumns.APPWIDGET_ID + "=?";
         String[] selectionArgs = { "" + appwidgetId };
         final Cursor cursor = context.getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, selection, selectionArgs, null);

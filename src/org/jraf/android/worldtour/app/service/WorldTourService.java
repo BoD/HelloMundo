@@ -262,6 +262,9 @@ public class WorldTourService extends IntentService {
                         if (Config.LOGD) Log.d(TAG, "updateWidgets ok=" + ok);
                         if (!ok) return;
 
+                        // Save current image to db
+                        AppwidgetManager.get().insertOrUpdate(WorldTourService.this, appwidgetId, finalWebcamId, webcamId);
+
                         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
                         BitmapFactory.Options opts = new BitmapFactory.Options();
                         // We don't need transparency
@@ -332,7 +335,8 @@ public class WorldTourService extends IntentService {
                     sharedPreferences.edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT).commit();
                     sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 } else {
-                    AppwidgetManager.get().insertOrUpdate(this, appWidgetId, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+                    AppwidgetManager.get().insertOrUpdate(this, appWidgetId, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT,
+                            Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
                 }
                 return null;
             }

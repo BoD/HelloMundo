@@ -57,7 +57,7 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
             + AppwidgetColumns.CURRENT_WEBCAM_ID + " TEXT "
             + " );";
     
-    private static final String SQL_UPDATE_TABLE_APPWIDGET_1  = "ALTER TABLE "
+    private static final String SQL_UPDATE_TABLE_APPWIDGET_2  = "ALTER TABLE "
             + AppwidgetColumns.TABLE_NAME + " "
             + "ADD COLUMN " + AppwidgetColumns.CURRENT_WEBCAM_ID + " TEXT "
             + " ;";
@@ -78,8 +78,8 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (Config.LOGD) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
-        if (newVersion == 1) {
-            db.execSQL(SQL_UPDATE_TABLE_APPWIDGET_1);
+        if (newVersion == 2) {
+            db.execSQL(SQL_UPDATE_TABLE_APPWIDGET_2);
         }
     }
 }

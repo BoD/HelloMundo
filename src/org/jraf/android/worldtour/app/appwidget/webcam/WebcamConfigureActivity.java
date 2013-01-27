@@ -55,7 +55,7 @@ public class WebcamConfigureActivity extends LifecycleDispatchActivity {
         }
 
         long webcamId = ContentUris.parseId(data.getData());
-        AppwidgetManager.get().insertOrUpdate(this, mAppWidgetId, webcamId);
+        AppwidgetManager.get().insertOrUpdate(this, mAppWidgetId, webcamId, Constants.WEBCAM_ID_NONE);
 
         WorldTourService.updateWidgetsNow(this);
 

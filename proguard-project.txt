@@ -33,3 +33,6 @@
 
 # Keep file name / line numbers so we can fix crashes
 -keepattributes SourceFile,LineNumberTable
+
+# Fix for SunriseSunset
+-dontwarn org.junit.**

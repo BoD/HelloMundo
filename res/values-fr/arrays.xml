@@ -24,4 +24,11 @@
         <item>Toujours</item>
     </string-array>
 
+    <!-- Webcam appwidget actions -->
+    <string-array name="webcamAppwidget_actions_labels">
+        <item>@string/menu_share</item>
+        <item>@string/menu_save</item>
+        <item>Choisir une autre webcam</item>
+    </string-array>
+
 </resources>

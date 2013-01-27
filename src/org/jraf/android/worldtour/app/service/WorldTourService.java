@@ -55,7 +55,7 @@ import org.jraf.android.util.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.analytics.AnalyticsHelper;
-import org.jraf.android.worldtour.app.appwidget.webcam.WebcamConfigureActivity;
+import org.jraf.android.worldtour.app.appwidget.webcam.WebcamAppWidgetActionsActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamInfo;
 import org.jraf.android.worldtour.model.WebcamManager;
@@ -278,11 +278,11 @@ public class WorldTourService extends IntentService {
                         remoteViews.setViewVisibility(R.id.imgPreviewFrame, View.VISIBLE);
 
                         // onClickListener to change the selected webcam
-                        Intent onClickIntent = new Intent(WorldTourService.this, WebcamConfigureActivity.class);
-                        onClickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+                        Intent onClickIntent = new Intent(WorldTourService.this, WebcamAppWidgetActionsActivity.class);
+                        //                        onClickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                         onClickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId);
                         onClickIntent.setData(Uri.parse("custom:" + System.currentTimeMillis())); // Need a unique data so the system doesn't try to recycle the pending intent
-                        onClickIntent.putExtra(WebcamConfigureActivity.EXTRA_CURRENT_WEBCAM_ID, finalWebcamId);
+                        onClickIntent.putExtra(WebcamAppWidgetActionsActivity.EXTRA_CURRENT_WEBCAM_ID, finalWebcamId);
                         onClickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         PendingIntent pendingIntent = PendingIntent.getActivity(WorldTourService.this, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         remoteViews.setOnClickPendingIntent(R.id.imgPreviewFrame, pendingIntent);

@@ -23,10 +23,12 @@ import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 
 public class WebcamConfigureActivity extends LifecycleDispatchActivity {
-    private static final int REQUEST_PICK_WEBCAM = 0;
-    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private static final String PREFIX = WebcamConfigureActivity.class.getName() + ".";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
+
+    private static final int REQUEST_PICK_WEBCAM = 0;
+
+    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

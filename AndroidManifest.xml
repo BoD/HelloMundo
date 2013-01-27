@@ -158,6 +158,13 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <!-- Webcam App Widget Configure -->
+        <activity
+            android:name="org.jraf.android.worldtour.app.appwidget.webcam.WebcamAppWidgetActionsActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity=":WebcamAppWidgetActionsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

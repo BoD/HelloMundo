@@ -12,6 +12,9 @@
 package org.jraf.android.worldtour;
 
 import java.util.HashSet;
+import java.util.UUID;
+
+import android.util.Log;
 
 public class Constants {
 
@@ -83,4 +86,9 @@ public class Constants {
     }
 
     public static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
+
+    public static final boolean PHOTON = UUID.randomUUID().getLeastSignificantBits() % 3 == 0;
+    static {
+        Log.i(TAG + "/Constants", "PHOTON=" + PHOTON);
+    }
 }

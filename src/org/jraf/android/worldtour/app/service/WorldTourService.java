@@ -467,6 +467,15 @@ public class WorldTourService extends IntentService {
 
     private Long getRandomWebcamId(boolean avoidNight) {
         if (Config.LOGD) Log.d(TAG, "getRandomWebcamId avoidNight=" + avoidNight);
+        return getRandomWebcamId(avoidNight, 0);
+    }
+
+    private Long getRandomWebcamId(boolean avoidNight, int recursion) {
+        if (Config.LOGD) Log.d(TAG, "getRandomWebcamId avoidNight=" + avoidNight + " recursion=" + recursion);
+        if (recursion > 20) {
+            Log.w(TAG, "getRandomWebcamId Could not find random webcamId after " + recursion + " trials");
+            return null;
+        }
         String[] projection = { WebcamColumns._ID, WebcamColumns.COORDINATES, WebcamColumns.PUBLIC_ID, WebcamColumns.VISIBILITY_BEGIN_HOUR,
                 WebcamColumns.VISIBILITY_BEGIN_MIN, WebcamColumns.VISIBILITY_END_HOUR, WebcamColumns.VISIBILITY_END_MIN };
         String selection = WebcamColumns.EXCLUDE_RANDOM + " is null or " + WebcamColumns.EXCLUDE_RANDOM + "=0";

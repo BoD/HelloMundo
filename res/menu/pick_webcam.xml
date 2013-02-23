@@ -5,6 +5,6 @@
         android:id="@+id/menu_newWebcam"
         android:icon="@drawable/ic_action_new_webcam"
         android:showAsAction="always|withText"
-        android:title="@string/menu_newWebcam"/>
+        android:title="@string/pickWebcam_menu_newWebcam"/>
 
 </menu>

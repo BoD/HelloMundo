@@ -114,7 +114,7 @@
         <!-- Pick webcam -->
         <activity
             android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
-            android:label="@string/menu_pick" />
+            android:label="@string/main_menu_pick" />
 
         <!-- Add user webcam -->
         <activity
@@ -124,12 +124,12 @@
         <!-- Settings -->
         <activity
             android:name="org.jraf.android.worldtour.app.preference.PreferenceActivity"
-            android:label="@string/menu_settings" />
+            android:label="@string/main_menu_settings" />
 
         <!-- About -->
         <activity
             android:name="org.jraf.android.worldtour.app.about.AboutActivity"
-            android:label="@string/menu_about" />
+            android:label="@string/main_menu_about" />
 
         <!-- Eula -->
         <activity

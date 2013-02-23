@@ -28,8 +28,8 @@
     <string-array name="webcamAppwidget_actions_labels">
         <item>Choisir une autre webcam</item>
         <item>Mettre à jour</item>
-        <item>@string/menu_share</item>
-        <item>@string/menu_save</item>
+        <item>@string/main_menu_share</item>
+        <item>@string/main_menu_save</item>
     </string-array>
 
 </resources>

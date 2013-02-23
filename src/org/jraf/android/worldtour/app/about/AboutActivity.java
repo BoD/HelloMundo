@@ -16,9 +16,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
+import org.acra.ACRA;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockActivity;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 
 public class AboutActivity extends LifecycleDispatchSherlockActivity {
@@ -32,6 +37,29 @@ public class AboutActivity extends LifecycleDispatchSherlockActivity {
         findViewById(R.id.btnEula).setOnClickListener(mEulaOnClickListener);
         findViewById(R.id.btnDonate).setOnClickListener(mDonateOnClickListener);
     }
+
+
+    /*
+     * Action bar.
+     */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.about, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sendLogs:
+                ACRA.getErrorReporter().handleSilentException(new Exception("User clicked on 'Send logs'"));
+                Toast.makeText(this, R.string.about_toast_sendLogs, Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private final OnClickListener mShareOnClickListener = new OnClickListener() {
         @Override

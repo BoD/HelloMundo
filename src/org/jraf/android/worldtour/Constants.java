@@ -12,9 +12,6 @@
 package org.jraf.android.worldtour;
 
 import java.util.HashSet;
-import java.util.UUID;
-
-import android.util.Log;
 
 public class Constants {
 
@@ -73,6 +70,8 @@ public class Constants {
     public static final String PREF_SHOW_INFO_ALWAYS = "2";
     public static final String PREF_SHOW_INFO_DEFAULT = PREF_SHOW_INFO_ONLY_RANDOM;
 
+    public static final String PREF_UUID = "PREF_UUID";
+
 
     public static final String FILE_IMAGE_WALLPAPER = "image_wallpaper";
     public static final String FILE_IMAGE_WALLPAPER_EDITED = "image_wallpaper_edited";
@@ -87,8 +86,5 @@ public class Constants {
 
     public static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
 
-    public static final boolean PHOTON = UUID.randomUUID().getLeastSignificantBits() % 3 == 0;
-    static {
-        Log.i(TAG + "/Constants", "PHOTON=" + PHOTON);
-    }
+    public static boolean PHOTON;
 }

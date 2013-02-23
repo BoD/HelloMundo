@@ -24,7 +24,6 @@
 30;Laundry Cam;Kitakyushu, Japan;www.wash-house.jp;210.157.199.232/SnapshotJPEG?Resolution=640x480&Quality=Clarity;lubek.b.free.fr/thumb_30.png;2009-05-23;Asia/Tokyo;-;-;0:00;23:59;33.842475,130.879333
 33;Stechelberg;Stechelberg, Switzerland;www.stechelberg.ch;www.stechelberg.ch/cam/cam.jpg;lubek.b.free.fr/thumb_33.png;2009-05-23;Europe/Zurich;-;-;-;-;46.545332,7.903011
 36;Denver Skyline;Denver, CO, USA;www.colorado.gov/airquality;www.colorado.gov/airquality/live_image/chpark.jpg;lubek.b.free.fr/thumb_36.png;2009-05-23;America/Denver;-;640x480;-;-;39.740199,-104.983601
-#37;New York City;New York City, NY, USA;wirednewyork.com;wirednewyork.com/images/webcams/wired-new-york-webcam1.jpg;lubek.b.free.fr/thumb_37.png;2009-05-27;America/New_York;-;640x480;-;-;40.714273,-74.005537
 38;Fort Lauderdale;Fort Lauderdale, FL, USA;www.sunny.org;webcam.sunny.org/show-netcam-17.jpg;lubek.b.free.fr/thumb_38.png;2009-06-05;America/New_York;-;-;-;-;26.12218,-80.143032
 39;Balboa Pavilion;Balboa, CA, USA;www.talesofbalboa.com;www.talesofbalboa.com/webcams/cam8.jpg;lubek.b.free.fr/thumb_39.png;2009-06-06;America/Los_Angeles;-;-;-;-;33.60219,-117.899126
 40;Balboa Island Ferry;Balboa, CA, USA;www.talesofbalboa.com;www.talesofbalboa.com/webcams/cam7.jpg;lubek.b.free.fr/thumb_40.png;2009-06-06;America/Los_Angeles;-;-;-;-;33.60219,-117.899126
@@ -36,7 +35,6 @@
 51;San Francisco Skyline;San Francisco, CA, USA;webmarin.com;webmarin.com/images/wc/Camera.jpg;lubek.b.free.fr/thumb_51.png;2009-10-10;America/Los_Angeles;-;640x480;-;-;37.77532,-122.418809
 52;Castaway Island;Qalito, Fiji Islands;www.castawayisland.com;www.castawayfiji.com/webcamimg/netcam.jpg;lubek.b.free.fr/thumb_52.png;2009-10-10;Pacific/Fiji;-;-;-;-;-17.733921,177.129822
 53;Grand Cayman Island;Cayman Islands;www.caymanchillin.com;www.caymanchillin.com/caymanchillin-live10.jpg;lubek.b.free.fr/thumb_53.png;2009-10-10;America/Cayman;-;-;-;-;19.32224,-81.227417
-#57;Ocean Park Beach;Ocean Park Beach, San Juan, Puerto Rico;www.earthcam.com;images.earthcam.com/ecnetwork/islaprnc1.jpg;lubek.b.free.fr/thumb_57.png;2010-01-10;America/Puerto_Rico;-;-;-;-;18.454308,-66.053144
 59;Citta di Cuneo;Cuneo, Piedmont, Italy;www.comune.cuneo.it;photon.jraf.org/is/resize/84.240.165.5/webcam05/record/current.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_59.png;2010-01-10;Europe/Rome;-;-;-;-;44.388792,7.547811
 60;Rio Gilão with Roman bridge;Tavira, Portugal;www.verdeland.com;www.verdeland.com/webcam/CamImageON.jpg;lubek.b.free.fr/thumb_60.png;2010-04-04;Europe/Lisbon;-;-;-;-;37.126869,-7.64981
 62;Piata Unirii;Timisoara, Romania;www.banaterra.eu/romana;photon.jraf.org/is/resize/www.banaterra.ro/imaginiwebcam/webcamunirii1.jpg?__width=800&__height=600&__lucky=true;lubek.b.free.fr/thumb_62.png;2010-04-04;Europe/Bucharest;-;-;-;-;45.752676,21.225071
@@ -44,14 +42,7 @@
 64;Downtown Los Angeles;Los Angeles, CA, USA;abclocal.go.com/kabc/feature?section=weather/photos&id=5790008;abclocal.go.com/three/kabc/webcam/web2-1.jpg;lubek.b.free.fr/thumb_64.png;2013-01-06;America/Los_Angeles;-;-;-;-;34.05101,-118.254355
 65;Rodonyà;Rodonyà, Spain;www.turismet.com/rodonya/wx.html;www.turismet.com/webcams/rodonya/current.jpg;lubek.b.free.fr/thumb_65.png;2013-01-25;Europe/Madrid;-;-;-;-;41.2825,1.398611
 66;Cabo San Lucas;Cabo San Lucas, Baja California Sur, Mexico;www.webcamsdemexico.com/webcam-cabo-san-lucas.html;webcamsdemexico.net/cabos1/live.jpg;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#90;candidate 1;candidate;www.test.com;photon.jraf.org/is/rtmp/video2.earthcam.com/fecnetwork/hdtimes11.flv?__playpath=hdtimes11.flv;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#91;candidate 2;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/explorePandas3;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#92;candidate 3;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/ffrc;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#93;candidate 4;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/parti-puppies;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#94;candidate 5;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/schnauzer-babies;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#95;candidate 6;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/maximilian-schnauzer-babies;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#96;candidate 7;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/toocute;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#97;candidate 8;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/almost-home-adoptions-cat-cam;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#98;candidate 9;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/persian-kitten-cam;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
-#99;candidate 9;candidate;www.test.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/live-iss-stream;lubek.b.free.fr/thumb_66.png;2013-01-27;Mexico/BajaSur;-;-;-;-;22.882027,-109.871349
+67;Times Square;New York City, NY, USA;www.earthcam.com/usa/newyork/timessquare/;photon.jraf.org/is/rtmp/video2.earthcam.com/fecnetwork/hdtimes11.flv?__playpath=hdtimes11.flv;lubek.b.free.fr/thumb_67.png;2013-02-19;America/New_York;-;-;0:00;23:59;40.758952,-73.984085
+#68;Sabrina's Puppies;Sanford, FL, USA;www.MaximilianSchnauzers.com;photon.jraf.org/is/ustream/www.ustream.tv/channel/maximilian-schnauzer-babies;lubek.b.free.fr/thumb_68.png;2013-02-19;Mexico/BajaSur;-;-;0:00;23:59;-
+#69;Too Cute Kittens;Washington, D.C, USA;www.warl.org;photon.jraf.org/is/ustream/www.ustream.tv/toocute;lubek.b.free.fr/thumb_69.png;2013-02-19;EST;-;-;-;-;38.849267,-76.902237
 #end;;;;;;;;;;;;

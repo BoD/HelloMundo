@@ -196,6 +196,11 @@ public class WorldTourService extends IntentService {
                 Log.w(TAG, "updateWallpaper Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
+            } catch (SecurityException e) {
+                // This happens, for instance, on a ALCATEL ONE TOUCH 997D
+                Log.w(TAG, "updateWallpaper Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
+                sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+                return;
             } finally {
                 IoUtil.close(imageInputStream);
             }

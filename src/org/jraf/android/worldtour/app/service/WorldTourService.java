@@ -509,7 +509,7 @@ public class WorldTourService extends IntentService {
                     if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
                     if (isNight) {
                         // Recurse
-                        return getRandomWebcamId(avoidNight);
+                        return getRandomWebcamId(avoidNight, recursion + 1);
                     }
                 } else {
                     boolean isNight;
@@ -525,7 +525,7 @@ public class WorldTourService extends IntentService {
                     if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
                     if (isNight) {
                         // Recurse
-                        return getRandomWebcamId(avoidNight);
+                        return getRandomWebcamId(avoidNight, recursion + 1);
                     }
                 }
             }

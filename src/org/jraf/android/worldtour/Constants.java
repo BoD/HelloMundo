@@ -85,6 +85,4 @@ public class Constants {
     }
 
     public static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
-
-    public static boolean PHOTON;
 }

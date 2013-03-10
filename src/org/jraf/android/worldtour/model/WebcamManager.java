@@ -42,7 +42,7 @@ import org.jraf.android.worldtour.provider.WebcamType;
 public class WebcamManager {
     private static String TAG = Constants.TAG + WebcamManager.class.getSimpleName();
 
-    private static String URL_DATABASE = Constants.PHOTON ? "http://lubek.b.free.fr/data6_photon.csv" : "http://lubek.b.free.fr/data6_rps.csv";
+    private static String URL_DATABASE = "http://lubek.b.free.fr/data7.csv";
 
     private static String HTTP = "http://";
     private static String EMPTY = "-";
@@ -58,7 +58,7 @@ public class WebcamManager {
     @Blocking
     public void insertWebcamsFromBundledFile(Context context) {
         if (Config.LOGD) Log.d(TAG, "insertWebcamsFromBundledFile");
-        InputStream inputStream = context.getResources().openRawResource(Constants.PHOTON ? R.raw.data6_photon : R.raw.data6_rps);
+        InputStream inputStream = context.getResources().openRawResource(R.raw.data7);
         ContentResolver contentResolver = context.getContentResolver();
         try {
             insertWebcams(inputStream, contentResolver);

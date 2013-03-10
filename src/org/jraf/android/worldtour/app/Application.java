@@ -18,7 +18,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -28,7 +27,6 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.ActivityLifecycleCallbacksAdapter;
 import org.jraf.android.util.activitylifecyclecallbackscompat.ActivityLifecycleCallbacksCompat;
 import org.jraf.android.util.activitylifecyclecallbackscompat.ApplicationHelper;
-import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.analytics.AnalyticsHelper;
 
@@ -106,10 +104,10 @@ public class Application extends android.app.Application {
         }
 
         // A/B testing
-        if (Config.LOGD) Log.d(TAG, "onCreate uuid=" + uuid);
-        if (Config.LOGD) Log.d(TAG, "onCreate uuid.getLeastSignificantBits()=" + uuid.getLeastSignificantBits());
-        Constants.PHOTON = uuid.getLeastSignificantBits() % 2 == 0;
-        Log.i(TAG, "PHOTON=" + Constants.PHOTON);
+        //        if (Config.LOGD) Log.d(TAG, "onCreate uuid=" + uuid);
+        //        if (Config.LOGD) Log.d(TAG, "onCreate uuid.getLeastSignificantBits()=" + uuid.getLeastSignificantBits());
+        //        Constants.PHOTON = uuid.getLeastSignificantBits() % 2 == 0;
+        //        Log.i(TAG, "PHOTON=" + Constants.PHOTON);
     }
 
 

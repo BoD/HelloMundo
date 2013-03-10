@@ -22,6 +22,7 @@
     <string name="main_dialog_noSdCard">Le stockage externe n\'est pas disponible actuellement.</string>
     <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s. Vue sur WorldTour pour Android.</string>
     <string name="main_shareText_userWebcam">Image de \'%1$s\' prise au %3$s. Vue sur WorldTour pour Android.</string>
+    <string name="main_share_chooser">Partager avec&#8230;</string>
     <string name="main_previewFrame_weight">100</string>
     <string name="main_txtNoImageWarning">Impossible de télécharger l\'image.\nProblème de réseau ? Ré-essayez plus tard.</string>
     <string name="main_menu_pick">Choisir une webcam</string>
@@ -73,8 +74,9 @@
     <string name="about_shareText_subject">Essayez WorldTour !</string>
     <string name="about_shareText_body">WorldTour pour Android est une appli excellente !\nTestez là ici :\nhttp://play.google.com/store/apps/details?id=%s</string>
     <string name="about_btnDonate">Faire un don</string>
-    <string name="about_menu_sendLogs">Envoyer logs</string><string name="about_toast_sendLogs">Les logs sont en cours d\envoi.</string>
-<!-- Eula -->
+    <string name="about_menu_sendLogs">Envoyer logs</string>
+    <string name="about_toast_sendLogs">Les logs sont en cours d\envoi.</string>
+    <!-- Eula -->
     <string name="eula_title">License d\'utilisation</string>
 
     <!-- Welcome -->

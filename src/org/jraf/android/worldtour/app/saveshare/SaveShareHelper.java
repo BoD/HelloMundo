@@ -151,7 +151,7 @@ public class SaveShareHelper {
                 shareIntent.putExtra("sms_body", mWebcamInfo.name);
                 Uri uri = Uri.parse(mWebcamInfo.localBitmapUriStr);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                context.startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
+                context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.main_share_chooser)));
 
                 if (context instanceof SaveShareListener) {
                     ((SaveShareListener) context).onDone();

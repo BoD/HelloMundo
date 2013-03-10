@@ -22,6 +22,7 @@
     <string name="main_dialog_noSdCard">The external storage is currently not available.</string>
     <string name="main_shareText">Picture of \'%1$s\', %2$s, taken on %3$s.&#160;&#160;Spotted on WorldTour for Android.</string>
     <string name="main_shareText_userWebcam">Picture of \'%1$s\' taken on %3$s.&#160;&#160;Spotted on WorldTour for Android.</string>
+    <string name="main_share_chooser">Share with&#8230;</string>
     <string name="main_previewFrame_weight">100</string>
     <string name="main_txtNoImageWarning">Could not download the image.\nNetwork problem?&#160;&#160;Try to refresh later.</string>
     <string name="main_menu_pick">Pick webcam</string>

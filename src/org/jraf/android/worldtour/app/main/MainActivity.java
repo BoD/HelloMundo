@@ -12,7 +12,6 @@
 package org.jraf.android.worldtour.app.main;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 import android.app.AlarmManager;
@@ -426,7 +425,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
                 try {
                     inputStream = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
                     return BitmapFactory.decodeStream(inputStream);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Log.w(TAG, "Could not open image file", e);
                     return null;
                 } finally {

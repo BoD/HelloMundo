@@ -10,6 +10,7 @@
     <string name="common_done">Valider</string>
     <string name="common_userDefined">Webcam personnalisée</string>
     <string name="common_confirmation">Confirmation</string>
+    <string name="common_shareWith">Partager avec&#8230;</string>
 
     <!-- Global -->
     <string name="global_ad">(Publicité)</string>
@@ -22,7 +23,6 @@
     <string name="main_dialog_noSdCard">Le stockage externe n\'est pas disponible actuellement.</string>
     <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s. Vue sur WorldTour pour Android.</string>
     <string name="main_shareText_userWebcam">Image de \'%1$s\' prise au %3$s. Vue sur WorldTour pour Android.</string>
-    <string name="main_share_chooser">Partager avec&#8230;</string>
     <string name="main_previewFrame_weight">100</string>
     <string name="main_txtNoImageWarning">Impossible de télécharger l\'image.\nProblème de réseau ? Ré-essayez plus tard.</string>
     <string name="main_menu_pick">Choisir une webcam</string>

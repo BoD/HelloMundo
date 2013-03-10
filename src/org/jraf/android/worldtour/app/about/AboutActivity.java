@@ -70,7 +70,7 @@ public class AboutActivity extends LifecycleDispatchSherlockActivity {
             String shareTextBody = getString(R.string.about_shareText_body, getPackageName());
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareTextBody);
             shareIntent.putExtra("sms_body", shareTextBody);
-            startActivity(/*Intent.createChooser(*/shareIntent/*, null)*/);
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.common_shareWith)));
         }
     };
 
@@ -79,7 +79,7 @@ public class AboutActivity extends LifecycleDispatchSherlockActivity {
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-            startActivity(intent);
+            startActivity(Intent.createChooser(intent, null));
         }
     };
 
@@ -88,7 +88,7 @@ public class AboutActivity extends LifecycleDispatchSherlockActivity {
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("market://search?q=pub:BoD"));
-            startActivity(intent);
+            startActivity(Intent.createChooser(intent, null));
         }
     };
 
@@ -106,7 +106,7 @@ public class AboutActivity extends LifecycleDispatchSherlockActivity {
             intent.setData(Uri
                     .parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=BoD%40JRAF%2eorg&lc=US&item_name=Donate%20to%20BoD&item_number=Donate%20to%20BoD&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest"
                             + getPackageName()));
-            startActivity(intent);
+            startActivity(Intent.createChooser(intent, null));
         }
     };
 }

@@ -421,7 +421,14 @@ public class WorldTourService extends IntentService {
             // Fix for gif images
             config = Bitmap.Config.ARGB_8888;
         }
-        bitmap = bitmap.copy(config, true);
+        try {
+            bitmap = bitmap.copy(config, true);
+        } catch (OutOfMemoryError e) {
+            Log.w(TAG, "saveEditedVersion Could not copy bitmap");
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+            return false;
+        }
+
 
         Canvas canvas = new Canvas(bitmap);
         if (dimmed) {

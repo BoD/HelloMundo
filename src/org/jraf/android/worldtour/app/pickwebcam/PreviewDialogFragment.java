@@ -81,6 +81,7 @@ public class PreviewDialogFragment extends DialogFragment {
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
+                if (!isAdded()) return null;
                 String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
                 Uri uri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, mWebcamId);
                 Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);

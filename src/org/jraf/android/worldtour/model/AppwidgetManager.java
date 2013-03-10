@@ -99,6 +99,7 @@ public class AppwidgetManager {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(AppwidgetColumns.CONTENT_URI, null, null, null, null);
         try {
+            if (cursor == null) return 0;
             int res = cursor.getCount();
             if (Config.LOGD) Log.d(TAG, "getWidgetCount res=" + res);
             return res;

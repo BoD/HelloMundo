@@ -191,7 +191,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
             throw new AssertionError(e); // Should never happen
         }
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        getActivity().startActivity(intent);
+        getActivity().startActivity(Intent.createChooser(intent, null));
     }
 
     @Override

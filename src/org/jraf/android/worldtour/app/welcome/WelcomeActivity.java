@@ -305,6 +305,7 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
                     imgWidget.setVisibility(View.GONE);
                     imgLogo.setVisibility(View.VISIBLE);
                     Rect rectPick = getIntent().getParcelableExtra(EXTRA_RECT_PICK);
+                    if (rectPick == null) break;
                     LayoutParams layoutParams = imgArrowUp.getLayoutParams();
                     ((RelativeLayout.LayoutParams) layoutParams).topMargin = rectPick.bottom + marginTop;
                     ((RelativeLayout.LayoutParams) layoutParams).leftMargin = rectPick.centerX() - imgArrowUpWidth / 2;

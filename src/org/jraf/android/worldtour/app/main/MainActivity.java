@@ -134,7 +134,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         final boolean firstRun = sharedPreferences.getBoolean(Constants.PREF_FIRST_RUN, true);
         new SimpleAsyncTask() {
             @Override
-            protected void background() throws Exception {
+            protected void doInBackground() throws Throwable {
                 if (firstRun) {
                     sharedPreferences.edit().putBoolean(Constants.PREF_FIRST_RUN, false).commit();
                     handleFirstRun();
@@ -142,7 +142,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
             }
 
             @Override
-            protected void postExecute(boolean ok) {
+            protected void onPostExecute(Boolean ok) {
                 updateWebcamRandom();
                 updateWebcamName();
                 updateWebcamImage();
@@ -294,13 +294,13 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
             new SimpleAsyncTask() {
                 @Override
-                protected void background() throws Exception {
+                protected void doInBackground() throws Throwable {
                     PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, isChecked)
                             .commit();
                 }
 
                 @Override
-                protected void postExecute(boolean ok) {
+                protected void onPostExecute(Boolean ok) {
                     setAlarm(isChecked);
                 }
             }.execute();
@@ -373,7 +373,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
             private int mType;
 
             @Override
-            protected void background() throws Exception {
+            protected void doInBackground() throws Throwable {
                 String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE, };
                 Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
                 Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
@@ -392,7 +392,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
             }
 
             @Override
-            protected void postExecute(boolean ok) {
+            protected void onPostExecute(Boolean ok) {
                 if (!ok) return;
                 mTxtWebcamInfoName.setText(mName);
                 if (mType == WebcamType.USER) {

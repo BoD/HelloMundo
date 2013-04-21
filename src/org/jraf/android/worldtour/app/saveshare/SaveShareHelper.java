@@ -55,7 +55,6 @@ public class SaveShareHelper {
 
     public static final int WALLPAPER = -1;
 
-    private static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
     private static final SaveShareHelper INSTANCE = new SaveShareHelper();
 
 
@@ -81,7 +80,7 @@ public class SaveShareHelper {
             return;
         }
 
-        fragmentManager.beginTransaction().add(new SimpleAsyncTaskFragment() {
+        new SimpleAsyncTaskFragment() {
             private boolean mTaskFinished;
 
             @Override
@@ -98,12 +97,12 @@ public class SaveShareHelper {
             }
 
             @Override
-            protected void background() throws Exception {
+            protected void doInBackground() throws Exception {
                 saveAndInsertImage(context, appwidgetId);
             }
 
             @Override
-            protected void postExecute(boolean ok) {
+            protected void onPostExecute(boolean ok) {
                 mTaskFinished = true;
                 DialogFragment dialogFragment = (DialogFragment) getFragmentManager().findFragmentByTag(Constants.FRAGMENT_DIALOG);
                 if (dialogFragment != null) dialogFragment.dismissAllowingStateLoss();
@@ -117,7 +116,7 @@ public class SaveShareHelper {
                     ((SaveShareListener) getActivity()).onDone();
                 }
             }
-        }, FRAGMENT_ASYNC_TASK).commit();
+        }.execute(fragmentManager);
     }
 
 
@@ -133,12 +132,12 @@ public class SaveShareHelper {
             private WebcamInfo mWebcamInfo;
 
             @Override
-            protected void background() throws Exception {
+            protected void doInBackground() throws Exception {
                 mWebcamInfo = saveAndInsertImage(context, appwidgetId);
             }
 
             @Override
-            protected void postExecute(boolean ok) {
+            protected void onPostExecute(Boolean ok) {
                 if (!ok) {
                     Toast.makeText(context, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
                     return;
@@ -170,7 +169,7 @@ public class SaveShareHelper {
             if (webcamId == Constants.WEBCAM_ID_NONE) throw new Exception("Could not get webcamId for appwidgetId=" + appwidgetId);
         }
 
-        // 2.1 equivalent of File path = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);
+        // 2.1 equivalent of File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File picturesPath = new File(Environment.getExternalStorageDirectory(), "Pictures");
         File path = new File(picturesPath, "WorldTour");
         WebcamInfo webcamInfo = getWebcamInfo(context, webcamId);

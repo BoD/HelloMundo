@@ -115,7 +115,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
         final long id = (Long) payload;
         new SimpleAsyncTask() {
             @Override
-            protected void background() throws Exception {
+            protected void doInBackground() throws Throwable {
                 getContentResolver().delete(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, id), null, null);
 
                 // Check if the selected cam is the one we just deleted, if yes set the eiffel tower one
@@ -134,7 +134,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
             }
 
             @Override
-            protected void postExecute(boolean ok) {
+            protected void onPostExecute(Boolean ok) {
                 if (!ok) return;
                 Toast.makeText(PickWebcamActivity.this, R.string.pickWebcam_webcamDeletedToast, Toast.LENGTH_SHORT).show();
             }

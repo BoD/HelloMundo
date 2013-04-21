@@ -30,7 +30,6 @@ import org.jraf.android.worldtour.model.WebcamManager;
 import com.actionbarsherlock.app.ActionBar;
 
 public class AddUserWebcamActivity extends LifecycleDispatchSherlockFragmentActivity {
-    protected static final String FRAGMENT_ASYNC_TASK = "FRAGMENT_ASYNC_TASK";
 
     private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();
 
@@ -75,9 +74,9 @@ public class AddUserWebcamActivity extends LifecycleDispatchSherlockFragmentActi
     private final OnClickListener mDoneOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            getSupportFragmentManager().beginTransaction().add(new SimpleAsyncTaskFragment() {
+            new SimpleAsyncTaskFragment() {
                 @Override
-                protected void background() throws Exception {
+                protected void doInBackground() throws Exception {
                     String url = mEdtUrl.getText().toString().trim();
                     if (url.startsWith("http://")) {
                         url = url.substring(7);
@@ -86,11 +85,11 @@ public class AddUserWebcamActivity extends LifecycleDispatchSherlockFragmentActi
                 }
 
                 @Override
-                protected void postExecute(boolean ok) {
+                protected void onPostExecute(boolean ok) {
                     setResult(RESULT_OK);
                     finish();
                 }
-            }, FRAGMENT_ASYNC_TASK).commit();
+            }.execute(getSupportFragmentManager());
         }
     };
 

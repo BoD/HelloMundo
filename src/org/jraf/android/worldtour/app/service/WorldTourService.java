@@ -405,6 +405,10 @@ public class WorldTourService extends IntentService {
             Log.w(TAG, "saveEditedVersion Could not read saved image", e);
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
+        } catch (OutOfMemoryError e) {
+            Log.w(TAG, "saveEditedVersion Could not decode saved image", e);
+            sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
+            return false;
         } finally {
             IoUtil.close(input);
         }

@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -89,7 +90,11 @@ public class Application extends android.app.Application {
         ApplicationHelper.registerActivityLifecycleCallbacks(this, mAnalyticActivityLifecycleCallbacks);
 
         // ACRA
-        ACRA.init(this);
+        try {
+            ACRA.init(this);
+        } catch (Throwable t) {
+            Log.w(TAG, "onCreate Problem while initializing ACRA", t);
+        }
 
         // UUID
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);

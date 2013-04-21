@@ -12,7 +12,6 @@
 package org.jraf.android.worldtour.app.main;
 
 import java.io.File;
-import java.io.InputStream;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -24,7 +23,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -44,9 +42,9 @@ import android.widget.Toast;
 
 import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.BitmapUtil;
 import org.jraf.android.util.Blocking;
 import org.jraf.android.util.DateTimeUtil;
-import org.jraf.android.util.IoUtil;
 import org.jraf.android.util.SimpleAsyncTask;
 import org.jraf.android.util.ui.UiUtil;
 import org.jraf.android.worldtour.Config;
@@ -421,16 +419,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         new AsyncTask<Void, Void, Bitmap>() {
             @Override
             protected Bitmap doInBackground(Void... params) {
-                InputStream inputStream = null;
-                try {
-                    inputStream = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
-                    return BitmapFactory.decodeStream(inputStream);
-                } catch (Exception e) {
-                    Log.w(TAG, "Could not open image file", e);
-                    return null;
-                } finally {
-                    IoUtil.close(inputStream);
-                }
+                return BitmapUtil.tryDecodeFile(new File(getFilesDir(), Constants.FILE_IMAGE_WALLPAPER), null);
             }
 
             @Override
@@ -469,6 +458,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         boolean seenWelcome = sharedPreferences.getBoolean(Constants.PREF_SEEN_WELCOME, false);
         if (!seenWelcome || welcomeResumeIndex != -1) {
             getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+                @SuppressWarnings("deprecation")
                 @Override
                 public void onGlobalLayout() {
                     View btnPick = findViewById(R.id.menu_pick);

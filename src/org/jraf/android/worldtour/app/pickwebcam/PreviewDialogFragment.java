@@ -89,7 +89,7 @@ public class PreviewDialogFragment extends DialogFragment {
                 String httpReferer = null;
                 try {
                     if (cursor == null || !cursor.moveToFirst()) {
-                        Log.w(TAG, "onHandleIntent Could not find webcam with webcamId=" + mWebcamId);
+                        Log.w(TAG, "doInBackground Could not find webcam with webcamId=" + mWebcamId);
                         return null;
                     }
                     url = cursor.getString(0);
@@ -103,12 +103,15 @@ public class PreviewDialogFragment extends DialogFragment {
                 try {
                     inputStream = HttpUtil.getAsStream(url);
                 } catch (IOException e) {
-                    Log.w(TAG, "onHandleIntent Could not download webcam with webcamId=" + mWebcamId, e);
+                    Log.w(TAG, "doInBackground Could not download webcam with webcamId=" + mWebcamId, e);
                     return null;
                 }
 
                 try {
                     return BitmapFactory.decodeStream(inputStream);
+                } catch (OutOfMemoryError e) {
+                    Log.w(TAG, "doInBackground Could not decode stream", e);
+                    return null;
                 } finally {
                     IoUtil.close(inputStream);
                 }

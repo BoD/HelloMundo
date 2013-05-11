@@ -21,7 +21,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.StringUtil;
+import org.jraf.android.util.closed.StringUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.service.WorldTourService;

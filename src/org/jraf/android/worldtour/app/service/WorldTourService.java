@@ -49,9 +49,9 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.HttpUtil;
-import org.jraf.android.util.HttpUtil.Options;
-import org.jraf.android.util.IoUtil;
+import org.jraf.android.util.closed.HttpUtil;
+import org.jraf.android.util.closed.HttpUtil.Options;
+import org.jraf.android.util.closed.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.analytics.AnalyticsHelper;

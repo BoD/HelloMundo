@@ -21,8 +21,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.SimpleAsyncTaskFragment;
-import org.jraf.android.util.validation.Validators;
+import org.jraf.android.util.async.SimpleAsyncTaskFragment;
+import org.jraf.android.util.closed.validation.Validators;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockFragmentActivity;
 import org.jraf.android.worldtour.model.WebcamManager;

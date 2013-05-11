@@ -16,8 +16,8 @@ import java.util.Date;
 import android.content.Context;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.DateTimeUtil;
-import org.jraf.android.util.FileUtil;
+import org.jraf.android.util.closed.DateTimeUtil;
+import org.jraf.android.util.closed.FileUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamType;
 

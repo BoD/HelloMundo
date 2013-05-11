@@ -13,7 +13,7 @@
         android:layout_height="@dimen/cell_webcam_collapsed_height"
         android:background="@color/pick_webcam_item_bg" >
 
-        <org.jraf.android.util.ui.LoadingImageView
+        <org.jraf.android.util.closed.ui.LoadingImageView
             android:id="@+id/imgThumbnail"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -43,7 +43,7 @@
                 android:textColor="#888" />
         </LinearLayout>
 
-        <org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentView
+        <org.jraf.android.util.closed.ui.dontpresswithparent.DontPressWithParentView
             android:id="@+id/btnExtend"
             android:layout_width="48dp"
             android:layout_height="64dp"
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/cell_webcam_extended_height" >
 
-            <org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentLinearLayout
+            <org.jraf.android.util.closed.ui.dontpresswithparent.DontPressWithParentLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -163,7 +163,7 @@
                         android:textColor="@color/ic_ext_text"
                         android:textSize="12sp" />
                 </LinearLayout>
-            </org.jraf.android.util.ui.dontpresswithparent.DontPressWithParentLinearLayout>
+            </org.jraf.android.util.closed.ui.dontpresswithparent.DontPressWithParentLinearLayout>
 
             <TextView
                 android:id="@+id/txtSourceUrl"

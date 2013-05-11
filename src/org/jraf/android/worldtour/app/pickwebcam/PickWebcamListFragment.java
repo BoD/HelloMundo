@@ -36,8 +36,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.dialog.AlertDialogFragment;
-import org.jraf.android.util.ui.LoadingImageView;
+import org.jraf.android.util.closed.dialog.AlertDialogFragment;
+import org.jraf.android.util.closed.ui.LoadingImageView;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;

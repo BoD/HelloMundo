@@ -19,8 +19,8 @@ import android.view.View.OnClickListener;
 import android.webkit.WebView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.IoUtil;
-import org.jraf.android.util.StringUtil;
+import org.jraf.android.util.closed.IoUtil;
+import org.jraf.android.util.closed.StringUtil;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockActivity;
 
 

@@ -31,9 +31,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.HttpUtil;
-import org.jraf.android.util.HttpUtil.Options;
-import org.jraf.android.util.IoUtil;
+import org.jraf.android.util.closed.HttpUtil;
+import org.jraf.android.util.closed.HttpUtil.Options;
+import org.jraf.android.util.closed.IoUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 

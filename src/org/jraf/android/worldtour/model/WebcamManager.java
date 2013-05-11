@@ -30,10 +30,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.Blocking;
-import org.jraf.android.util.Blocking.Type;
-import org.jraf.android.util.HttpUtil;
-import org.jraf.android.util.IoUtil;
+import org.jraf.android.util.closed.Blocking;
+import org.jraf.android.util.closed.Blocking.Type;
+import org.jraf.android.util.closed.HttpUtil;
+import org.jraf.android.util.closed.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;

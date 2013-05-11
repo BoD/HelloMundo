@@ -34,18 +34,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.Blocking;
-import org.jraf.android.util.Blocking.Type;
-import org.jraf.android.util.EnvironmentUtil;
-import org.jraf.android.util.IoUtil;
-import org.jraf.android.util.MediaScannerUtil;
-import org.jraf.android.util.MediaScannerUtil.OnScanCompletedListener;
-import org.jraf.android.util.SimpleAsyncTask;
-import org.jraf.android.util.SimpleAsyncTaskFragment;
-import org.jraf.android.util.dialog.AlertDialogFragment;
+import org.jraf.android.util.async.SimpleAsyncTask;
+import org.jraf.android.util.async.SimpleAsyncTaskFragment;
+import org.jraf.android.util.closed.Blocking;
+import org.jraf.android.util.closed.Blocking.Type;
+import org.jraf.android.util.closed.EnvironmentUtil;
+import org.jraf.android.util.closed.IoUtil;
+import org.jraf.android.util.closed.dialog.AlertDialogFragment;
+import org.jraf.android.util.dialog.ProgressDialogFragment;
+import org.jraf.android.util.mediascanner.MediaScannerUtil;
+import org.jraf.android.util.mediascanner.MediaScannerUtil.OnScanCompletedListener;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.app.main.ProgressDialogFragment;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamInfo;
 import org.jraf.android.worldtour.provider.WebcamColumns;
@@ -90,7 +90,7 @@ public class SaveShareHelper {
                     public void run() {
                         if (!mTaskFinished) {
                             ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-                            progressDialogFragment.show(getFragmentManager(), Constants.FRAGMENT_DIALOG);
+                            progressDialogFragment.show(getFragmentManager());
                         }
                     }
                 }, 500);

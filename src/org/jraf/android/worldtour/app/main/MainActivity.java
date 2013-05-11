@@ -42,11 +42,11 @@ import android.widget.Toast;
 
 import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.BitmapUtil;
-import org.jraf.android.util.Blocking;
-import org.jraf.android.util.DateTimeUtil;
-import org.jraf.android.util.SimpleAsyncTask;
-import org.jraf.android.util.ui.UiUtil;
+import org.jraf.android.util.async.SimpleAsyncTask;
+import org.jraf.android.util.closed.BitmapUtil;
+import org.jraf.android.util.closed.Blocking;
+import org.jraf.android.util.closed.DateTimeUtil;
+import org.jraf.android.util.closed.ui.UiUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.about.AboutActivity;

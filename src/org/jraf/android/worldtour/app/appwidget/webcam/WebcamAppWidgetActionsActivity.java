@@ -28,8 +28,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.StringUtil;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
+import org.jraf.android.util.closed.StringUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.saveshare.SaveShareHelper;
@@ -70,6 +70,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), com.actionbarsherlock.R.style.Theme_Sherlock);
             //            final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), android.R.style.Theme_Light);
+
 
             AlertDialog.Builder builder = new AlertDialog.Builder(contextWithTheme);
             builder.setNegativeButton(android.R.string.cancel, null);

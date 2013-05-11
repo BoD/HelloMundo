@@ -25,8 +25,8 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.jraf.android.util.Blocking;
-import org.jraf.android.util.CollectionUtil;
+import org.jraf.android.util.closed.Blocking;
+import org.jraf.android.util.closed.CollectionUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.service.WorldTourService;

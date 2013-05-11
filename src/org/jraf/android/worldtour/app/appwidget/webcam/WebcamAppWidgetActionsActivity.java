@@ -19,6 +19,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -128,7 +129,8 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
         @Override
         public void onDismiss(DialogInterface dialog) {
             if (Config.LOGD) Log.d(TAG, "onDismiss");
-            getActivity().finish();
+            FragmentActivity activity = getActivity();
+            if (activity != null) activity.finish();
         }
 
         @Override

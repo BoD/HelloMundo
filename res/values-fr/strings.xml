@@ -14,7 +14,7 @@
 
     <!-- Global -->
     <string name="global_ad">(Publicité)</string>
-    <string name="acra_toast">The application has crashed.\nLogs are being sent so we can fix the problem.</string>
+    <string name="acra_toast">L\'application a rencontré une anomalie.\nDes logs vont être envoyés pour que nous puissions corriger le problème.</string>
 
     <!-- Main -->
     <string name="main_txtWallpaperAutoUpdate">M.à.j. automatique du papier-peint</string>

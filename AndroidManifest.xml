@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.jraf.android.latoureiffel"
     android:sharedUserId="org.jraf.android"
-    android:versionName="${versionName}" >
+    android:versionName="${versionName}"
+    tools:ignore="MissingVersion" >
 
     <!-- android:sharedUserId="org.jraf.android" -->
 

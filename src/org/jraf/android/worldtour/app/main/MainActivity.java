@@ -439,6 +439,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
 
     private void setLoading(boolean loading) {
         mLoading = loading;
+        if (mRefreshMenuItem == null) return;
         if (loading) {
             mRefreshMenuItem.setActionView(R.layout.main_refreshing);
         } else {

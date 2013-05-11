@@ -487,6 +487,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     }
 
     private void showWelcomeScreen(Rect rectPick, Rect rectSwiOnOff) {
+        if (Config.LOGD) Log.d(TAG, "showWelcomeScreen rectPick=" + rectPick + " rectSwiOnOff=" + rectSwiOnOff);
         startActivity(new Intent(this, WelcomeActivity.class).putExtra(WelcomeActivity.EXTRA_RECT_PICK, rectPick).putExtra(WelcomeActivity.EXTRA_RECT_SWITCH,
                 rectSwiOnOff));
     }

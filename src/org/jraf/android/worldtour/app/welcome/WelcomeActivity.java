@@ -305,7 +305,11 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
                     imgWidget.setVisibility(View.GONE);
                     imgLogo.setVisibility(View.VISIBLE);
                     Rect rectPick = getIntent().getParcelableExtra(EXTRA_RECT_PICK);
-                    if (rectPick == null) break;
+                    if (rectPick == null) {
+                        // This should never happen, but for some reason ACRA reports show this happening
+                        Log.w(TAG, "instantiateItem rectPick=null");
+                        break;
+                    }
                     LayoutParams layoutParams = imgArrowUp.getLayoutParams();
                     ((RelativeLayout.LayoutParams) layoutParams).topMargin = rectPick.bottom + marginTop;
                     ((RelativeLayout.LayoutParams) layoutParams).leftMargin = rectPick.centerX() - imgArrowUpWidth / 2;
@@ -319,6 +323,11 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
                     imgWidget.setVisibility(View.GONE);
                     imgLogo.setVisibility(View.GONE);
                     Rect rectSwitch = getIntent().getParcelableExtra(EXTRA_RECT_SWITCH);
+                    if (rectSwitch == null) {
+                        // This should never happen, but for some reason ACRA reports show this happening
+                        Log.w(TAG, "instantiateItem rectSwitch=null");
+                        break;
+                    }
                     setShowCasePosition(view, rectSwitch);
                     layoutParams = imgArrowUp.getLayoutParams();
                     ((RelativeLayout.LayoutParams) layoutParams).topMargin = rectSwitch.bottom + marginTop;

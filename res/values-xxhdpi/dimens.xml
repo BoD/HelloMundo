@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="cell_webcam_collapsed_height">194px</dimen> <!-- 192+2 -->
+    <dimen name="cell_webcam_separator_height">2px</dimen>
+
+</resources>

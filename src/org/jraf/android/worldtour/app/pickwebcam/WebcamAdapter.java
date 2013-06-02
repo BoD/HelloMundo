@@ -34,6 +34,7 @@ import org.jraf.android.util.closed.ui.ExtendHeightAnimation;
 import org.jraf.android.util.closed.ui.LoadingImageView;
 import org.jraf.android.util.closed.ui.ViewHolder;
 import org.jraf.android.worldtour.Constants;
+import org.jraf.android.worldtour.provider.WebcamCursorWrapper;
 import org.jraf.android.worldtour.provider.WebcamType;
 
 public class WebcamAdapter extends ResourceCursorAdapter {
@@ -57,13 +58,15 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        long id = cursor.getLong(0);
+        WebcamCursorWrapper c = new WebcamCursorWrapper(cursor);
+        long id = c.getId();
 
         TextView txtName = (TextView) ViewHolder.get(view, R.id.txtName);
-        String name = cursor.getString(1);
+        String name = c.getName();
         txtName.setText(name);
 
-        boolean isUserWebcam = cursor.getInt(9) == WebcamType.USER;
+        Long type = c.getType();
+        boolean isUserWebcam = type != null && type.equals(WebcamType.USER);
 
         // Extend
         View conExtended = ViewHolder.get(view, R.id.conExtended);
@@ -90,7 +93,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             imgThumbnail.setImageResource(R.drawable.ic_thumbnail_user_defined);
         } else {
             imgThumbnail.setImageResource(0);
-            imgThumbnail.loadBitmap(cursor.getString(2));
+            imgThumbnail.loadBitmap(c.getThumbUrl());
         }
 
         // Location & time
@@ -98,11 +101,11 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         if (isUserWebcam) {
             txtLocationAndTime.setText(R.string.common_userDefined);
         } else {
-            String location = cursor.getString(3);
-            String publicId = cursor.getString(6);
+            String location = c.getLocation();
+            String publicId = c.getPublicId();
             boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId);
             if (!specialCam) {
-                location += " - " + getLocalTime(context, cursor.getString(7));
+                location += " - " + getLocalTime(context, c.getTimezone());
             }
             txtLocationAndTime.setText(location);
         }
@@ -111,21 +114,22 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         TextView txtSourceUrl = ViewHolder.get(view, R.id.txtSourceUrl);
         String sourceUrl;
         if (isUserWebcam) {
-            sourceUrl = cursor.getString(10);
+            sourceUrl = c.getUrl();
             sourceUrl = sourceUrl.substring("http://".length());
             int slashIdx = sourceUrl.indexOf('/');
             if (slashIdx != -1) {
                 sourceUrl = sourceUrl.substring(0, slashIdx);
             }
         } else {
-            sourceUrl = cursor.getString(4);
+            sourceUrl = c.getSourceUrl();
         }
         txtSourceUrl.setText(context.getString(R.string.pickWebcam_source, sourceUrl));
         txtSourceUrl.setTag(sourceUrl);
         txtSourceUrl.setOnClickListener(mSourceOnClickListener);
 
         // Exclude from random
-        boolean excludedFromRandom = !cursor.isNull(5) && cursor.getInt(5) == 1;
+        Long excludeRandom = c.getExcludeRandom();
+        boolean excludedFromRandom = excludeRandom != null && excludeRandom.equals(1);
         View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
         btnExcludeFromRandom.setSelected(excludedFromRandom);
         txtName.setCompoundDrawablesWithIntrinsicBounds(0, 0, excludedFromRandom ? R.drawable.ic_excluded_from_random : 0, 0);
@@ -144,7 +148,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         } else {
             imgShowOnMap.setImageResource(R.drawable.ic_ext_show_on_map);
             txtShowOnMap.setText(R.string.pickWebcam_showOnMap);
-            String coordinates = cursor.getString(8);
+            String coordinates = c.getCoordinates();
             if (coordinates == null) {
                 btnShowOnMap.setEnabled(false);
             } else {

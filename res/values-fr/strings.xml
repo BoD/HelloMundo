@@ -5,7 +5,7 @@
 
     <!-- Common -->
     <string name="common_pleaseWait">Veuillez patienter…</string>
-    <string name="common_toast_unexpectedError">Un problème innatendu est survenu.\nVeuillez réésssayer.</string>
+    <string name="common_toast_unexpectedError">Un problème inattendu est survenu.\nVeuillez réesssayer.</string>
     <string name="common_discard">Annuler</string>
     <string name="common_done">Valider</string>
     <string name="common_userDefined">Webcam personnalisée</string>
@@ -24,7 +24,7 @@
     <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s. Vue sur WorldTour pour Android.</string>
     <string name="main_shareText_userWebcam">Image de \'%1$s\' prise au %3$s. Vue sur WorldTour pour Android.</string>
     <string name="main_previewFrame_weight">100</string>
-    <string name="main_txtNoImageWarning">Impossible de télécharger l\'image.\nProblème de réseau ? Ré-essayez plus tard.</string>
+    <string name="main_txtNoImageWarning">Impossible de télécharger l\'image.\nProblème de réseau ? Réesssayer plus tard.</string>
     <string name="main_menu_pick">Choisir une webcam</string>
     <string name="main_menu_refresh">Mettre à jour le papier-peint</string>
     <string name="main_menu_share">Partager l\'image actuelle</string>

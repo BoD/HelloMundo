@@ -147,8 +147,8 @@ public class WorldtourProvider extends ContentProvider {
         final String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
         if (Config.LOGD_PROVIDER) Log.d(TAG, "query uri=" + uri + " selection=" + selection + " sortOrder=" + sortOrder + " groupBy=" + groupBy);
         final QueryParams queryParams = getQueryParams(uri, selection, true);
-        final Cursor res = mWorldtourSQLiteOpenHelper.getReadableDatabase().query(queryParams.tableWithJoins, projection, queryParams.whereClause,
-                selectionArgs, groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        final Cursor res = mWorldtourSQLiteOpenHelper.getReadableDatabase().query(queryParams.tableWithJoins, projection, queryParams.whereClause, selectionArgs,
+                groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }

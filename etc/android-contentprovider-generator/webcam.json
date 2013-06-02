@@ -1,74 +1,76 @@
-[
-	{
-		"name": "type",
-		"type": "integer"
-	},
-	{
-		"name": "public_id",
-		"type": "text"
-	},
-	{
-		"name": "name",
-		"type": "text"
-	},
-	{
-		"name": "location",
-		"type": "text"
-	},
-	{
-		"name": "url",
-		"type": "text"
-	},
-	{
-		"name": "thumb_url",
-		"type": "text"
-	},
-	{
-		"name": "source_url",
-		"type": "text"
-	},
-	{
-		"name": "http_referer",
-		"type": "text"
-	},
-	{
-		"name": "timezone",
-		"type": "text"
-	},
-	{
-		"name": "resize_width",
-		"type": "integer"
-	},
-	{
-		"name": "resize_height",
-		"type": "integer"
-	},
-	{
-		"name": "visibility_begin_hour",
-		"type": "integer"
-	},
-	{
-		"name": "visibility_begin_min",
-		"type": "integer"
-	},
-	{
-		"name": "visibility_end_hour",
-		"type": "integer"
-	},
-	{
-		"name": "visibility_end_min",
-		"type": "integer"
-	},
-	{
-		"name": "added_date",
-		"type": "integer"
-	},
-	{
-		"name": "exclude_random",
-		"type": "integer"
-	},
-	{
-		"name": "coordinates",
-		"type": "text"
-	},
-]
+{
+	"fields": [
+		{
+			"name": "type",
+			"type": "integer"
+		},
+		{
+			"name": "public_id",
+			"type": "text"
+		},
+		{
+			"name": "name",
+			"type": "text"
+		},
+		{
+			"name": "location",
+			"type": "text"
+		},
+		{
+			"name": "url",
+			"type": "text"
+		},
+		{
+			"name": "thumb_url",
+			"type": "text"
+		},
+		{
+			"name": "source_url",
+			"type": "text"
+		},
+		{
+			"name": "http_referer",
+			"type": "text"
+		},
+		{
+			"name": "timezone",
+			"type": "text"
+		},
+		{
+			"name": "resize_width",
+			"type": "integer"
+		},
+		{
+			"name": "resize_height",
+			"type": "integer"
+		},
+		{
+			"name": "visibility_begin_hour",
+			"type": "integer"
+		},
+		{
+			"name": "visibility_begin_min",
+			"type": "integer"
+		},
+		{
+			"name": "visibility_end_hour",
+			"type": "integer"
+		},
+		{
+			"name": "visibility_end_min",
+			"type": "integer"
+		},
+		{
+			"name": "added_date",
+			"type": "integer"
+		},
+		{
+			"name": "exclude_random",
+			"type": "integer"
+		},
+		{
+			"name": "coordinates",
+			"type": "text"
+		},
+	]
+}

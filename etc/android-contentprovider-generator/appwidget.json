@@ -1,14 +1,16 @@
-[
-	{
-		"name": "appwidget_id",
-		"type": "integer"
-	},
-	{
-		"name": "webcam_id",
-		"type": "text"
-	},
-	{
-		"name": "current_webcam_id",
-		"type": "text"
-	},
-]
+{
+	"fields": [
+		{
+			"name": "appwidget_id",
+			"type": "integer"
+		},
+		{
+			"name": "webcam_id",
+			"type": "text"
+		},
+		{
+			"name": "current_webcam_id",
+			"type": "text"
+		},
+	]
+}

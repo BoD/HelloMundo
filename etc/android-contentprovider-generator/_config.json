@@ -1,5 +1,6 @@
 {
-	"package": "org.jraf.android.worldtour.provider",
+    "projectPackage": "org.jraf.android.worldtour",
+	"providerPackage": "org.jraf.android.worldtour.provider",
 	"providerClassName": "WorldtourProvider",
 	"sqliteHelperClassName": "WorldtourSQLiteOpenHelper",
 	"authority": "org.jraf.android.worldtour.provider",

@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  *
- * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  */
 package org.jraf.android.worldtour.provider;
 

@@ -26,7 +26,7 @@ public class AppwidgetCursorWrapper extends CursorWrapper {
     public Long getId() {
         Integer index = mColumnIndexes.get("_id");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("_id");
+        	index = getColumnIndexOrThrow("_id");
         	mColumnIndexes.put("type", index);
         }
         if (isNull(index)) return null;
@@ -36,7 +36,7 @@ public class AppwidgetCursorWrapper extends CursorWrapper {
     public Long getAppwidgetId() {
         Integer index = mColumnIndexes.get("appwidget_id");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("appwidget_id");
+        	index = getColumnIndexOrThrow("appwidget_id");
         	mColumnIndexes.put("appwidget_id", index);
         }
         if (isNull(index)) return null;
@@ -46,7 +46,7 @@ public class AppwidgetCursorWrapper extends CursorWrapper {
     public String getWebcamId() {
         Integer index = mColumnIndexes.get("webcam_id");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("webcam_id");
+        	index = getColumnIndexOrThrow("webcam_id");
         	mColumnIndexes.put("webcam_id", index);
         }
         return getString(index);
@@ -55,7 +55,7 @@ public class AppwidgetCursorWrapper extends CursorWrapper {
     public String getCurrentWebcamId() {
         Integer index = mColumnIndexes.get("current_webcam_id");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("current_webcam_id");
+        	index = getColumnIndexOrThrow("current_webcam_id");
         	mColumnIndexes.put("current_webcam_id", index);
         }
         return getString(index);

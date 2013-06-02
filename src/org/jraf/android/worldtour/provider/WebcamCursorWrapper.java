@@ -26,7 +26,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getId() {
         Integer index = mColumnIndexes.get("_id");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("_id");
+        	index = getColumnIndexOrThrow("_id");
         	mColumnIndexes.put("type", index);
         }
         if (isNull(index)) return null;
@@ -36,7 +36,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getType() {
         Integer index = mColumnIndexes.get("type");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("type");
+        	index = getColumnIndexOrThrow("type");
         	mColumnIndexes.put("type", index);
         }
         if (isNull(index)) return null;
@@ -46,7 +46,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getPublicId() {
         Integer index = mColumnIndexes.get("public_id");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("public_id");
+        	index = getColumnIndexOrThrow("public_id");
         	mColumnIndexes.put("public_id", index);
         }
         return getString(index);
@@ -55,7 +55,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getName() {
         Integer index = mColumnIndexes.get("name");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("name");
+        	index = getColumnIndexOrThrow("name");
         	mColumnIndexes.put("name", index);
         }
         return getString(index);
@@ -64,7 +64,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getLocation() {
         Integer index = mColumnIndexes.get("location");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("location");
+        	index = getColumnIndexOrThrow("location");
         	mColumnIndexes.put("location", index);
         }
         return getString(index);
@@ -73,7 +73,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getUrl() {
         Integer index = mColumnIndexes.get("url");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("url");
+        	index = getColumnIndexOrThrow("url");
         	mColumnIndexes.put("url", index);
         }
         return getString(index);
@@ -82,7 +82,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getThumbUrl() {
         Integer index = mColumnIndexes.get("thumb_url");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("thumb_url");
+        	index = getColumnIndexOrThrow("thumb_url");
         	mColumnIndexes.put("thumb_url", index);
         }
         return getString(index);
@@ -91,7 +91,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getSourceUrl() {
         Integer index = mColumnIndexes.get("source_url");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("source_url");
+        	index = getColumnIndexOrThrow("source_url");
         	mColumnIndexes.put("source_url", index);
         }
         return getString(index);
@@ -100,7 +100,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getHttpReferer() {
         Integer index = mColumnIndexes.get("http_referer");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("http_referer");
+        	index = getColumnIndexOrThrow("http_referer");
         	mColumnIndexes.put("http_referer", index);
         }
         return getString(index);
@@ -109,7 +109,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getTimezone() {
         Integer index = mColumnIndexes.get("timezone");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("timezone");
+        	index = getColumnIndexOrThrow("timezone");
         	mColumnIndexes.put("timezone", index);
         }
         return getString(index);
@@ -118,7 +118,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getResizeWidth() {
         Integer index = mColumnIndexes.get("resize_width");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("resize_width");
+        	index = getColumnIndexOrThrow("resize_width");
         	mColumnIndexes.put("resize_width", index);
         }
         if (isNull(index)) return null;
@@ -128,7 +128,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getResizeHeight() {
         Integer index = mColumnIndexes.get("resize_height");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("resize_height");
+        	index = getColumnIndexOrThrow("resize_height");
         	mColumnIndexes.put("resize_height", index);
         }
         if (isNull(index)) return null;
@@ -138,7 +138,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getVisibilityBeginHour() {
         Integer index = mColumnIndexes.get("visibility_begin_hour");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("visibility_begin_hour");
+        	index = getColumnIndexOrThrow("visibility_begin_hour");
         	mColumnIndexes.put("visibility_begin_hour", index);
         }
         if (isNull(index)) return null;
@@ -148,7 +148,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getVisibilityBeginMin() {
         Integer index = mColumnIndexes.get("visibility_begin_min");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("visibility_begin_min");
+        	index = getColumnIndexOrThrow("visibility_begin_min");
         	mColumnIndexes.put("visibility_begin_min", index);
         }
         if (isNull(index)) return null;
@@ -158,7 +158,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getVisibilityEndHour() {
         Integer index = mColumnIndexes.get("visibility_end_hour");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("visibility_end_hour");
+        	index = getColumnIndexOrThrow("visibility_end_hour");
         	mColumnIndexes.put("visibility_end_hour", index);
         }
         if (isNull(index)) return null;
@@ -168,7 +168,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getVisibilityEndMin() {
         Integer index = mColumnIndexes.get("visibility_end_min");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("visibility_end_min");
+        	index = getColumnIndexOrThrow("visibility_end_min");
         	mColumnIndexes.put("visibility_end_min", index);
         }
         if (isNull(index)) return null;
@@ -178,7 +178,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getAddedDate() {
         Integer index = mColumnIndexes.get("added_date");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("added_date");
+        	index = getColumnIndexOrThrow("added_date");
         	mColumnIndexes.put("added_date", index);
         }
         if (isNull(index)) return null;
@@ -188,7 +188,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public Long getExcludeRandom() {
         Integer index = mColumnIndexes.get("exclude_random");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("exclude_random");
+        	index = getColumnIndexOrThrow("exclude_random");
         	mColumnIndexes.put("exclude_random", index);
         }
         if (isNull(index)) return null;
@@ -198,7 +198,7 @@ public class WebcamCursorWrapper extends CursorWrapper {
     public String getCoordinates() {
         Integer index = mColumnIndexes.get("coordinates");
         if (index == null) {
-        	index =  getColumnIndexOrThrow("coordinates");
+        	index = getColumnIndexOrThrow("coordinates");
         	mColumnIndexes.put("coordinates", index);
         }
         return getString(index);

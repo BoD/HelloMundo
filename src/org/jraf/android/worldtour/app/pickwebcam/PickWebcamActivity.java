@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.async.SimpleAsyncTask;
-import org.jraf.android.util.closed.dialog.AlertDialogListener;
+import org.jraf.android.util.dialog.AlertDialogListener;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity;

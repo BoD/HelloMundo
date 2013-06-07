@@ -24,24 +24,18 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.async.SimpleAsyncTask;
-import org.jraf.android.util.async.SimpleAsyncTaskFragment;
+import org.jraf.android.util.async.ProgressDialogAsyncTaskFragment;
 import org.jraf.android.util.closed.Blocking;
 import org.jraf.android.util.closed.Blocking.Type;
 import org.jraf.android.util.closed.EnvironmentUtil;
 import org.jraf.android.util.closed.IoUtil;
-import org.jraf.android.util.closed.dialog.AlertDialogFragment;
-import org.jraf.android.util.dialog.ProgressDialogFragment;
+import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.util.mediascanner.MediaScannerUtil;
 import org.jraf.android.util.mediascanner.MediaScannerUtil.OnScanCompletedListener;
 import org.jraf.android.worldtour.Config;
@@ -74,61 +68,34 @@ public class SaveShareHelper {
     public void saveImage(final Context context, FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "saveImage appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
-            fragmentManager.beginTransaction()
-                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), Constants.FRAGMENT_DIALOG)
-                    .commit();
+            AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
             return;
         }
 
-        new SimpleAsyncTaskFragment() {
-            private boolean mTaskFinished;
-
-            @Override
-            protected void onPreExecute() {
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!mTaskFinished) {
-                            ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-                            progressDialogFragment.show(getFragmentManager());
-                        }
-                    }
-                }, 500);
-            }
-
+        new ProgressDialogAsyncTaskFragment() {
             @Override
             protected void doInBackground() throws Exception {
                 saveAndInsertImage(context, appwidgetId);
             }
 
             @Override
-            protected void onPostExecute(boolean ok) {
-                mTaskFinished = true;
-                DialogFragment dialogFragment = (DialogFragment) getFragmentManager().findFragmentByTag(Constants.FRAGMENT_DIALOG);
-                if (dialogFragment != null) dialogFragment.dismissAllowingStateLoss();
-                if (!ok) {
-                    Toast.makeText(context, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Toast.makeText(context, R.string.main_toast_fileSaved, Toast.LENGTH_SHORT).show();
-
+            protected void onPostExecuteOk() {
+                super.onPostExecuteOk();
                 if (getActivity() instanceof SaveShareListener) {
                     ((SaveShareListener) getActivity()).onDone();
                 }
             }
-        }.execute(fragmentManager);
+        }.toastOk(R.string.main_toast_fileSaved).toastFail(R.string.common_toast_unexpectedError).execute(fragmentManager);
     }
 
 
     public void shareImage(final Context context, FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "shareImage appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
-            fragmentManager.beginTransaction()
-                    .add(AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null), Constants.FRAGMENT_DIALOG)
-                    .commit();
+            AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
             return;
         }
-        new SimpleAsyncTask() {
+        new ProgressDialogAsyncTaskFragment() {
             private WebcamInfo mWebcamInfo;
 
             @Override
@@ -137,11 +104,7 @@ public class SaveShareHelper {
             }
 
             @Override
-            protected void onPostExecute(Boolean ok) {
-                if (!ok) {
-                    Toast.makeText(context, R.string.common_toast_unexpectedError, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            protected void onPostExecuteOk() {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("image/jpeg");
 
@@ -156,7 +119,7 @@ public class SaveShareHelper {
                     ((SaveShareListener) context).onDone();
                 }
             }
-        }.execute();
+        }.toastFail(R.string.common_toast_unexpectedError).execute(fragmentManager);
     }
 
     @Blocking(Type.DISK)

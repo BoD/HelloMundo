@@ -15,7 +15,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.util.Log;
 
-import org.jraf.android.util.closed.CollectionUtil;
+import org.jraf.android.util.collection.CollectionUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.model.AppwidgetManager;

@@ -24,39 +24,39 @@ public class AppwidgetCursorWrapper extends CursorWrapper {
     }
 
     public Long getId() {
-        Integer index = mColumnIndexes.get("_id");
+        Integer index = mColumnIndexes.get(AppwidgetColumns._ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("_id");
-        	mColumnIndexes.put("type", index);
+        	index = getColumnIndexOrThrow(AppwidgetColumns._ID);
+        	mColumnIndexes.put(AppwidgetColumns._ID, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getAppwidgetId() {
-        Integer index = mColumnIndexes.get("appwidget_id");
+        Integer index = mColumnIndexes.get(AppwidgetColumns.APPWIDGET_ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("appwidget_id");
-        	mColumnIndexes.put("appwidget_id", index);
+        	index = getColumnIndexOrThrow(AppwidgetColumns.APPWIDGET_ID);
+        	mColumnIndexes.put(AppwidgetColumns.APPWIDGET_ID, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public String getWebcamId() {
-        Integer index = mColumnIndexes.get("webcam_id");
+        Integer index = mColumnIndexes.get(AppwidgetColumns.WEBCAM_ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("webcam_id");
-        	mColumnIndexes.put("webcam_id", index);
+        	index = getColumnIndexOrThrow(AppwidgetColumns.WEBCAM_ID);
+        	mColumnIndexes.put(AppwidgetColumns.WEBCAM_ID, index);
         }
         return getString(index);
     }
 
     public String getCurrentWebcamId() {
-        Integer index = mColumnIndexes.get("current_webcam_id");
+        Integer index = mColumnIndexes.get(AppwidgetColumns.CURRENT_WEBCAM_ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("current_webcam_id");
-        	mColumnIndexes.put("current_webcam_id", index);
+        	index = getColumnIndexOrThrow(AppwidgetColumns.CURRENT_WEBCAM_ID);
+        	mColumnIndexes.put(AppwidgetColumns.CURRENT_WEBCAM_ID, index);
         }
         return getString(index);
     }

@@ -17,7 +17,7 @@ import android.content.Context;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.closed.DateTimeUtil;
-import org.jraf.android.util.closed.FileUtil;
+import org.jraf.android.util.file.FileUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamType;
 
@@ -56,7 +56,7 @@ public class WebcamInfo {
         res += locationStr;
         res += ".jpg";
 
-        res = FileUtil.stripBadCharsForFileName(res, "_");
+        res = FileUtil.getValidFileName(res, '_');
         return res;
     }
 }

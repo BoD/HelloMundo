@@ -32,7 +32,7 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.closed.DateTimeUtil;
 import org.jraf.android.util.closed.ui.ExtendHeightAnimation;
 import org.jraf.android.util.closed.ui.LoadingImageView;
-import org.jraf.android.util.closed.ui.ViewHolder;
+import org.jraf.android.util.ui.ViewHolder;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamCursorWrapper;
 import org.jraf.android.worldtour.provider.WebcamType;
@@ -66,7 +66,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         txtName.setText(name);
 
         Long type = c.getType();
-        boolean isUserWebcam = type != null && type.equals(WebcamType.USER);
+        boolean isUserWebcam = type != null && type.intValue() == WebcamType.USER;
 
         // Extend
         View conExtended = ViewHolder.get(view, R.id.conExtended);
@@ -129,7 +129,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
         // Exclude from random
         Long excludeRandom = c.getExcludeRandom();
-        boolean excludedFromRandom = excludeRandom != null && excludeRandom.equals(1);
+        boolean excludedFromRandom = excludeRandom != null && excludeRandom.intValue() == 1;
         View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
         btnExcludeFromRandom.setSelected(excludedFromRandom);
         txtName.setCompoundDrawablesWithIntrinsicBounds(0, 0, excludedFromRandom ? R.drawable.ic_excluded_from_random : 0, 0);

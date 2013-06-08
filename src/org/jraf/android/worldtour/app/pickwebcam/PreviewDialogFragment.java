@@ -33,7 +33,7 @@ import android.widget.Toast;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.closed.HttpUtil;
 import org.jraf.android.util.closed.HttpUtil.Options;
-import org.jraf.android.util.closed.IoUtil;
+import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
@@ -113,7 +113,7 @@ public class PreviewDialogFragment extends DialogFragment {
                     Log.w(TAG, "doInBackground Could not decode stream", e);
                     return null;
                 } finally {
-                    IoUtil.close(inputStream);
+                    IoUtil.closeSilently(inputStream);
                 }
             }
 

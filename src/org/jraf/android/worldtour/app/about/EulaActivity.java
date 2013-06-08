@@ -11,16 +11,13 @@
  */
 package org.jraf.android.worldtour.app.about;
 
-import java.io.IOException;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.IoUtil;
-import org.jraf.android.util.closed.StringUtil;
+import org.jraf.android.util.webview.WebViewUtil;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockActivity;
 
 
@@ -30,16 +27,8 @@ public class EulaActivity extends LifecycleDispatchSherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eula);
         findViewById(R.id.btnOk).setOnClickListener(mOkOnClickListener);
-        final WebView eulaWebView = (WebView) findViewById(R.id.webView);
-        String html;
-        try {
-            html = IoUtil.inputStreamToString(getResources().openRawResource(R.raw.eula));
-        } catch (final IOException e) {
-            // should never happen
-            throw new AssertionError("Could not read eula file");
-        }
-        html = StringUtil.reworkForWebView(html);
-        eulaWebView.loadData(html, "text/html", "utf-8");
+        WebView eulaWebView = (WebView) findViewById(R.id.webView);
+        WebViewUtil.loadFromRaw(eulaWebView, R.raw.eula);
     }
 
     private final OnClickListener mOkOnClickListener = new OnClickListener() {

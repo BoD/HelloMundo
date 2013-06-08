@@ -33,7 +33,7 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.closed.Blocking;
 import org.jraf.android.util.closed.Blocking.Type;
 import org.jraf.android.util.closed.HttpUtil;
-import org.jraf.android.util.closed.IoUtil;
+import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;
@@ -139,7 +139,7 @@ public class WebcamManager {
             }
             return publicIds;
         } finally {
-            IoUtil.close(inputStream);
+            IoUtil.closeSilently(inputStream);
         }
     }
 

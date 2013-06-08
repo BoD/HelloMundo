@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
-import org.jraf.android.util.closed.StringUtil;
+import org.jraf.android.util.string.StringUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.saveshare.SaveShareHelper;

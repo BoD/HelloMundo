@@ -51,7 +51,7 @@ import android.widget.RemoteViews;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.closed.HttpUtil;
 import org.jraf.android.util.closed.HttpUtil.Options;
-import org.jraf.android.util.closed.IoUtil;
+import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.analytics.AnalyticsHelper;
@@ -202,7 +202,7 @@ public class WorldTourService extends IntentService {
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             } finally {
-                IoUtil.close(imageInputStream);
+                IoUtil.closeSilently(imageInputStream);
             }
         }
 
@@ -389,7 +389,7 @@ public class WorldTourService extends IntentService {
             if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
-            IoUtil.close(inputStream, outputStream);
+            IoUtil.closeSilently(inputStream, outputStream);
         }
         return true;
     }
@@ -410,7 +410,7 @@ public class WorldTourService extends IntentService {
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
-            IoUtil.close(input);
+            IoUtil.closeSilently(input);
         }
 
         if (bitmap == null) {
@@ -460,7 +460,7 @@ public class WorldTourService extends IntentService {
             return false;
         }
         boolean ok = bitmap.compress(CompressFormat.JPEG, 90, outputStream);
-        IoUtil.close(outputStream);
+        IoUtil.closeSilently(outputStream);
         if (!ok) {
             Log.w(TAG, "saveEditedVersion Could not encode dimmed image");
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));

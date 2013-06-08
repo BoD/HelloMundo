@@ -24,182 +24,182 @@ public class WebcamCursorWrapper extends CursorWrapper {
     }
 
     public Long getId() {
-        Integer index = mColumnIndexes.get("_id");
+        Integer index = mColumnIndexes.get(WebcamColumns._ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("_id");
-        	mColumnIndexes.put("type", index);
+        	index = getColumnIndexOrThrow(WebcamColumns._ID);
+        	mColumnIndexes.put(WebcamColumns._ID, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getType() {
-        Integer index = mColumnIndexes.get("type");
+        Integer index = mColumnIndexes.get(WebcamColumns.TYPE);
         if (index == null) {
-        	index = getColumnIndexOrThrow("type");
-        	mColumnIndexes.put("type", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.TYPE);
+        	mColumnIndexes.put(WebcamColumns.TYPE, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public String getPublicId() {
-        Integer index = mColumnIndexes.get("public_id");
+        Integer index = mColumnIndexes.get(WebcamColumns.PUBLIC_ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("public_id");
-        	mColumnIndexes.put("public_id", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.PUBLIC_ID);
+        	mColumnIndexes.put(WebcamColumns.PUBLIC_ID, index);
         }
         return getString(index);
     }
 
     public String getName() {
-        Integer index = mColumnIndexes.get("name");
+        Integer index = mColumnIndexes.get(WebcamColumns.NAME);
         if (index == null) {
-        	index = getColumnIndexOrThrow("name");
-        	mColumnIndexes.put("name", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.NAME);
+        	mColumnIndexes.put(WebcamColumns.NAME, index);
         }
         return getString(index);
     }
 
     public String getLocation() {
-        Integer index = mColumnIndexes.get("location");
+        Integer index = mColumnIndexes.get(WebcamColumns.LOCATION);
         if (index == null) {
-        	index = getColumnIndexOrThrow("location");
-        	mColumnIndexes.put("location", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.LOCATION);
+        	mColumnIndexes.put(WebcamColumns.LOCATION, index);
         }
         return getString(index);
     }
 
     public String getUrl() {
-        Integer index = mColumnIndexes.get("url");
+        Integer index = mColumnIndexes.get(WebcamColumns.URL);
         if (index == null) {
-        	index = getColumnIndexOrThrow("url");
-        	mColumnIndexes.put("url", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.URL);
+        	mColumnIndexes.put(WebcamColumns.URL, index);
         }
         return getString(index);
     }
 
     public String getThumbUrl() {
-        Integer index = mColumnIndexes.get("thumb_url");
+        Integer index = mColumnIndexes.get(WebcamColumns.THUMB_URL);
         if (index == null) {
-        	index = getColumnIndexOrThrow("thumb_url");
-        	mColumnIndexes.put("thumb_url", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.THUMB_URL);
+        	mColumnIndexes.put(WebcamColumns.THUMB_URL, index);
         }
         return getString(index);
     }
 
     public String getSourceUrl() {
-        Integer index = mColumnIndexes.get("source_url");
+        Integer index = mColumnIndexes.get(WebcamColumns.SOURCE_URL);
         if (index == null) {
-        	index = getColumnIndexOrThrow("source_url");
-        	mColumnIndexes.put("source_url", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.SOURCE_URL);
+        	mColumnIndexes.put(WebcamColumns.SOURCE_URL, index);
         }
         return getString(index);
     }
 
     public String getHttpReferer() {
-        Integer index = mColumnIndexes.get("http_referer");
+        Integer index = mColumnIndexes.get(WebcamColumns.HTTP_REFERER);
         if (index == null) {
-        	index = getColumnIndexOrThrow("http_referer");
-        	mColumnIndexes.put("http_referer", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.HTTP_REFERER);
+        	mColumnIndexes.put(WebcamColumns.HTTP_REFERER, index);
         }
         return getString(index);
     }
 
     public String getTimezone() {
-        Integer index = mColumnIndexes.get("timezone");
+        Integer index = mColumnIndexes.get(WebcamColumns.TIMEZONE);
         if (index == null) {
-        	index = getColumnIndexOrThrow("timezone");
-        	mColumnIndexes.put("timezone", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.TIMEZONE);
+        	mColumnIndexes.put(WebcamColumns.TIMEZONE, index);
         }
         return getString(index);
     }
 
     public Long getResizeWidth() {
-        Integer index = mColumnIndexes.get("resize_width");
+        Integer index = mColumnIndexes.get(WebcamColumns.RESIZE_WIDTH);
         if (index == null) {
-        	index = getColumnIndexOrThrow("resize_width");
-        	mColumnIndexes.put("resize_width", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.RESIZE_WIDTH);
+        	mColumnIndexes.put(WebcamColumns.RESIZE_WIDTH, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getResizeHeight() {
-        Integer index = mColumnIndexes.get("resize_height");
+        Integer index = mColumnIndexes.get(WebcamColumns.RESIZE_HEIGHT);
         if (index == null) {
-        	index = getColumnIndexOrThrow("resize_height");
-        	mColumnIndexes.put("resize_height", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.RESIZE_HEIGHT);
+        	mColumnIndexes.put(WebcamColumns.RESIZE_HEIGHT, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getVisibilityBeginHour() {
-        Integer index = mColumnIndexes.get("visibility_begin_hour");
+        Integer index = mColumnIndexes.get(WebcamColumns.VISIBILITY_BEGIN_HOUR);
         if (index == null) {
-        	index = getColumnIndexOrThrow("visibility_begin_hour");
-        	mColumnIndexes.put("visibility_begin_hour", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.VISIBILITY_BEGIN_HOUR);
+        	mColumnIndexes.put(WebcamColumns.VISIBILITY_BEGIN_HOUR, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getVisibilityBeginMin() {
-        Integer index = mColumnIndexes.get("visibility_begin_min");
+        Integer index = mColumnIndexes.get(WebcamColumns.VISIBILITY_BEGIN_MIN);
         if (index == null) {
-        	index = getColumnIndexOrThrow("visibility_begin_min");
-        	mColumnIndexes.put("visibility_begin_min", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.VISIBILITY_BEGIN_MIN);
+        	mColumnIndexes.put(WebcamColumns.VISIBILITY_BEGIN_MIN, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getVisibilityEndHour() {
-        Integer index = mColumnIndexes.get("visibility_end_hour");
+        Integer index = mColumnIndexes.get(WebcamColumns.VISIBILITY_END_HOUR);
         if (index == null) {
-        	index = getColumnIndexOrThrow("visibility_end_hour");
-        	mColumnIndexes.put("visibility_end_hour", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.VISIBILITY_END_HOUR);
+        	mColumnIndexes.put(WebcamColumns.VISIBILITY_END_HOUR, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getVisibilityEndMin() {
-        Integer index = mColumnIndexes.get("visibility_end_min");
+        Integer index = mColumnIndexes.get(WebcamColumns.VISIBILITY_END_MIN);
         if (index == null) {
-        	index = getColumnIndexOrThrow("visibility_end_min");
-        	mColumnIndexes.put("visibility_end_min", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.VISIBILITY_END_MIN);
+        	mColumnIndexes.put(WebcamColumns.VISIBILITY_END_MIN, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getAddedDate() {
-        Integer index = mColumnIndexes.get("added_date");
+        Integer index = mColumnIndexes.get(WebcamColumns.ADDED_DATE);
         if (index == null) {
-        	index = getColumnIndexOrThrow("added_date");
-        	mColumnIndexes.put("added_date", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.ADDED_DATE);
+        	mColumnIndexes.put(WebcamColumns.ADDED_DATE, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Long getExcludeRandom() {
-        Integer index = mColumnIndexes.get("exclude_random");
+        Integer index = mColumnIndexes.get(WebcamColumns.EXCLUDE_RANDOM);
         if (index == null) {
-        	index = getColumnIndexOrThrow("exclude_random");
-        	mColumnIndexes.put("exclude_random", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.EXCLUDE_RANDOM);
+        	mColumnIndexes.put(WebcamColumns.EXCLUDE_RANDOM, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public String getCoordinates() {
-        Integer index = mColumnIndexes.get("coordinates");
+        Integer index = mColumnIndexes.get(WebcamColumns.COORDINATES);
         if (index == null) {
-        	index = getColumnIndexOrThrow("coordinates");
-        	mColumnIndexes.put("coordinates", index);
+        	index = getColumnIndexOrThrow(WebcamColumns.COORDINATES);
+        	mColumnIndexes.put(WebcamColumns.COORDINATES, index);
         }
         return getString(index);
     }

@@ -33,9 +33,9 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.async.ProgressDialogAsyncTaskFragment;
 import org.jraf.android.util.closed.Blocking;
 import org.jraf.android.util.closed.Blocking.Type;
-import org.jraf.android.util.closed.EnvironmentUtil;
-import org.jraf.android.util.closed.IoUtil;
 import org.jraf.android.util.dialog.AlertDialogFragment;
+import org.jraf.android.util.environment.EnvironmentUtil;
+import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.util.mediascanner.MediaScannerUtil;
 import org.jraf.android.util.mediascanner.MediaScannerUtil.OnScanCompletedListener;
 import org.jraf.android.worldtour.Config;
@@ -67,7 +67,7 @@ public class SaveShareHelper {
 
     public void saveImage(final Context context, FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "saveImage appwidgetId=" + appwidgetId);
-        if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
+        if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
             AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
             return;
         }
@@ -91,7 +91,7 @@ public class SaveShareHelper {
 
     public void shareImage(final Context context, FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "shareImage appwidgetId=" + appwidgetId);
-        if (!EnvironmentUtil.isSdCardMountedReadWrite()) {
+        if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
             AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
             return;
         }
@@ -153,7 +153,7 @@ public class SaveShareHelper {
         try {
             IoUtil.copy(inputStream, outputStream);
         } finally {
-            IoUtil.close(inputStream, outputStream);
+            IoUtil.closeSilently(inputStream, outputStream);
         }
 
         // Scan it

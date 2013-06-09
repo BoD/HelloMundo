@@ -132,9 +132,14 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         boolean excludedFromRandom = excludeRandom != null && excludeRandom.intValue() == 1;
         View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
         btnExcludeFromRandom.setSelected(excludedFromRandom);
-        txtName.setCompoundDrawablesWithIntrinsicBounds(0, 0, excludedFromRandom ? R.drawable.ic_excluded_from_random : 0, 0);
         btnExcludeFromRandom.setTag(id);
         btnExcludeFromRandom.setOnClickListener(mExcludeFromRandomOnClickListener);
+        ImageView imgExcludedFromRandom = ViewHolder.get(view, R.id.imgExcludedFromRandom);
+        if (excludedFromRandom) {
+            imgExcludedFromRandom.setVisibility(View.VISIBLE);
+        } else {
+            imgExcludedFromRandom.setVisibility(View.GONE);
+        }
 
         // Show on map / delete
         View btnShowOnMap = ViewHolder.get(view, R.id.btnShowOnMap);

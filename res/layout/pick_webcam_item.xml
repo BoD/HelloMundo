@@ -19,12 +19,24 @@
             android:layout_height="64dp"
             jraf:loadingBackground="@drawable/ic_thumbnail_bg" />
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/imgExcludedFromRandom"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="24dp"
+            android:paddingTop="2dp"
+            android:src="@drawable/ic_excluded_from_random"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
+            android:layout_toLeftOf="@+id/imgExcludedFromRandom"
             android:layout_toRightOf="@+id/imgThumbnail"
             android:orientation="vertical" >
 
@@ -33,6 +45,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
+                android:ellipsize="marquee"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -45,11 +60,11 @@
 
         <org.jraf.android.util.closed.ui.dontpresswithparent.DontPressWithParentView
             android:id="@+id/btnExtend"
-            android:layout_width="48dp"
+            android:layout_width="32dp"
             android:layout_height="64dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/ic_arrow"
+            android:background="@drawable/dotdotdot"
             android:clickable="true" />
 
         <!-- Separator -->

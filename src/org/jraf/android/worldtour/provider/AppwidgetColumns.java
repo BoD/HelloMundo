@@ -14,6 +14,9 @@ package org.jraf.android.worldtour.provider;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+/**
+ * Columns for the {@code appwidget} table.
+ */
 public class AppwidgetColumns implements BaseColumns {
     public static final String TABLE_NAME = "appwidget";
     public static final Uri CONTENT_URI = Uri.parse(WorldtourProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

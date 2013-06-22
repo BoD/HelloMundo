@@ -14,6 +14,9 @@ package org.jraf.android.worldtour.provider;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+/**
+ * Columns for the {@code webcam} table.
+ */
 public class WebcamColumns implements BaseColumns {
     public static final String TABLE_NAME = "webcam";
     public static final Uri CONTENT_URI = Uri.parse(WorldtourProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

@@ -31,11 +31,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.HttpUtil;
-import org.jraf.android.util.closed.HttpUtil.Options;
+import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamColumns;
+
+import com.github.kevinsawicki.http.HttpRequest;
 
 public class PreviewDialogFragment extends DialogFragment {
     private static final String TAG = Constants.TAG + PreviewDialogFragment.class.getSimpleName();
@@ -97,11 +98,12 @@ public class PreviewDialogFragment extends DialogFragment {
                 } finally {
                     if (cursor != null) cursor.close();
                 }
-                Options options = new Options();
-                options.referer = httpReferer;
+
                 InputStream inputStream;
                 try {
-                    inputStream = HttpUtil.getAsStream(url);
+                    HttpRequest httpRequest = HttpUtil.get(url);
+                    if (httpReferer != null) httpRequest.referer(httpReferer);
+                    inputStream = httpRequest.stream();
                 } catch (IOException e) {
                     Log.w(TAG, "doInBackground Could not download webcam with webcamId=" + mWebcamId, e);
                     return null;
@@ -109,8 +111,8 @@ public class PreviewDialogFragment extends DialogFragment {
 
                 try {
                     return BitmapFactory.decodeStream(inputStream);
-                } catch (OutOfMemoryError e) {
-                    Log.w(TAG, "doInBackground Could not decode stream", e);
+                } catch (Throwable t) {
+                    Log.w(TAG, "doInBackground Could not decode stream", t);
                     return null;
                 } finally {
                     IoUtil.closeSilently(inputStream);

@@ -49,8 +49,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.HttpUtil;
-import org.jraf.android.util.closed.HttpUtil.Options;
+import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -63,6 +62,8 @@ import org.jraf.android.worldtour.provider.AppwidgetColumns;
 import org.jraf.android.worldtour.provider.WebcamColumns;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
+
+import com.github.kevinsawicki.http.HttpRequest;
 
 public class WorldTourService extends IntentService {
     private static final String TAG = Constants.TAG + WorldTourService.class.getSimpleName();
@@ -358,11 +359,11 @@ public class WorldTourService extends IntentService {
     private boolean downloadImage(long webcamId, WebcamInfo webcamInfo, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
         if (Config.LOGD) Log.d(TAG, "downloadImage webcamId=" + webcamId);
 
-        Options options = new Options();
-        options.referer = webcamInfo.httpReferer;
         InputStream inputStream;
         try {
-            inputStream = HttpUtil.getAsStream(webcamInfo.url);
+            HttpRequest httpRequest = HttpUtil.get(webcamInfo.url);
+            if (webcamInfo.httpReferer != null) httpRequest.referer(webcamInfo.httpReferer);
+            inputStream = httpRequest.stream();
         } catch (IOException e) {
             Log.w(TAG, "downloadImage Could not download webcam with webcamId=" + webcamId, e);
             if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));

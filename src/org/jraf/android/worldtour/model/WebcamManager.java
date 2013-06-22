@@ -32,7 +32,7 @@ import android.util.Log;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.closed.Blocking;
 import org.jraf.android.util.closed.Blocking.Type;
-import org.jraf.android.util.closed.HttpUtil;
+import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -71,7 +71,7 @@ public class WebcamManager {
 
     @Blocking
     public void refreshDatabaseFromNetwork(Context context) throws IOException {
-        InputStream inputStream = HttpUtil.getAsStream(URL_DATABASE);
+        InputStream inputStream = HttpUtil.get(URL_DATABASE).stream();
         ContentResolver contentResolver = context.getContentResolver();
         ArrayList<String> publicIds = insertWebcams(inputStream, contentResolver);
         String publicIdList = TextUtils.join(",", publicIds);

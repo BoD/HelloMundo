@@ -33,40 +33,50 @@ import org.jraf.android.worldtour.analytics.AnalyticsHelper;
 
 import com.google.analytics.tracking.android.EasyTracker;
 
-@ReportsCrashes(mode = ReportingInteractionMode.TOAST, resToastText = R.string.acra_toast, formKey = "dHYzRm43eWk1eEwxRGFfVHNURmxVY3c6MQ", customReportContent = {
-        //@formatter:off
-        ReportField.REPORT_ID,
-        ReportField.APP_VERSION_CODE,
-        ReportField.APP_VERSION_NAME,
-        ReportField.PACKAGE_NAME,
-        ReportField.FILE_PATH,
-        ReportField.PHONE_MODEL,
-        ReportField.BRAND,
-        ReportField.PRODUCT,
-        ReportField.ANDROID_VERSION,
-        ReportField.BUILD,
-        ReportField.TOTAL_MEM_SIZE,
-        ReportField.AVAILABLE_MEM_SIZE,
-        ReportField.CUSTOM_DATA,
-        ReportField.IS_SILENT,
-        ReportField.STACK_TRACE,
-        ReportField.INITIAL_CONFIGURATION,
-        ReportField.CRASH_CONFIGURATION,
-        ReportField.DISPLAY,
-        ReportField.USER_COMMENT,
-        ReportField.USER_EMAIL,
-        ReportField.USER_APP_START_DATE,
-        ReportField.USER_CRASH_DATE,
-        ReportField.DUMPSYS_MEMINFO,
-        ReportField.LOGCAT,
-        ReportField.INSTALLATION_ID,
-        ReportField.DEVICE_FEATURES,
-        ReportField.ENVIRONMENT,
-        ReportField.SHARED_PREFERENCES,
-        ReportField.SETTINGS_SYSTEM,
-        ReportField.SETTINGS_SECURE
-        //@formatter:on
-}/*, applicationLogFile = Log.FILE, applicationLogFileLines = 300*/, logcatArguments = { "-t", "300", "-v", "time" })
+//@formatter:off
+@ReportsCrashes(
+        mode = ReportingInteractionMode.TOAST, 
+        resToastText = R.string.acra_toast, 
+        formKey = "", 
+        formUri = "https://bod.cloudant.com/acra-worldtour/_design/acra-storage/_update/report",
+        reportType = org.acra.sender.HttpSender.Type.JSON,
+        httpMethod = org.acra.sender.HttpSender.Method.PUT,
+        formUriBasicAuthLogin="mencivileyeatedstectenly",
+        formUriBasicAuthPassword="uaKvCawUwwo6PKeTyQLbMapH",
+        customReportContent = {
+            ReportField.REPORT_ID,
+            ReportField.APP_VERSION_CODE,
+            ReportField.APP_VERSION_NAME,
+            ReportField.PACKAGE_NAME,
+            ReportField.FILE_PATH,
+            ReportField.PHONE_MODEL,
+            ReportField.BRAND,
+            ReportField.PRODUCT,
+            ReportField.ANDROID_VERSION,
+            ReportField.BUILD,
+            ReportField.TOTAL_MEM_SIZE,
+            ReportField.AVAILABLE_MEM_SIZE,
+            ReportField.CUSTOM_DATA,
+            ReportField.IS_SILENT,
+            ReportField.STACK_TRACE,
+            ReportField.INITIAL_CONFIGURATION,
+            ReportField.CRASH_CONFIGURATION,
+            ReportField.DISPLAY,
+            ReportField.USER_COMMENT,
+            ReportField.USER_EMAIL,
+            ReportField.USER_APP_START_DATE,
+            ReportField.USER_CRASH_DATE,
+            ReportField.DUMPSYS_MEMINFO,
+            ReportField.LOGCAT,
+            ReportField.INSTALLATION_ID,
+            ReportField.DEVICE_FEATURES,
+            ReportField.ENVIRONMENT,
+            ReportField.SHARED_PREFERENCES,
+            ReportField.SETTINGS_SYSTEM,
+            ReportField.SETTINGS_SECURE
+        }, 
+        logcatArguments = { "-t", "300", "-v", "time" })
+//@formatter:on
 public class Application extends android.app.Application {
     private static final String TAG = Constants.TAG + Application.class.getSimpleName();
 

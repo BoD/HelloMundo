@@ -36,7 +36,8 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
-            android:layout_toLeftOf="@+id/imgExcludedFromRandom"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/btnExtend"
             android:layout_toRightOf="@+id/imgThumbnail"
             android:orientation="vertical" >
 

@@ -26,13 +26,15 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.annotation.Background;
 import org.jraf.android.util.annotation.Background.Type;
-import org.jraf.android.util.async.ProgressDialogAsyncTaskFragment;
+import org.jraf.android.util.async.Task;
+import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.util.environment.EnvironmentUtil;
 import org.jraf.android.util.io.IoUtil;
@@ -65,17 +67,17 @@ public class SaveShareHelper {
         return currentWebcamId;
     }
 
-    public void saveImage(final Context context, FragmentManager fragmentManager, final int appwidgetId) {
+    public void saveImage(FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "saveImage appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
             AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
             return;
         }
 
-        new ProgressDialogAsyncTaskFragment() {
+        new TaskFragment(new Task<FragmentActivity>() {
             @Override
             protected void doInBackground() throws Exception {
-                saveAndInsertImage(context, appwidgetId);
+                saveAndInsertImage(getActivity(), appwidgetId);
             }
 
             @Override
@@ -85,22 +87,22 @@ public class SaveShareHelper {
                     ((SaveShareListener) getActivity()).onDone();
                 }
             }
-        }.toastOk(R.string.main_toast_fileSaved).toastFail(R.string.common_toast_unexpectedError).execute(fragmentManager);
+        }.toastOk(R.string.main_toast_fileSaved).toastFail(R.string.common_toast_unexpectedError)).execute(fragmentManager);
     }
 
 
-    public void shareImage(final Context context, FragmentManager fragmentManager, final int appwidgetId) {
+    public void shareImage(FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "shareImage appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
             AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
             return;
         }
-        new ProgressDialogAsyncTaskFragment() {
+        new TaskFragment(new Task<FragmentActivity>() {
             private WebcamInfo mWebcamInfo;
 
             @Override
             protected void doInBackground() throws Exception {
-                mWebcamInfo = saveAndInsertImage(context, appwidgetId);
+                mWebcamInfo = saveAndInsertImage(getActivity(), appwidgetId);
             }
 
             @Override
@@ -109,17 +111,17 @@ public class SaveShareHelper {
                 shareIntent.setType("image/jpeg");
 
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, mWebcamInfo.name);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText(context));
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mWebcamInfo.getShareText(getActivity()));
                 shareIntent.putExtra("sms_body", mWebcamInfo.name);
                 Uri uri = Uri.parse(mWebcamInfo.localBitmapUriStr);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                context.startActivity(Intent.createChooser(shareIntent, context.getText(R.string.common_shareWith)));
+                getActivity().startActivity(Intent.createChooser(shareIntent, getActivity().getText(R.string.common_shareWith)));
 
-                if (context instanceof SaveShareListener) {
-                    ((SaveShareListener) context).onDone();
+                if (getActivity() instanceof SaveShareListener) {
+                    ((SaveShareListener) getActivity()).onDone();
                 }
             }
-        }.toastFail(R.string.common_toast_unexpectedError).execute(fragmentManager);
+        }.toastFail(R.string.common_toast_unexpectedError)).execute(fragmentManager);
     }
 
     @Background(Type.DISK)

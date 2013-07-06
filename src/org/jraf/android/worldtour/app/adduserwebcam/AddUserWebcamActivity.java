@@ -21,7 +21,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.async.SimpleAsyncTaskFragment;
+import org.jraf.android.util.async.Task;
+import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.closed.validation.Validators;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockFragmentActivity;
@@ -74,22 +75,20 @@ public class AddUserWebcamActivity extends LifecycleDispatchSherlockFragmentActi
     private final OnClickListener mDoneOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            new SimpleAsyncTaskFragment() {
+            new TaskFragment(new Task<AddUserWebcamActivity>() {
                 @Override
                 protected void doInBackground() throws Exception {
-                    String url = mEdtUrl.getText().toString().trim();
-                    if (url.startsWith("http://")) {
-                        url = url.substring(7);
-                    }
-                    WebcamManager.get().insertUserWebcam(AddUserWebcamActivity.this, mEdtName.getText().toString().trim(), url);
+                    String url = getActivity().mEdtUrl.getText().toString().trim();
+                    if (url.startsWith("http://")) url = url.substring(7);
+                    WebcamManager.get().insertUserWebcam(AddUserWebcamActivity.this, getActivity().mEdtName.getText().toString().trim(), url);
                 }
 
                 @Override
-                protected void onPostExecute(boolean ok) {
+                protected void onPostExecuteOk() {
                     setResult(RESULT_OK);
-                    finish();
+                    getActivity().finish();
                 }
-            }.execute(getSupportFragmentManager());
+            }).execute(getSupportFragmentManager());
         }
     };
 

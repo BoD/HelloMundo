@@ -173,12 +173,12 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
 
             case 2:
                 // Share image
-                SaveShareHelper.get().shareImage(this, getSupportFragmentManager(), mAppWidgetId);
+                SaveShareHelper.get().shareImage(getSupportFragmentManager(), mAppWidgetId);
                 break;
 
             case 3:
                 // Save image
-                SaveShareHelper.get().saveImage(this, getSupportFragmentManager(), mAppWidgetId);
+                SaveShareHelper.get().saveImage(getSupportFragmentManager(), mAppWidgetId);
                 break;
 
 

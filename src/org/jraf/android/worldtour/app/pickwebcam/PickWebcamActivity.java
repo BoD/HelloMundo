@@ -24,7 +24,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.async.SimpleAsyncTask;
+import org.jraf.android.util.async.Task;
+import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.dialog.AlertDialogListener;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -113,7 +114,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
     @Override
     public void onClickPositive(int tag, Object payload) {
         final long id = (Long) payload;
-        new SimpleAsyncTask() {
+        new TaskFragment(new Task<PickWebcamActivity>() {
             @Override
             protected void doInBackground() throws Throwable {
                 getContentResolver().delete(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, id), null, null);
@@ -132,13 +133,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
                     WorldTourService.updateWallpaperNow(PickWebcamActivity.this);
                 }
             }
-
-            @Override
-            protected void onPostExecute(Boolean ok) {
-                if (!ok) return;
-                Toast.makeText(PickWebcamActivity.this, R.string.pickWebcam_webcamDeletedToast, Toast.LENGTH_SHORT).show();
-            }
-        }.execute();
+        }.toastOk(R.string.pickWebcam_webcamDeletedToast)).execute(getSupportFragmentManager());
     }
 
     @Override

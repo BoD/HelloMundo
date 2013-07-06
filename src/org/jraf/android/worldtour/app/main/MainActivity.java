@@ -43,7 +43,8 @@ import android.widget.Toast;
 import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.annotation.Background;
-import org.jraf.android.util.async.SimpleAsyncTask;
+import org.jraf.android.util.async.Task;
+import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.bitmap.BitmapUtil;
 import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.ui.UiUtil;
@@ -130,7 +131,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         }
 
         final boolean firstRun = sharedPreferences.getBoolean(Constants.PREF_FIRST_RUN, true);
-        new SimpleAsyncTask() {
+        new TaskFragment(new Task<MainActivity>() {
             @Override
             protected void doInBackground() throws Throwable {
                 if (firstRun) {
@@ -140,12 +141,12 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
             }
 
             @Override
-            protected void onPostExecute(Boolean ok) {
-                updateWebcamRandom();
-                updateWebcamName();
-                updateWebcamImage();
+            protected void onPostExecuteOk() {
+                getActivity().updateWebcamRandom();
+                getActivity().updateWebcamName();
+                getActivity().updateWebcamImage();
             }
-        }.execute();
+        }).execute(getSupportFragmentManager());
     }
 
     @Override
@@ -230,11 +231,11 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
                 return true;
 
             case R.id.menu_save:
-                SaveShareHelper.get().saveImage(this, getSupportFragmentManager(), SaveShareHelper.WALLPAPER);
+                SaveShareHelper.get().saveImage(getSupportFragmentManager(), SaveShareHelper.WALLPAPER);
                 return true;
 
             case R.id.menu_share:
-                SaveShareHelper.get().shareImage(this, getSupportFragmentManager(), SaveShareHelper.WALLPAPER);
+                SaveShareHelper.get().shareImage(getSupportFragmentManager(), SaveShareHelper.WALLPAPER);
                 return true;
 
             case R.id.menu_help:
@@ -290,7 +291,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     private final OnCheckedChangeListener mOnOffOnCheckedChangeListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-            new SimpleAsyncTask() {
+            new TaskFragment(new Task<MainActivity>() {
                 @Override
                 protected void doInBackground() throws Throwable {
                     PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, isChecked)
@@ -298,10 +299,10 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
                 }
 
                 @Override
-                protected void onPostExecute(Boolean ok) {
-                    setAlarm(isChecked);
+                protected void onPostExecuteOk() {
+                    getActivity().setAlarm(isChecked);
                 }
-            }.execute();
+            }).execute(getSupportFragmentManager());
         }
     };
 
@@ -363,7 +364,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     private void updateWebcamName() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
-        new SimpleAsyncTask() {
+        new TaskFragment(new Task<MainActivity>() {
             private String mName;
             private String mLocation;
             private String mTimeZone;
@@ -390,21 +391,20 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
             }
 
             @Override
-            protected void onPostExecute(Boolean ok) {
-                if (!ok) return;
-                mTxtWebcamInfoName.setText(mName);
+            protected void onPostExecuteOk() {
+                getActivity().mTxtWebcamInfoName.setText(mName);
                 if (mType == WebcamType.USER) {
-                    mTxtWebcamInfoLocation.setText(R.string.common_userDefined);
+                    getActivity().mTxtWebcamInfoLocation.setText(R.string.common_userDefined);
                 } else {
                     String location = mLocation;
                     boolean specialCam = Constants.SPECIAL_CAMS.contains(mPublicId);
                     if (!specialCam) {
                         location += " - " + DateTimeUtil.getCurrentTimeForTimezone(MainActivity.this, mTimeZone);
                     }
-                    mTxtWebcamInfoLocation.setText(location);
+                    getActivity().mTxtWebcamInfoLocation.setText(location);
                 }
             }
-        }.execute();
+        }).execute(getSupportFragmentManager());
     }
 
     private void updateWebcamImage() {

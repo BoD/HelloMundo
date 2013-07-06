@@ -42,11 +42,11 @@ import android.widget.Toast;
 
 import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.annotation.Background;
 import org.jraf.android.util.async.SimpleAsyncTask;
 import org.jraf.android.util.bitmap.BitmapUtil;
-import org.jraf.android.util.closed.Blocking;
-import org.jraf.android.util.closed.DateTimeUtil;
-import org.jraf.android.util.closed.ui.UiUtil;
+import org.jraf.android.util.datetime.DateTimeUtil;
+import org.jraf.android.util.ui.UiUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.about.AboutActivity;
@@ -182,7 +182,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
      * First run.
      */
 
-    @Blocking
+    @Background
     private void handleFirstRun() {
         if (Config.LOGD) Log.d(TAG, "handleFirstRun");
         WebcamManager.get().insertWebcamsFromBundledFile(this);

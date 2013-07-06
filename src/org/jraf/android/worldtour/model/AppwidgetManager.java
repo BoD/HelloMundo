@@ -25,7 +25,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.jraf.android.util.closed.Blocking;
+import org.jraf.android.util.annotation.Background;
 import org.jraf.android.util.collection.CollectionUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -43,7 +43,7 @@ public class AppwidgetManager {
 
     private AppwidgetManager() {}
 
-    @Blocking
+    @Background
     public void insertOrUpdate(Context context, int appWidgetId, long webcamId, long currentWebcamId) {
         if (Config.LOGD) Log.d(TAG, "insertOrUpdate appWidgetId=" + appWidgetId + " webcamId=" + webcamId + " currentWebcamId=" + currentWebcamId);
         String[] projection = { AppwidgetColumns._ID };
@@ -77,7 +77,7 @@ public class AppwidgetManager {
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
     }
 
-    @Blocking
+    @Background
     public void delete(Context context, int... appWidgetIds) {
         List<Integer> idList = CollectionUtil.asList(appWidgetIds);
         if (Config.LOGD) Log.d(TAG, "delete appWidgetIds=" + idList);

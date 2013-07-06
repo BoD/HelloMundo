@@ -29,9 +29,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.DateTimeUtil;
 import org.jraf.android.util.closed.ui.ExtendHeightAnimation;
 import org.jraf.android.util.closed.ui.LoadingImageView;
+import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.ui.ViewHolder;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamCursorWrapper;

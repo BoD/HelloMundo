@@ -30,8 +30,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.Blocking;
-import org.jraf.android.util.closed.Blocking.Type;
+import org.jraf.android.util.annotation.Background;
+import org.jraf.android.util.annotation.Background.Type;
 import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Config;
@@ -55,7 +55,7 @@ public class WebcamManager {
 
     private WebcamManager() {}
 
-    @Blocking
+    @Background
     public void insertWebcamsFromBundledFile(Context context) {
         if (Config.LOGD) Log.d(TAG, "insertWebcamsFromBundledFile");
         InputStream inputStream = context.getResources().openRawResource(R.raw.data7);
@@ -69,7 +69,7 @@ public class WebcamManager {
         preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
     }
 
-    @Blocking
+    @Background
     public void refreshDatabaseFromNetwork(Context context) throws IOException {
         InputStream inputStream = HttpUtil.get(URL_DATABASE).stream();
         ContentResolver contentResolver = context.getContentResolver();
@@ -84,7 +84,7 @@ public class WebcamManager {
         preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
     }
 
-    @Blocking({ Type.DISK, Type.NETWORK })
+    @Background({ Type.DISK, Type.NETWORK })
     private ArrayList<String> insertWebcams(InputStream inputStream, ContentResolver contentResolver) throws IOException {
         ArrayList<String> publicIds = new ArrayList<String>(40);
         try {
@@ -202,7 +202,7 @@ public class WebcamManager {
         res.put(WebcamColumns.TYPE, WebcamType.SERVER);
     }
 
-    @Blocking(Type.DISK)
+    @Background(Type.DISK)
     public void insertUserWebcam(Context context, String name, String url) {
         ContentValues values = new ContentValues(12);
         values.put(WebcamColumns.PUBLIC_ID, "user_" + System.currentTimeMillis());
@@ -214,7 +214,7 @@ public class WebcamManager {
         contentResolver.insert(WebcamColumns.CONTENT_URI, values);
     }
 
-    @Blocking(Type.DISK)
+    @Background(Type.DISK)
     public String getPublicId(Context context, long webcamId) {
         if (webcamId == Constants.WEBCAM_ID_RANDOM) return "RANDOM";
         if (webcamId == Constants.WEBCAM_ID_NONE) return "NONE"; // Should never happen

@@ -11,12 +11,14 @@
  */
 package org.jraf.android.worldtour.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.DateTimeUtil;
+import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.file.FileUtil;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamType;
@@ -32,12 +34,12 @@ public class WebcamInfo {
     public int type;
 
     public String getShareText(Context context) {
-        String date = DateTimeUtil.formatDate(context, new Date()) + ", ";
+        String date = DateFormat.getDateFormat(context).format(new Date()) + ", ";
         boolean specialCam = Constants.SPECIAL_CAMS.contains(publicId) || type == WebcamType.USER;
         if (!specialCam) {
             date += DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
         } else {
-            date += DateTimeUtil.formatTime(context, new Date());
+            date += DateFormat.getTimeFormat(context).format(new Date());
         }
         return context.getString(type == WebcamType.USER ? R.string.main_shareText_userWebcam : R.string.main_shareText, name, location, date);
     }
@@ -48,10 +50,10 @@ public class WebcamInfo {
         if (!specialCam) {
             locationStr = location + " - " + DateTimeUtil.getCurrentTimeForTimezone(context, timeZone);
         } else {
-            locationStr = location + " - " + DateTimeUtil.formatTime(context, new Date());
+            locationStr = location + " - " + DateFormat.getTimeFormat(context).format(new Date());
         }
 
-        String res = DateTimeUtil.formatDate(new Date(), "yyyy-MM-dd") + " - ";
+        String res = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " - ";
         res += name + " - ";
         res += locationStr;
         res += ".jpg";

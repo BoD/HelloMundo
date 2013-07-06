@@ -30,9 +30,9 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.annotation.Background;
+import org.jraf.android.util.annotation.Background.Type;
 import org.jraf.android.util.async.ProgressDialogAsyncTaskFragment;
-import org.jraf.android.util.closed.Blocking;
-import org.jraf.android.util.closed.Blocking.Type;
 import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.util.environment.EnvironmentUtil;
 import org.jraf.android.util.io.IoUtil;
@@ -58,7 +58,7 @@ public class SaveShareHelper {
 
     private SaveShareHelper() {}
 
-    @Blocking(Type.DISK)
+    @Background(Type.DISK)
     private long getCurrentWallpaperWebcamId(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         final long currentWebcamId = preferences.getLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
@@ -122,7 +122,7 @@ public class SaveShareHelper {
         }.toastFail(R.string.common_toast_unexpectedError).execute(fragmentManager);
     }
 
-    @Blocking(Type.DISK)
+    @Background(Type.DISK)
     private WebcamInfo saveAndInsertImage(Context context, int appwidgetId) throws Exception {
         long webcamId;
         if (appwidgetId == WALLPAPER) {
@@ -179,7 +179,7 @@ public class SaveShareHelper {
         return webcamInfo;
     }
 
-    @Blocking(Type.DISK)
+    @Background(Type.DISK)
     private WebcamInfo getWebcamInfo(Context context, final long webcamId) {
         String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE };
         Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);

@@ -41,8 +41,8 @@ import com.google.analytics.tracking.android.EasyTracker;
         formUri = "https://bod.cloudant.com/acra-worldtour/_design/acra-storage/_update/report",
         reportType = org.acra.sender.HttpSender.Type.JSON,
         httpMethod = org.acra.sender.HttpSender.Method.PUT,
-        formUriBasicAuthLogin="mencivileyeatedstectenly",
-        formUriBasicAuthPassword="uaKvCawUwwo6PKeTyQLbMapH",
+        formUriBasicAuthLogin="tannottlyinsedgmedisence",
+        formUriBasicAuthPassword="oQQupJ5ehbJK6A08JUJo0E2H",
         customReportContent = {
             ReportField.REPORT_ID,
             ReportField.APP_VERSION_CODE,

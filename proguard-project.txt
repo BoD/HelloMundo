@@ -45,6 +45,9 @@
 -keep class org.acra.ReportingInteractionMode {
     *;
 }
+-keepnames class org.acra.sender.HttpSender$** {
+    *;
+}
 -keepnames class org.acra.ReportField {
     *;
 }

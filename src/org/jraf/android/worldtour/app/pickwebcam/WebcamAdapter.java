@@ -14,6 +14,7 @@ package org.jraf.android.worldtour.app.pickwebcam;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import android.R;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
@@ -28,9 +29,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.ui.ExtendHeightAnimation;
-import org.jraf.android.util.closed.ui.LoadingImageView;
 import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.ui.ViewHolder;
 import org.jraf.android.worldtour.Constants;
@@ -58,7 +56,7 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        WebcamCursorWrapper c = new WebcamCursorWrapper(cursor);
+        WebcamCursorWrapper c = new WebcamCursorWrapper(cursor); // TODO: do not do that in bindView (which is called for every item!)
         long id = c.getId();
 
         TextView txtName = (TextView) ViewHolder.get(view, R.id.txtName);

@@ -34,8 +34,8 @@
     <string name="main_menu_help">Aide</string>
 
     <!-- Pick webcam -->
-    <string name="pickWebcam_random">Aléatoire</string>
-    <string name="pickWebcam_subtitle">Une webcam différente à chaque fois</string>
+    <string name="pickWebcam_random_title">Aléatoire</string>
+    <string name="pickWebcam_random_subtitle">Une webcam différente à chaque fois</string>
     <string name="pickWebcam_source">Source : %1$s</string>
     <string name="pickWebcam_previewDialog_cantPreviewToast">Impossible de télécharger l\'image.</string>
     <string name="pickWebcam_exclFromRandom">Excl. d\'aléatoire</string>

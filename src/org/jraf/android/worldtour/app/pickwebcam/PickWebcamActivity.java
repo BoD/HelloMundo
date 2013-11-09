@@ -138,4 +138,8 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
 
     @Override
     public void onClickNegative(int tag, Object payload) {}
+
+
+    @Override
+    public void onClickListItem(int tag, int index, Object payload) {}
 }

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.content.ContentUris;
@@ -70,7 +71,7 @@ public class SaveShareHelper {
     public void saveImage(FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "saveImage appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
-            AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
+            AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, (Serializable) null).show(fragmentManager);
             return;
         }
 
@@ -94,7 +95,7 @@ public class SaveShareHelper {
     public void shareImage(FragmentManager fragmentManager, final int appwidgetId) {
         if (Config.LOGD) Log.d(TAG, "shareImage appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
-            AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, null).show(fragmentManager);
+            AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, (Serializable) null).show(fragmentManager);
             return;
         }
         new TaskFragment(new Task<FragmentActivity>() {

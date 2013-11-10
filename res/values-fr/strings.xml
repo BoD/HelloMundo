@@ -68,7 +68,7 @@
     <string name="about_email">→ BoD@JRAF.org</string>
     <string name="about_web">→ JRAF.org/android</string>
     <string name="about_btnShare">Partager</string>
-    <string name="about_btnRate">Avis</string>
+    <string name="about_btnRate">Votre avis</string>
     <string name="about_btnOtherApps">Autres applis</string>
     <string name="about_btnEula"><u>License d\'utilisation</u></string>
     <string name="about_shareText_subject">Essayez WorldTour !</string>

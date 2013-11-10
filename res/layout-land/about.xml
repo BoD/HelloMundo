@@ -100,7 +100,7 @@
             android:id="@+id/btnOtherApps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_action_other_apps"
+            android:drawableLeft="@drawable/ic_other_apps"
             android:text="@string/about_btnOtherApps" />
 
         <Button

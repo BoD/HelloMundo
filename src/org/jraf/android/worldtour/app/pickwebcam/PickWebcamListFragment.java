@@ -31,12 +31,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.ui.LoadingImageView;
 import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
@@ -89,9 +89,8 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     private View getHeaderView(ListView listView) {
         View res = getActivity().getLayoutInflater().inflate(R.layout.pick_webcam_item, listView, false);
-        LoadingImageView imgThumbnail = (LoadingImageView) res.findViewById(R.id.imgThumbnail);
+        ImageView imgThumbnail = (ImageView) res.findViewById(R.id.imgThumbnail);
         imgThumbnail.setImageResource(R.drawable.ic_random_thumbnail);
-        imgThumbnail.setLoadingBackground(0);
         imgThumbnail.setScaleType(ScaleType.FIT_CENTER);
         res.findViewById(R.id.btnExtend).setVisibility(View.GONE);
         ((TextView) res.findViewById(R.id.txtName)).setText(R.string.pickWebcam_random_title);

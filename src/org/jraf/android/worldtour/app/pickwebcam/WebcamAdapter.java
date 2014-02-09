@@ -29,13 +29,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.closed.ui.ExtendHeightAnimation;
-import org.jraf.android.util.closed.ui.LoadingImageView;
 import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.ui.ViewHolder;
+import org.jraf.android.util.ui.animation.ExtendHeightAnimation;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.provider.WebcamCursorWrapper;
 import org.jraf.android.worldtour.provider.WebcamType;
+
+import com.squareup.picasso.Picasso;
 
 public class WebcamAdapter extends ResourceCursorAdapter {
     private final int mExtendedHeight;
@@ -88,12 +89,14 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         }
 
         // Thumbnail
-        LoadingImageView imgThumbnail = ViewHolder.get(view, R.id.imgThumbnail);
+        ImageView imgThumbnail = ViewHolder.get(view, R.id.imgThumbnail);
         if (isUserWebcam) {
             imgThumbnail.setImageResource(R.drawable.ic_thumbnail_user_defined);
         } else {
             imgThumbnail.setImageResource(0);
-            imgThumbnail.loadBitmap(c.getThumbUrl());
+            Picasso.with(context).load(c.getThumbUrl())
+                    .resizeDimen(R.dimen.pickWebcam_item_imgThumbnail_widthHeight, R.dimen.pickWebcam_item_imgThumbnail_widthHeight).centerCrop()
+                    .placeholder(R.drawable.ic_thumbnail_bg).into(imgThumbnail);
         }
 
         // Location & time

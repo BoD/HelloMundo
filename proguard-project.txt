@@ -59,3 +59,6 @@
 -keep public class org.acra.ErrorReporter {
     public void handleSilentException(java.lang.Throwable);
 }
+
+# Fix for Picasso
+-dontwarn com.squareup.okhttp.**

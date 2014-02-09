@@ -10,5 +10,6 @@
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="welcome_txtText2_marginBottom">50dp</dimen>
     <dimen name="webcamAppwidgetActions_iconPadding">8dp</dimen>
+    <dimen name="pickWebcam_item_imgThumbnail_widthHeight">64dp</dimen>
 
 </resources>

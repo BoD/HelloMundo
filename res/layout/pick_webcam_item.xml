@@ -13,11 +13,10 @@
         android:layout_height="@dimen/cell_webcam_collapsed_height"
         android:background="@color/pick_webcam_item_bg" >
 
-        <org.jraf.android.util.closed.ui.LoadingImageView
+        <ImageView
             android:id="@+id/imgThumbnail"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            jraf:loadingBackground="@drawable/ic_thumbnail_bg" />
+            android:layout_width="@dimen/pickWebcam_item_imgThumbnail_widthHeight"
+            android:layout_height="@dimen/pickWebcam_item_imgThumbnail_widthHeight" />
 
         <ImageView
             android:id="@+id/imgExcludedFromRandom"

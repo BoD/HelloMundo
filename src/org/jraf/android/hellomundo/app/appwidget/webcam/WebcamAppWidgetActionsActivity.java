@@ -31,7 +31,7 @@ import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareListener;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
 import org.jraf.android.util.string.StringUtil;
@@ -167,7 +167,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
 
             case 1:
                 // Refresh
-                WorldTourService.updateWidgetsNow(this);
+                HelloMundoService.updateWidgetsNow(this);
                 finish();
                 break;
 

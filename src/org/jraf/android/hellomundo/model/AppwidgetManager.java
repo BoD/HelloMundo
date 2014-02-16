@@ -24,7 +24,7 @@ import android.util.Log;
 
 import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.provider.appwidget.AppwidgetColumns;
 import org.jraf.android.hellomundo.provider.appwidget.AppwidgetContentValues;
 import org.jraf.android.hellomundo.provider.appwidget.AppwidgetCursor;
@@ -73,7 +73,7 @@ public class AppwidgetManager {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREF_UPDATE_INTERVAL,
                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));
-        PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
+        PendingIntent widgetsPendingIntent = HelloMundoService.getWidgetsAlarmPendingIntent(context);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
     }
 
@@ -89,7 +89,7 @@ public class AppwidgetManager {
         int count = getWidgetCount(context);
         if (count == 0) {
             if (Config.LOGD) Log.d(TAG, "delete Count=0, canceling alarm");
-            PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
+            PendingIntent widgetsPendingIntent = HelloMundoService.getWidgetsAlarmPendingIntent(context);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(widgetsPendingIntent);
         }

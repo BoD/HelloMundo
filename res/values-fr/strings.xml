@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">WorldTour</string>
-
     <!-- Common -->
     <string name="common_pleaseWait">Veuillez patienter…</string>
     <string name="common_toast_unexpectedError">Un problème inattendu est survenu.\nVeuillez réesssayer.</string>
@@ -19,10 +17,10 @@
     <!-- Main -->
     <string name="main_txtWallpaperAutoUpdate">M.à.j. automatique du papier-peint</string>
     <string name="main_toast_wallpaperUpdated">Papier-peint mis à jour.</string>
-    <string name="main_toast_fileSaved">Image enregistrée dans l\'album WorldTour.</string>
+    <string name="main_toast_fileSaved">Image enregistrée dans l\'album HelloMundo.</string>
     <string name="main_dialog_noSdCard">Le stockage externe n\'est pas disponible actuellement.</string>
-    <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s. Vue sur WorldTour pour Android.</string>
-    <string name="main_shareText_userWebcam">Image de \'%1$s\' prise au %3$s. Vue sur WorldTour pour Android.</string>
+    <string name="main_shareText">Image de \'%1$s\', %2$s, prise au %3$s. Vue sur HelloMundo pour Android.</string>
+    <string name="main_shareText_userWebcam">Image de \'%1$s\' prise au %3$s. Vue sur HelloMundo pour Android.</string>
     <string name="main_previewFrame_weight">100</string>
     <string name="main_txtNoImageWarning">Impossible de télécharger l\'image.\nProblème de réseau ? Réesssayer plus tard.</string>
     <string name="main_menu_pick">Choisir une webcam</string>
@@ -71,8 +69,8 @@
     <string name="about_btnRate">Votre avis</string>
     <string name="about_btnOtherApps">Autres applis</string>
     <string name="about_btnEula"><u>License d\'utilisation</u></string>
-    <string name="about_shareText_subject">Essayez WorldTour !</string>
-    <string name="about_shareText_body">WorldTour pour Android est une appli excellente !\nTestez là ici :\nhttp://play.google.com/store/apps/details?id=%s</string>
+    <string name="about_shareText_subject">Essayez HelloMundo !</string>
+    <string name="about_shareText_body">HelloMundo pour Android est une appli excellente !\nTestez là ici :\nhttp://play.google.com/store/apps/details?id=%s</string>
     <string name="about_btnDonate">Faire un don</string>
     <string name="about_menu_sendLogs">Envoyer logs</string>
     <string name="about_toast_sendLogs">Les logs sont en cours d\envoi.</string>
@@ -80,7 +78,7 @@
     <string name="eula_title">License d\'utilisation</string>
 
     <!-- Welcome -->
-    <string name="welcome_0_txtTitle">Bienvenue dans WorldTour !</string>
+    <string name="welcome_0_txtTitle">Bienvenue dans HelloMundo !</string>
     <string name="welcome_0_txtText">1. Pressez ce bouton pour choisir une webcam de la liste…</string>
     <string name="welcome_1_txtText">2. Activez pour mettre à jour automatiquement le papier-peint toutes les 30 minutes…</string>
     <string name="welcome_2_txtText">3. Vous pouvez aussi ajouter une widget sur le bureau.</string>
@@ -89,7 +87,7 @@
     <string name="welcome_next">Suivant</string>
 
     <!-- App Widgets -->
-    <string name="appwidget_webcam_label">Webcam WorldTour (2x2)</string>
-    <string name="appwidget_webcam_label_3x3">Webcam WorldTour (3x3)</string>
+    <string name="appwidget_webcam_label">Webcam HelloMundo (2x2)</string>
+    <string name="appwidget_webcam_label_3x3">Webcam HelloMundo (3x3)</string>
 
 </resources>

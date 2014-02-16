@@ -18,7 +18,7 @@ import android.os.Bundle;
 
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.pickwebcam.PickWebcamActivity;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.model.AppwidgetManager;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchActivity;
 
@@ -57,7 +57,7 @@ public class WebcamConfigureActivity extends LifecycleDispatchActivity {
         long webcamId = ContentUris.parseId(data.getData());
         AppwidgetManager.get().insertOrUpdate(this, mAppWidgetId, webcamId, Constants.WEBCAM_ID_NONE);
 
-        WorldTourService.updateWidgetsNow(this);
+        HelloMundoService.updateWidgetsNow(this);
 
         setResult(RESULT_OK, resultValue);
         finish();

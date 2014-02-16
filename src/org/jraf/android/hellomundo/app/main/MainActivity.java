@@ -45,7 +45,7 @@ import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentA
 import org.jraf.android.hellomundo.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.hellomundo.app.preference.PreferenceActivity;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.app.welcome.WelcomeActivity;
 import org.jraf.android.hellomundo.model.AppwidgetManager;
 import org.jraf.android.hellomundo.model.WebcamManager;
@@ -105,9 +105,9 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     protected void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WorldTourService.ACTION_UPDATE_WALLPAPER_START);
-        intentFilter.addAction(WorldTourService.ACTION_UPDATE_WALLPAPER_END_FAILURE);
-        intentFilter.addAction(WorldTourService.ACTION_UPDATE_WALLPAPER_END_SUCCESS);
+        intentFilter.addAction(HelloMundoService.ACTION_UPDATE_WALLPAPER_START);
+        intentFilter.addAction(HelloMundoService.ACTION_UPDATE_WALLPAPER_END_FAILURE);
+        intentFilter.addAction(HelloMundoService.ACTION_UPDATE_WALLPAPER_END_SUCCESS);
         registerReceiver(mBroadcastReceiver, intentFilter);
         mBroadcastReceiverRegistered = true;
     }
@@ -164,7 +164,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
                 if (Config.LOGD) Log.d(TAG, "onActivityResult selectedWebcamId=" + selectedWebcamId);
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, selectedWebcamId).commit();
                 updateWebcamRandom();
-                WorldTourService.updateWallpaperNow(this);
+                HelloMundoService.updateWallpaperNow(this);
                 break;
 
             case REQUEST_SETTINGS:
@@ -223,7 +223,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
 
             case R.id.menu_refresh:
                 if (mLoading) return true;
-                WorldTourService.updateAllNow(this);
+                HelloMundoService.updateAllNow(this);
                 return true;
 
             case R.id.menu_save:
@@ -256,17 +256,17 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         public void onReceive(Context context, Intent intent) {
             if (Config.LOGD) Log.d(TAG, "onReceive context=" + context + " intent=" + intent);
             String action = intent.getAction();
-            if (WorldTourService.ACTION_UPDATE_WALLPAPER_START.equals(action)) {
+            if (HelloMundoService.ACTION_UPDATE_WALLPAPER_START.equals(action)) {
                 updateWebcamName();
                 setLoading(true);
-            } else if (WorldTourService.ACTION_UPDATE_WALLPAPER_END_SUCCESS.equals(action)) {
+            } else if (HelloMundoService.ACTION_UPDATE_WALLPAPER_END_SUCCESS.equals(action)) {
                 setLoading(false);
                 updateWebcamImage();
                 if (PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
                         Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT)) {
                     Toast.makeText(MainActivity.this, R.string.main_toast_wallpaperUpdated, Toast.LENGTH_SHORT).show();
                 }
-            } else if (WorldTourService.ACTION_UPDATE_WALLPAPER_END_FAILURE.equals(action)) {
+            } else if (HelloMundoService.ACTION_UPDATE_WALLPAPER_END_FAILURE.equals(action)) {
                 setLoading(false);
                 if (!mImageAvailable) {
                     setNoImageWarningVisible(true);
@@ -307,20 +307,20 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        PendingIntent wallpaperPendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(MainActivity.this);
+        PendingIntent wallpaperPendingIntent = HelloMundoService.getWallpaperAlarmPendingIntent(MainActivity.this);
         if (enabled) {
             // Set the alarm
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, wallpaperPendingIntent);
 
             // Update the wallpaper now
-            WorldTourService.updateWallpaperNow(this);
+            HelloMundoService.updateWallpaperNow(this);
         } else {
             alarmManager.cancel(wallpaperPendingIntent);
         }
 
         int widgetCount = AppwidgetManager.get().getWidgetCount(this);
         if (widgetCount > 0) {
-            PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(this);
+            PendingIntent widgetsPendingIntent = HelloMundoService.getWidgetsAlarmPendingIntent(this);
             // Set the alarm to trigger in 1 minute (allows for the network to be up)
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + interval, interval, widgetsPendingIntent);
         }
@@ -405,7 +405,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     private void updateWebcamImage() {
         if (!new File(getFilesDir(), Constants.FILE_IMAGE_WALLPAPER).exists()) {
             // The service has never been started, there is no file yet: start it now
-            WorldTourService.updateWallpaperNow(this);
+            HelloMundoService.updateWallpaperNow(this);
             mImgPreviewFrame.setVisibility(View.INVISIBLE);
             mImageAvailable = false;
             return;

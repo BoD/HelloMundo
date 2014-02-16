@@ -22,7 +22,7 @@ import android.util.Log;
 
 import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 
 public class WallpaperChangedBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = Constants.TAG + WallpaperChangedBroadcastReceiver.class.getSimpleName();
@@ -44,7 +44,7 @@ public class WallpaperChangedBroadcastReceiver extends BroadcastReceiver {
 
             // Disable alarm
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            PendingIntent pendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(context);
+            PendingIntent pendingIntent = HelloMundoService.getWallpaperAlarmPendingIntent(context);
             alarmManager.cancel(pendingIntent);
         }
     }

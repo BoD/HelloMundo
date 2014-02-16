@@ -67,10 +67,10 @@ import ca.rmen.sunrisesunset.SunriseSunset;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
-public class WorldTourService extends IntentService {
-    private static final String TAG = Constants.TAG + WorldTourService.class.getSimpleName();
+public class HelloMundoService extends IntentService {
+    private static final String TAG = Constants.TAG + HelloMundoService.class.getSimpleName();
 
-    private static final String PREFIX = WorldTourService.class.getName() + ".";
+    private static final String PREFIX = HelloMundoService.class.getName() + ".";
 
     public static final String ACTION_UPDATE_WALLPAPER = PREFIX + "ACTION_UPDATE_WALLPAPER";
     public static final String ACTION_UPDATE_WIDGETS = PREFIX + "ACTION_UPDATE_WIDGETS";
@@ -90,8 +90,8 @@ public class WorldTourService extends IntentService {
         WALLPAPER, APPWIDGET,
     }
 
-    public WorldTourService() {
-        super("WorldTourService");
+    public HelloMundoService() {
+        super("HelloMundoService");
     }
 
     @Override
@@ -172,7 +172,7 @@ public class WorldTourService extends IntentService {
         if (enabled) {
             // If this is triggered by an alarm, we first check if the current wallpaper is a live wallpaper.
             // This would mean the current wallpaper has been manually changed by the user, and so we should disable ourself.
-            if (intent.getBooleanExtra(WorldTourService.EXTRA_FROM_ALARM, false)) {
+            if (intent.getBooleanExtra(HelloMundoService.EXTRA_FROM_ALARM, false)) {
                 if (WallpaperManager.getInstance(this).getWallpaperInfo() != null) {
                     if (Config.LOGD) Log.d(TAG, "updateWallpaper Current wallpaper is a live wallpaper: disabling service and alarm");
                     // Disable setting
@@ -246,12 +246,12 @@ public class WorldTourService extends IntentService {
                         AppWidgetProviderInfo info = appWidgetManager.getAppWidgetInfo(appwidgetId);
                         if (info == null) {
                             // This widget has been deleted: remove it from the db
-                            AppwidgetManager.get().delete(WorldTourService.this, appwidgetId);
+                            AppwidgetManager.get().delete(HelloMundoService.this, appwidgetId);
                             return;
                         }
 
                         // Analytics
-                        AnalyticsHelper.get().sendEvent(TAG, "updateWidget", WebcamManager.get().getPublicId(WorldTourService.this, webcamId));
+                        AnalyticsHelper.get().sendEvent(TAG, "updateWidget", WebcamManager.get().getPublicId(HelloMundoService.this, webcamId));
 
                         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
                             Long randomWebcamId = getRandomWebcamId(avoidNight);
@@ -272,7 +272,7 @@ public class WorldTourService extends IntentService {
                         if (!ok) return;
 
                         // Save current image to db
-                        AppwidgetManager.get().insertOrUpdate(WorldTourService.this, appwidgetId, finalWebcamId, webcamId);
+                        AppwidgetManager.get().insertOrUpdate(HelloMundoService.this, appwidgetId, finalWebcamId, webcamId);
 
                         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
                         BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -290,13 +290,13 @@ public class WorldTourService extends IntentService {
                         remoteViews.setViewVisibility(R.id.imgPreviewFrame, View.VISIBLE);
 
                         // onClickListener to change the selected webcam
-                        Intent onClickIntent = new Intent(WorldTourService.this, WebcamAppWidgetActionsActivity.class);
+                        Intent onClickIntent = new Intent(HelloMundoService.this, WebcamAppWidgetActionsActivity.class);
                         //                        onClickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                         onClickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId);
                         onClickIntent.setData(Uri.parse("custom:" + System.currentTimeMillis())); // Need a unique data so the system doesn't try to recycle the pending intent
                         onClickIntent.putExtra(WebcamAppWidgetActionsActivity.EXTRA_CURRENT_WEBCAM_ID, finalWebcamId);
                         onClickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(WorldTourService.this, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(HelloMundoService.this, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         remoteViews.setOnClickPendingIntent(R.id.imgPreviewFrame, pendingIntent);
 
                         appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
@@ -568,40 +568,40 @@ public class WorldTourService extends IntentService {
      */
 
     public static PendingIntent getWallpaperAlarmPendingIntent(Context context) {
-        Intent intent = new Intent(context, WorldTourService.class);
+        Intent intent = new Intent(context, HelloMundoService.class);
         intent.setAction(ACTION_UPDATE_WALLPAPER);
-        intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, true);
+        intent.putExtra(HelloMundoService.EXTRA_FROM_ALARM, true);
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static PendingIntent getUpdateAllPendingIntent(Context context) {
-        Intent intent = new Intent(context, WorldTourService.class);
+        Intent intent = new Intent(context, HelloMundoService.class);
         intent.setAction(ACTION_UPDATE_ALL);
-        intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, false);
+        intent.putExtra(HelloMundoService.EXTRA_FROM_ALARM, false);
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static PendingIntent getWidgetsAlarmPendingIntent(Context context) {
-        Intent intent = new Intent(context, WorldTourService.class);
+        Intent intent = new Intent(context, HelloMundoService.class);
         intent.setAction(ACTION_UPDATE_WIDGETS);
-        intent.putExtra(WorldTourService.EXTRA_FROM_ALARM, true);
+        intent.putExtra(HelloMundoService.EXTRA_FROM_ALARM, true);
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public static void updateWallpaperNow(Context context) {
-        Intent intent = new Intent(context, WorldTourService.class);
+        Intent intent = new Intent(context, HelloMundoService.class);
         intent.setAction(ACTION_UPDATE_WALLPAPER);
         context.startService(intent);
     }
 
     public static void updateWidgetsNow(Context context) {
-        Intent intent = new Intent(context, WorldTourService.class);
+        Intent intent = new Intent(context, HelloMundoService.class);
         intent.setAction(ACTION_UPDATE_WIDGETS);
         context.startService(intent);
     }
 
     public static void updateAllNow(Context context) {
-        Intent intent = new Intent(context, WorldTourService.class);
+        Intent intent = new Intent(context, HelloMundoService.class);
         intent.setAction(ACTION_UPDATE_ALL);
         context.startService(intent);
     }

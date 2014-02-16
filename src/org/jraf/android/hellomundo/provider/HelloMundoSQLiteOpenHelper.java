@@ -25,8 +25,8 @@ import org.jraf.android.hellomundo.provider.appwidget.AppwidgetColumns;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.latoureiffel.BuildConfig;
 
-public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String TAG = WorldtourSQLiteOpenHelper.class.getSimpleName();
+public class HelloMundoSQLiteOpenHelper extends SQLiteOpenHelper {
+    private static final String TAG = HelloMundoSQLiteOpenHelper.class.getSimpleName();
 
     public static final String DATABASE_FILE_NAME = "worldtour.db";
     private static final int DATABASE_VERSION = 1;
@@ -70,7 +70,7 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
     
     // @formatter:on
 
-    public static WorldtourSQLiteOpenHelper newInstance(Context context) {
+    public static HelloMundoSQLiteOpenHelper newInstance(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return newInstancePreHoneycomb(context);
         }
@@ -82,11 +82,11 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
      * Pre Honeycomb.
      */
 
-    private static WorldtourSQLiteOpenHelper newInstancePreHoneycomb(Context context) {
-        return new WorldtourSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+    private static HelloMundoSQLiteOpenHelper newInstancePreHoneycomb(Context context) {
+        return new HelloMundoSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
     }
 
-    private WorldtourSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version) {
+    private HelloMundoSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
@@ -96,12 +96,12 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
      */
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static WorldtourSQLiteOpenHelper newInstancePostHoneycomb(Context context) {
-        return new WorldtourSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+    private static HelloMundoSQLiteOpenHelper newInstancePostHoneycomb(Context context) {
+        return new HelloMundoSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private WorldtourSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+    private HelloMundoSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
     }
 

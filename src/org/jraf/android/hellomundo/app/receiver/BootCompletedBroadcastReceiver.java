@@ -22,7 +22,7 @@ import android.util.Log;
 
 import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.model.AppwidgetManager;
 
 public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
@@ -39,14 +39,14 @@ public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));
 
         if (wallpaperEnabled) {
-            PendingIntent wallpaperPendingIntent = WorldTourService.getWallpaperAlarmPendingIntent(context);
+            PendingIntent wallpaperPendingIntent = HelloMundoService.getWallpaperAlarmPendingIntent(context);
             // Set the alarm to trigger in 1 minute (allows for the network to be up)
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, interval, wallpaperPendingIntent);
         }
 
         int widgetCount = AppwidgetManager.get().getWidgetCount(context);
         if (widgetCount > 0) {
-            PendingIntent widgetsPendingIntent = WorldTourService.getWidgetsAlarmPendingIntent(context);
+            PendingIntent widgetsPendingIntent = HelloMundoService.getWidgetsAlarmPendingIntent(context);
             // Set the alarm to trigger in 1 minute (allows for the network to be up)
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, interval, widgetsPendingIntent);
         }

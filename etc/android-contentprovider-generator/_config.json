@@ -1,10 +1,10 @@
 {
 	"toolVersion": "1.5",
     "projectPackageId": "org.jraf.android.latoureiffel",
-	"providerJavaPackage": "org.jraf.android.worldtour.provider",
-	"providerClassName": "WorldtourProvider",
-	"sqliteHelperClassName": "WorldtourSQLiteOpenHelper",
-	"authority": "org.jraf.android.worldtour.provider",
+	"providerJavaPackage": "org.jraf.android.hellomundo.provider",
+	"providerClassName": "HelloMundoProvider",
+	"sqliteHelperClassName": "HelloMundoSQLiteOpenHelper",
+	"authority": "org.jraf.android.hellomundo.provider",
 	"databaseFileName": "worldtour.db",
 	"enableForeignKeys": false,
 }

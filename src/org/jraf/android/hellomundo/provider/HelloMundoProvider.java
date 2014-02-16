@@ -30,13 +30,13 @@ import org.jraf.android.hellomundo.provider.appwidget.AppwidgetColumns;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.latoureiffel.BuildConfig;
 
-public class WorldtourProvider extends ContentProvider {
-    private static final String TAG = WorldtourProvider.class.getSimpleName();
+public class HelloMundoProvider extends ContentProvider {
+    private static final String TAG = HelloMundoProvider.class.getSimpleName();
 
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";
 
-    public static final String AUTHORITY = "org.jraf.android.worldtour.provider";
+    public static final String AUTHORITY = "org.jraf.android.hellomundo.provider";
     public static final String CONTENT_URI_BASE = "content://" + AUTHORITY;
 
     public static final String QUERY_NOTIFY = "QUERY_NOTIFY";
@@ -59,11 +59,11 @@ public class WorldtourProvider extends ContentProvider {
         URI_MATCHER.addURI(AUTHORITY, WebcamColumns.TABLE_NAME + "/#", URI_TYPE_WEBCAM_ID);
     }
 
-    private WorldtourSQLiteOpenHelper mWorldtourSQLiteOpenHelper;
+    private HelloMundoSQLiteOpenHelper mHelloMundoSQLiteOpenHelper;
 
     @Override
     public boolean onCreate() {
-        mWorldtourSQLiteOpenHelper = WorldtourSQLiteOpenHelper.newInstance(getContext());
+        mHelloMundoSQLiteOpenHelper = HelloMundoSQLiteOpenHelper.newInstance(getContext());
         return true;
     }
 
@@ -89,7 +89,7 @@ public class WorldtourProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         if (BuildConfig.DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
         final String table = uri.getLastPathSegment();
-        final long rowId = mWorldtourSQLiteOpenHelper.getWritableDatabase().insert(table, null, values);
+        final long rowId = mHelloMundoSQLiteOpenHelper.getWritableDatabase().insert(table, null, values);
         String notify;
         if (rowId != -1 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -101,7 +101,7 @@ public class WorldtourProvider extends ContentProvider {
     public int bulkInsert(Uri uri, ContentValues[] values) {
         if (BuildConfig.DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         final String table = uri.getLastPathSegment();
-        final SQLiteDatabase db = mWorldtourSQLiteOpenHelper.getWritableDatabase();
+        final SQLiteDatabase db = mHelloMundoSQLiteOpenHelper.getWritableDatabase();
         int res = 0;
         db.beginTransaction();
         try {
@@ -129,7 +129,7 @@ public class WorldtourProvider extends ContentProvider {
         if (BuildConfig.DEBUG)
             Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         final QueryParams queryParams = getQueryParams(uri, selection);
-        final int res = mWorldtourSQLiteOpenHelper.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
+        final int res = mHelloMundoSQLiteOpenHelper.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -141,7 +141,7 @@ public class WorldtourProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (BuildConfig.DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         final QueryParams queryParams = getQueryParams(uri, selection);
-        final int res = mWorldtourSQLiteOpenHelper.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
+        final int res = mHelloMundoSQLiteOpenHelper.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -156,7 +156,7 @@ public class WorldtourProvider extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         final QueryParams queryParams = getQueryParams(uri, selection);
-        final Cursor res = mWorldtourSQLiteOpenHelper.getReadableDatabase().query(queryParams.table, projection, queryParams.selection, selectionArgs, groupBy,
+        final Cursor res = mHelloMundoSQLiteOpenHelper.getReadableDatabase().query(queryParams.table, projection, queryParams.selection, selectionArgs, groupBy,
                 null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
@@ -164,7 +164,7 @@ public class WorldtourProvider extends ContentProvider {
 
     @Override
     public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
-        SQLiteDatabase db = mWorldtourSQLiteOpenHelper.getWritableDatabase();
+        SQLiteDatabase db = mHelloMundoSQLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             int numOperations = operations.size();

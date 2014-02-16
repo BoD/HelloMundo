@@ -22,7 +22,7 @@ import android.widget.RemoteViews;
 
 import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.string.StringUtil;
 
@@ -36,14 +36,14 @@ public class RefreshAppWidgetProvider extends AppWidgetProvider {
         if (Config.LOGD) Log.d(TAG, "onReceive intent=" + StringUtil.toString(intent));
 
         String action = intent.getAction();
-        if (WorldTourService.ACTION_UPDATE_START.equals(action)) {
+        if (HelloMundoService.ACTION_UPDATE_START.equals(action)) {
             if (sAnimate) {
                 // Already animating
                 return;
             }
             sAnimate = true;
             startAnimationThread(context);
-        } else if (WorldTourService.ACTION_UPDATE_END.equals(action)) {
+        } else if (HelloMundoService.ACTION_UPDATE_END.equals(action)) {
             sAnimate = false;
         } else {
             super.onReceive(context, intent);
@@ -61,7 +61,7 @@ public class RefreshAppWidgetProvider extends AppWidgetProvider {
     public void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         if (Config.LOGD) Log.d(TAG, "updateAppWidget appWidgetId=" + appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget_refresh);
-        views.setOnClickPendingIntent(R.id.image, WorldTourService.getUpdateAllPendingIntent(context));
+        views.setOnClickPendingIntent(R.id.image, HelloMundoService.getUpdateAllPendingIntent(context));
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
@@ -109,7 +109,7 @@ public class RefreshAppWidgetProvider extends AppWidgetProvider {
                 // Now set the default image / onClickListener
                 for (int appWidgetId : appWidgetIds) {
                     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget_refresh);
-                    views.setOnClickPendingIntent(R.id.image, WorldTourService.getUpdateAllPendingIntent(context));
+                    views.setOnClickPendingIntent(R.id.image, HelloMundoService.getUpdateAllPendingIntent(context));
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
             }

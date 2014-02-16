@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- App name -->
-    <string name="app_name" translatable="false">WorldTour</string>
+    <string name="app_name" translatable="false">HelloMundo</string>
 
     <!--
      *
@@ -39,10 +39,10 @@
     <!--  -->
     <string name="main_txtWallpaperAutoUpdate">Auto update wallpaper</string>
     <string name="main_toast_wallpaperUpdated">Wallpaper updated.</string>
-    <string name="main_toast_fileSaved">Picture saved to the <xliff:g id="app_name">WorldTour</xliff:g> album.</string>
+    <string name="main_toast_fileSaved">Picture saved to the <xliff:g id="app_name">HelloMundo</xliff:g> album.</string>
     <string name="main_dialog_noSdCard">The external storage is currently not available.</string>
-    <string name="main_shareText">Picture of <xliff:g id="webcam_name">\'%1$s\'</xliff:g>, <xliff:g id="webcam_location">%2$s</xliff:g>, taken on <xliff:g id="picture_date">%3$s</xliff:g>.<xliff:g id="spaces">&#160;&#160;</xliff:g>Spotted on <xliff:g id="app_name">WorldTour</xliff:g> for Android.</string>
-    <string name="main_shareText_userWebcam">Picture of <xliff:g id="webcam_name">\'%1$s\'</xliff:g> taken on <xliff:g id="picture_date">%3$s</xliff:g>.<xliff:g id="spaces">&#160;&#160;</xliff:g>Spotted on <xliff:g id="app_name">WorldTour</xliff:g> for Android.</string>
+    <string name="main_shareText">Picture of <xliff:g id="webcam_name">\'%1$s\'</xliff:g>, <xliff:g id="webcam_location">%2$s</xliff:g>, taken on <xliff:g id="picture_date">%3$s</xliff:g>.<xliff:g id="spaces">&#160;&#160;</xliff:g>Spotted on <xliff:g id="app_name">HelloMundo</xliff:g> for Android.</string>
+    <string name="main_shareText_userWebcam">Picture of <xliff:g id="webcam_name">\'%1$s\'</xliff:g> taken on <xliff:g id="picture_date">%3$s</xliff:g>.<xliff:g id="spaces">&#160;&#160;</xliff:g>Spotted on <xliff:g id="app_name">HelloMundo</xliff:g> for Android.</string>
     <string name="main_previewFrame_weight" translatable="false">100</string>
     <string name="main_txtNoImageWarning">Could not download the image.<xliff:g id="new_line">\n</xliff:g>Network problem?<xliff:g id="spaces">&#160;&#160;</xliff:g>Try to refresh later.</string>
     <!-- Action bar (menu) item -->
@@ -112,7 +112,7 @@
      * About screen
      *
     -->
-    <string name="about_txtInfo1"><![CDATA[<b>BoD WorldTour</b> v${versionName}<br/>Built on ${buildDate}<font color="#808080"> – ${gitSha1}</font>]]></string>
+    <string name="about_txtInfo1"><![CDATA[<b>BoD HelloMundo</b> v${versionName}<br/>Built on ${buildDate}<font color="#808080"> – ${gitSha1}</font>]]></string>
     <string name="about_txtInfo2">Copyright 2009–2013 Benoit \'BoD\' Lubek.\nAdditional code by Carmen Alvarez (c@rmen.ca).\nAll Rights Reserved.</string>
     <string name="about_email">→ BoD@JRAF.org</string>
     <string name="about_web">→ JRAF.org/android</string>
@@ -120,8 +120,8 @@
     <string name="about_btnRate">Rate app</string>
     <string name="about_btnOtherApps">Other apps</string>
     <string name="about_btnEula"><u>End user license agreement</u></string>
-    <string name="about_shareText_subject">Checkout out WorldTour!</string>
-    <string name="about_shareText_body">WorldTour for Android is a most excellent app!\nCheck it out here:\nhttp://play.google.com/store/apps/details?id=%s</string>
+    <string name="about_shareText_subject">Checkout out HelloMundo!</string>
+    <string name="about_shareText_body">HelloMundo for Android is a most excellent app!\nCheck it out here:\nhttp://play.google.com/store/apps/details?id=%s</string>
     <string name="about_btnDonate">Donate</string>
     <string name="about_menu_sendLogs">Send logs</string>
     <string name="about_toast_sendLogs">Logs are being sent.</string>
@@ -138,7 +138,7 @@
      * Welcome screen
      *
     -->
-    <string name="welcome_0_txtTitle">Welcome to WorldTour!</string>
+    <string name="welcome_0_txtTitle">Welcome to HelloMundo!</string>
     <string name="welcome_0_txtText">1. Press this button to pick a webcam from the list…</string>
     <string name="welcome_1_txtText">2. Switch ON to automatically refresh your wallpaper every 30 minutes…</string>
     <string name="welcome_2_txtText">3. You can also add a widget to your home screen.</string>
@@ -151,8 +151,8 @@
      * App Widgets
      *
     -->
-    <string name="appwidget_webcam_label">WorldTour Webcam (2x2)</string>
-    <string name="appwidget_webcam_label_3x3">WorldTour Webcam (3x3)</string>
-    <string name="appwidget_refresh_label">WorldTour Refresh</string>
+    <string name="appwidget_webcam_label">HelloMundo Webcam (2x2)</string>
+    <string name="appwidget_webcam_label_3x3">HelloMundo Webcam (3x3)</string>
+    <string name="appwidget_refresh_label">HelloMundo Refresh</string>
 
 </resources>

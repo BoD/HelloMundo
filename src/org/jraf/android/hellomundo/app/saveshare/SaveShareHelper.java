@@ -137,7 +137,7 @@ public class SaveShareHelper {
 
         // 2.1 equivalent of File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File picturesPath = new File(Environment.getExternalStorageDirectory(), "Pictures");
-        File path = new File(picturesPath, "WorldTour");
+        File path = new File(picturesPath, "HelloMundo");
         WebcamInfo webcamInfo = getWebcamInfo(context, webcamId);
         if (webcamInfo == null) {
             throw new Exception("Could not get webcam info");

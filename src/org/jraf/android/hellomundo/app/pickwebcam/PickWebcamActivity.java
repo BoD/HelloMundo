@@ -27,7 +27,7 @@ import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.adduserwebcam.AddUserWebcamActivity;
 import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentActivity;
-import org.jraf.android.hellomundo.app.service.WorldTourService;
+import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.async.Task;
@@ -130,7 +130,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
                     editor.commit();
 
                     // Invoke service to download the default image now.
-                    WorldTourService.updateWallpaperNow(PickWebcamActivity.this);
+                    HelloMundoService.updateWallpaperNow(PickWebcamActivity.this);
                 }
             }
         }.toastOk(R.string.pickWebcam_webcamDeletedToast)).execute(getSupportFragmentManager());

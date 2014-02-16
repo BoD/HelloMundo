@@ -28,12 +28,12 @@
 
         <!-- Provider -->
         <provider
-            android:name="org.jraf.android.hellomundo.provider.WorldtourProvider"
+            android:name="org.jraf.android.hellomundo.provider.HelloMundoProvider"
             android:authorities="org.jraf.android.hellomundo.provider"
             android:exported="false" />
 
         <!-- Service -->
-        <service android:name="org.jraf.android.hellomundo.app.service.WorldTourService" />
+        <service android:name="org.jraf.android.hellomundo.app.service.HelloMundoService" />
 
         <!-- Boot receiver -->
         <receiver android:name="org.jraf.android.hellomundo.app.receiver.BootCompletedBroadcastReceiver" >
@@ -84,10 +84,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.jraf.android.hellomundo.app.service.WorldTourService.ACTION_UPDATE_START" />
+                <action android:name="org.jraf.android.hellomundo.app.service.HelloMundoService.ACTION_UPDATE_START" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.jraf.android.hellomundo.app.service.WorldTourService.ACTION_UPDATE_END" />
+                <action android:name="org.jraf.android.hellomundo.app.service.HelloMundoService.ACTION_UPDATE_END" />
             </intent-filter>
 
             <meta-data

@@ -14,14 +14,14 @@ package org.jraf.android.hellomundo.provider.appwidget;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import org.jraf.android.hellomundo.provider.WorldtourProvider;
+import org.jraf.android.hellomundo.provider.HelloMundoProvider;
 
 /**
  * Columns for the {@code appwidget} table.
  */
 public interface AppwidgetColumns extends BaseColumns {
     String TABLE_NAME = "appwidget";
-    Uri CONTENT_URI = Uri.parse(WorldtourProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
+    Uri CONTENT_URI = Uri.parse(HelloMundoProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     String _ID = BaseColumns._ID;
     String APPWIDGET_ID = "appwidget_id";

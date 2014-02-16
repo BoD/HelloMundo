@@ -18,7 +18,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:text="BoD WorldTour"
+            android:text="BoD HelloMundo"
             android:textAppearance="?android:attr/textAppearanceMedium"
             tools:ignore="HardcodedText" />
 

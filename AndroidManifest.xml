@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="org.jraf.android.worldtour.app.Application"
+        android:name="org.jraf.android.hellomundo.app.Application"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -28,22 +28,22 @@
 
         <!-- Provider -->
         <provider
-            android:name="org.jraf.android.worldtour.provider.WorldtourProvider"
-            android:authorities="org.jraf.android.worldtour.provider"
+            android:name="org.jraf.android.hellomundo.provider.WorldtourProvider"
+            android:authorities="org.jraf.android.hellomundo.provider"
             android:exported="false" />
 
         <!-- Service -->
-        <service android:name="org.jraf.android.worldtour.app.service.WorldTourService" />
+        <service android:name="org.jraf.android.hellomundo.app.service.WorldTourService" />
 
         <!-- Boot receiver -->
-        <receiver android:name="org.jraf.android.worldtour.app.receiver.BootCompletedBroadcastReceiver" >
+        <receiver android:name="org.jraf.android.hellomundo.app.receiver.BootCompletedBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <!-- Wallpaper changed receiver -->
-        <receiver android:name="org.jraf.android.worldtour.app.receiver.WallpaperChangedBroadcastReceiver" >
+        <receiver android:name="org.jraf.android.hellomundo.app.receiver.WallpaperChangedBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.WALLPAPER_CHANGED" />
             </intent-filter>
@@ -51,7 +51,7 @@
 
         <!-- Webcam widget (2x2) -->
         <receiver
-            android:name="org.jraf.android.worldtour.app.appwidget.webcam.WebcamAppWidgetProvider"
+            android:name="org.jraf.android.hellomundo.app.appwidget.webcam.WebcamAppWidgetProvider"
             android:label="@string/appwidget_webcam_label" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -64,7 +64,7 @@
 
         <!-- Webcam widget (3x3) -->
         <receiver
-            android:name="org.jraf.android.worldtour.app.appwidget.webcam.WebcamAppWidgetProvider3x3"
+            android:name="org.jraf.android.hellomundo.app.appwidget.webcam.WebcamAppWidgetProvider3x3"
             android:enabled="@bool/appwidget_webcam_3x3_enabled"
             android:label="@string/appwidget_webcam_label_3x3" >
             <intent-filter>
@@ -78,16 +78,16 @@
 
         <!-- Refresh widget -->
         <receiver
-            android:name="org.jraf.android.worldtour.app.appwidget.refresh.RefreshAppWidgetProvider"
+            android:name="org.jraf.android.hellomundo.app.appwidget.refresh.RefreshAppWidgetProvider"
             android:label="@string/appwidget_refresh_label" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.jraf.android.worldtour.app.service.WorldTourService.ACTION_UPDATE_START" />
+                <action android:name="org.jraf.android.hellomundo.app.service.WorldTourService.ACTION_UPDATE_START" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.jraf.android.worldtour.app.service.WorldTourService.ACTION_UPDATE_END" />
+                <action android:name="org.jraf.android.hellomundo.app.service.WorldTourService.ACTION_UPDATE_END" />
             </intent-filter>
 
             <meta-data
@@ -97,7 +97,7 @@
 
         <!-- Main -->
         <activity
-            android:name="org.jraf.android.worldtour.app.main.MainActivity"
+            android:name="org.jraf.android.hellomundo.app.main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -113,32 +113,32 @@
 
         <!-- Pick webcam -->
         <activity
-            android:name="org.jraf.android.worldtour.app.pickwebcam.PickWebcamActivity"
+            android:name="org.jraf.android.hellomundo.app.pickwebcam.PickWebcamActivity"
             android:label="@string/main_menu_pick" />
 
         <!-- Add user webcam -->
         <activity
-            android:name="org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity"
+            android:name="org.jraf.android.hellomundo.app.adduserwebcam.AddUserWebcamActivity"
             android:windowSoftInputMode="stateVisible" />
 
         <!-- Settings -->
         <activity
-            android:name="org.jraf.android.worldtour.app.preference.PreferenceActivity"
+            android:name="org.jraf.android.hellomundo.app.preference.PreferenceActivity"
             android:label="@string/main_menu_settings" />
 
         <!-- About -->
         <activity
-            android:name="org.jraf.android.worldtour.app.about.AboutActivity"
+            android:name="org.jraf.android.hellomundo.app.about.AboutActivity"
             android:label="@string/main_menu_about" />
 
         <!-- Eula -->
         <activity
-            android:name="org.jraf.android.worldtour.app.about.EulaActivity"
+            android:name="org.jraf.android.hellomundo.app.about.EulaActivity"
             android:label="@string/eula_title" />
 
         <!-- Welcome -->
         <activity
-            android:name="org.jraf.android.worldtour.app.welcome.WelcomeActivity"
+            android:name="org.jraf.android.hellomundo.app.welcome.WelcomeActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Welcome" />
@@ -150,7 +150,7 @@
 
         <!-- Webcam App Widget Configure -->
         <activity
-            android:name="org.jraf.android.worldtour.app.appwidget.webcam.WebcamConfigureActivity"
+            android:name="org.jraf.android.hellomundo.app.appwidget.webcam.WebcamConfigureActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=":WebcamConfigureActivity"
             tools:ignore="ExportedActivity" >
@@ -161,7 +161,7 @@
 
         <!-- Webcam App Widget Configure -->
         <activity
-            android:name="org.jraf.android.worldtour.app.appwidget.webcam.WebcamAppWidgetActionsActivity"
+            android:name="org.jraf.android.hellomundo.app.appwidget.webcam.WebcamAppWidgetActionsActivity"
             android:excludeFromRecents="true"
             android:taskAffinity=":WebcamAppWidgetActionsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />

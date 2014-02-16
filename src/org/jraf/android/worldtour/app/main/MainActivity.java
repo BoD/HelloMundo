@@ -21,13 +21,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -59,8 +56,9 @@ import org.jraf.android.worldtour.app.service.WorldTourService;
 import org.jraf.android.worldtour.app.welcome.WelcomeActivity;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamManager;
-import org.jraf.android.worldtour.provider.WebcamColumns;
-import org.jraf.android.worldtour.provider.WebcamType;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamSelection;
+import org.jraf.android.worldtour.provider.webcam.WebcamType;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -84,8 +82,6 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     private TextView mTxtWebcamInfoName;
     private TextView mTxtWebcamInfoLocation;
     private View mTxtNoImageWarning;
-
-    private final Handler mHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -369,22 +365,21 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
             private String mLocation;
             private String mTimeZone;
             private String mPublicId;
-            private int mType;
+            private WebcamType mType;
 
             @Override
             protected void doInBackground() throws Throwable {
-                String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE, };
-                Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, currentWebcamId);
-                Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
+                WebcamSelection where = new WebcamSelection().id(currentWebcamId);
+                WebcamCursor cursor = where.query(getContentResolver());
                 try {
                     if (cursor == null || !cursor.moveToFirst()) {
                         throw new Exception("Could not find webcam with id=" + currentWebcamId);
                     }
-                    mName = cursor.getString(0);
-                    mLocation = cursor.getString(1);
-                    mTimeZone = cursor.getString(2);
-                    mPublicId = cursor.getString(3);
-                    mType = cursor.getInt(4);
+                    mName = cursor.getName();
+                    mLocation = cursor.getLocation();
+                    mTimeZone = cursor.getTimezone();
+                    mPublicId = cursor.getPublicId();
+                    mType = cursor.getType();
                 } finally {
                     if (cursor != null) cursor.close();
                 }

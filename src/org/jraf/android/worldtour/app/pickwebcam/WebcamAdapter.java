@@ -33,8 +33,8 @@ import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.ui.ViewHolder;
 import org.jraf.android.util.ui.animation.ExtendHeightAnimation;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.provider.WebcamCursorWrapper;
-import org.jraf.android.worldtour.provider.WebcamType;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamType;
 
 import com.squareup.picasso.Picasso;
 
@@ -59,15 +59,15 @@ public class WebcamAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        WebcamCursorWrapper c = new WebcamCursorWrapper(cursor); // TODO: do not do that in bindView (which is called for every item!)
+        WebcamCursor c = (WebcamCursor) cursor;
         long id = c.getId();
 
         TextView txtName = (TextView) ViewHolder.get(view, R.id.txtName);
         String name = c.getName();
         txtName.setText(name);
 
-        Long type = c.getType();
-        boolean isUserWebcam = type != null && type.intValue() == WebcamType.USER;
+        WebcamType type = c.getType();
+        boolean isUserWebcam = type != null && type == WebcamType.USER;
 
         // Extend
         View conExtended = ViewHolder.get(view, R.id.conExtended);
@@ -94,9 +94,10 @@ public class WebcamAdapter extends ResourceCursorAdapter {
             imgThumbnail.setImageResource(R.drawable.ic_thumbnail_user_defined);
         } else {
             imgThumbnail.setImageResource(0);
-            Picasso.with(context).load(c.getThumbUrl())
-                    .resizeDimen(R.dimen.pickWebcam_item_imgThumbnail_widthHeight, R.dimen.pickWebcam_item_imgThumbnail_widthHeight).centerCrop()
-                    .placeholder(R.drawable.ic_thumbnail_bg).into(imgThumbnail);
+            Picasso picasso = Picasso.with(context);
+            //            picasso.setDebugging(true);
+            picasso.load(c.getThumbUrl()).resizeDimen(R.dimen.pickWebcam_item_imgThumbnail_widthHeight, R.dimen.pickWebcam_item_imgThumbnail_widthHeight)
+                    .centerCrop().placeholder(R.drawable.ic_thumbnail_bg).into(imgThumbnail);
         }
 
         // Location & time
@@ -131,8 +132,8 @@ public class WebcamAdapter extends ResourceCursorAdapter {
         txtSourceUrl.setOnClickListener(mSourceOnClickListener);
 
         // Exclude from random
-        Long excludeRandom = c.getExcludeRandom();
-        boolean excludedFromRandom = excludeRandom != null && excludeRandom.intValue() == 1;
+        Boolean excludeRandom = c.getExcludeRandom();
+        boolean excludedFromRandom = excludeRandom != null && excludeRandom;
         View btnExcludeFromRandom = ViewHolder.get(view, R.id.btnExcludeFromRandom);
         btnExcludeFromRandom.setSelected(excludedFromRandom);
         btnExcludeFromRandom.setTag(id);

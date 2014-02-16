@@ -31,7 +31,6 @@ import android.app.PendingIntent;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,8 +57,11 @@ import org.jraf.android.worldtour.app.appwidget.webcam.WebcamAppWidgetActionsAct
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamInfo;
 import org.jraf.android.worldtour.model.WebcamManager;
-import org.jraf.android.worldtour.provider.AppwidgetColumns;
-import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetColumns;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamSelection;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
 
@@ -219,7 +221,8 @@ public class WorldTourService extends IntentService {
         if (Config.LOGD) Log.d(TAG, "updateWidgets");
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         String[] projection = { AppwidgetColumns.APPWIDGET_ID, AppwidgetColumns.WEBCAM_ID };
-        final Cursor cursor = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
+        final Cursor c = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
+        final AppwidgetCursor cursor = new AppwidgetCursor(c);
         try {
             int count = cursor.getCount();
             if (Config.LOGD) Log.d(TAG, "updateWidgets count=" + count);
@@ -231,8 +234,8 @@ public class WorldTourService extends IntentService {
             ExecutorService threadPool = Executors.newFixedThreadPool(count);
             ArrayList<Future<?>> futureList = new ArrayList<Future<?>>(count);
             while (cursor.moveToNext()) {
-                final int appwidgetId = cursor.getInt(0);
-                final long finalWebcamId = cursor.getLong(1);
+                final int appwidgetId = cursor.getAppwidgetId();
+                final long finalWebcamId = cursor.getWebcamId();
                 if (Config.LOGD) Log.d(TAG, "updateWidgets Submitting runnable");
                 Future<?> future = threadPool.submit(new Runnable() {
                     @Override
@@ -315,20 +318,21 @@ public class WorldTourService extends IntentService {
             // Inform listeners that all the widgets have been updated
             sendBroadcast(new Intent(ACTION_UPDATE_END));
         } finally {
-            if (cursor != null) cursor.close();
+            cursor.close();
         }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
     private void logBitmapSize(Bitmap bitmap) {
+        if (bitmap == null) return;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) return;
         if (Config.LOGD) Log.d(TAG, "updateWidgets bitmap.getByteCount()=" + bitmap.getByteCount());
     }
 
     private WebcamInfo getWebcamInfo(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
         String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER, WebcamColumns.NAME, WebcamColumns.LOCATION };
-        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
-        Cursor cursor = getContentResolver().query(webcamUri, projection, null, null, null);
+        WebcamSelection where = new WebcamSelection().id(webcamId);
+        WebcamCursor cursor = where.query(getContentResolver(), projection);
         WebcamInfo res = new WebcamInfo();
         try {
             if (cursor == null || !cursor.moveToFirst()) {
@@ -346,10 +350,10 @@ public class WorldTourService extends IntentService {
                 }
                 return null;
             }
-            res.url = cursor.getString(0);
-            res.httpReferer = cursor.getString(1);
-            res.name = cursor.getString(2);
-            res.location = cursor.getString(3);
+            res.url = cursor.getUrl();
+            res.httpReferer = cursor.getHttpReferer();
+            res.name = cursor.getName();
+            res.location = cursor.getLocation();
         } finally {
             if (cursor != null) cursor.close();
         }
@@ -496,7 +500,9 @@ public class WorldTourService extends IntentService {
         String[] projection = { WebcamColumns._ID, WebcamColumns.COORDINATES, WebcamColumns.PUBLIC_ID, WebcamColumns.VISIBILITY_BEGIN_HOUR,
                 WebcamColumns.VISIBILITY_BEGIN_MIN, WebcamColumns.VISIBILITY_END_HOUR, WebcamColumns.VISIBILITY_END_MIN };
         String selection = WebcamColumns.EXCLUDE_RANDOM + " is null or " + WebcamColumns.EXCLUDE_RANDOM + "=0";
-        Cursor cursor = getContentResolver().query(WebcamColumns.CONTENT_URI, projection, selection, null, null);
+
+        WebcamSelection where = new WebcamSelection().excludeRandom((Boolean) null).or().excludeRandom(false);
+        WebcamCursor cursor = where.query(getContentResolver(), projection);
         try {
             if (cursor == null) {
                 Log.w(TAG, "getRandomWebcamId Could not find random webcamId");
@@ -505,12 +511,13 @@ public class WorldTourService extends IntentService {
             int count = cursor.getCount();
             int randomIndex = new Random().nextInt(count);
             cursor.moveToPosition(randomIndex);
-            long res = cursor.getLong(0);
-            String publicId = cursor.getString(2);
+            long res = cursor.getId();
+            String publicId = cursor.getPublicId();
             if (Config.LOGD) Log.d(TAG, "getRandomWebcamId res=" + res + " publicId=" + publicId);
             if (avoidNight) {
-                if (!cursor.isNull(3)) {
-                    boolean isNight = isNight(cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6));
+                if (cursor.getVisibilityBeginHour() != null) {
+                    boolean isNight = isNight(cursor.getVisibilityBeginHour(), cursor.getVisibilityBeginMin(), cursor.getVisibilityEndHour(),
+                            cursor.getVisibilityEndMin());
                     if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
                     if (isNight) {
                         // Recurse
@@ -518,7 +525,7 @@ public class WorldTourService extends IntentService {
                     }
                 } else {
                     boolean isNight;
-                    String coordinatesStr = cursor.getString(1);
+                    String coordinatesStr = cursor.getCoordinates();
                     if (coordinatesStr == null) {
                         isNight = false;
                     } else {

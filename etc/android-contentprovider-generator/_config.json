@@ -1,8 +1,10 @@
 {
-    "projectPackage": "org.jraf.android.worldtour",
-	"providerPackage": "org.jraf.android.worldtour.provider",
+	"toolVersion": "1.5",
+    "projectPackageId": "org.jraf.android.latoureiffel",
+	"providerJavaPackage": "org.jraf.android.worldtour.provider",
 	"providerClassName": "WorldtourProvider",
 	"sqliteHelperClassName": "WorldtourSQLiteOpenHelper",
 	"authority": "org.jraf.android.worldtour.provider",
-	"databaseName": "worldtour.db",
+	"databaseFileName": "worldtour.db",
+	"enableForeignKeys": false,
 }

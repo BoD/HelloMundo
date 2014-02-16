@@ -32,7 +32,7 @@ import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.adduserwebcam.AddUserWebcamActivity;
 import org.jraf.android.worldtour.app.common.LifecycleDispatchSherlockFragmentActivity;
 import org.jraf.android.worldtour.app.service.WorldTourService;
-import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;

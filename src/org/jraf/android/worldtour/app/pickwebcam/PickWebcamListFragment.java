@@ -40,7 +40,8 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
 
 public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor>, WebcamCallbacks {
     private static final String TAG = Constants.TAG + PickWebcamListFragment.class.getSimpleName();
@@ -125,19 +126,13 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = { WebcamColumns._ID, // 0
-                WebcamColumns.NAME, // 1
-                WebcamColumns.THUMB_URL, // 2
-                WebcamColumns.LOCATION, // 3
-                WebcamColumns.SOURCE_URL, // 4
-                WebcamColumns.EXCLUDE_RANDOM, // 5
-                WebcamColumns.PUBLIC_ID, // 6
-                WebcamColumns.TIMEZONE, // 7
-                WebcamColumns.COORDINATES, // 8
-                WebcamColumns.TYPE, // 9
-                WebcamColumns.URL, // 10
+        return new CursorLoader(getActivity(), WebcamColumns.CONTENT_URI, null, null, null, null) {
+            @Override
+            public Cursor loadInBackground() {
+                Cursor c = super.loadInBackground();
+                return new WebcamCursor(c);
+            }
         };
-        return new CursorLoader(getActivity(), WebcamColumns.CONTENT_URI, projection, null, null, null);
     }
 
     @Override

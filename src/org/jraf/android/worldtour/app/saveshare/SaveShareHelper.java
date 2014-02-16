@@ -18,11 +18,9 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -45,7 +43,9 @@ import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.model.AppwidgetManager;
 import org.jraf.android.worldtour.model.WebcamInfo;
-import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamSelection;
 
 public class SaveShareHelper {
     private static final String TAG = Constants.TAG + SaveShareHelper.class.getSimpleName();
@@ -185,19 +185,19 @@ public class SaveShareHelper {
     @Background(Type.DISK)
     private WebcamInfo getWebcamInfo(Context context, final long webcamId) {
         String[] projection = { WebcamColumns.NAME, WebcamColumns.LOCATION, WebcamColumns.TIMEZONE, WebcamColumns.PUBLIC_ID, WebcamColumns.TYPE };
-        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
-        Cursor cursor = context.getContentResolver().query(webcamUri, projection, null, null, null);
+        WebcamSelection where = new WebcamSelection().id(webcamId);
+        WebcamCursor cursor = where.query(context.getContentResolver(), projection);
         try {
             if (cursor == null || !cursor.moveToFirst()) {
                 Log.e(TAG, "Could not find webcam with id=" + webcamId);
                 return null;
             }
             WebcamInfo res = new WebcamInfo();
-            res.name = cursor.getString(0);
-            res.location = cursor.getString(1);
-            res.timeZone = cursor.getString(2);
-            res.publicId = cursor.getString(3);
-            res.type = cursor.getInt(4);
+            res.name = cursor.getName();
+            res.location = cursor.getLocation();
+            res.timeZone = cursor.getTimezone();
+            res.publicId = cursor.getPublicId();
+            res.type = cursor.getType();
             return res;
         } finally {
             if (cursor != null) cursor.close();

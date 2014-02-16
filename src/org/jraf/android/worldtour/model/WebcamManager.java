@@ -19,14 +19,9 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.jraf.android.latoureiffel.R;
@@ -36,8 +31,11 @@ import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.provider.WebcamColumns;
-import org.jraf.android.worldtour.provider.WebcamType;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamContentValues;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamSelection;
+import org.jraf.android.worldtour.provider.webcam.WebcamType;
 
 public class WebcamManager {
     private static String TAG = Constants.TAG + WebcamManager.class.getSimpleName();
@@ -73,26 +71,24 @@ public class WebcamManager {
     public void refreshDatabaseFromNetwork(Context context) throws IOException {
         InputStream inputStream = HttpUtil.get(URL_DATABASE).stream();
         ContentResolver contentResolver = context.getContentResolver();
-        ArrayList<String> publicIds = insertWebcams(inputStream, contentResolver);
-        String publicIdList = TextUtils.join(",", publicIds);
-        String where = WebcamColumns.TYPE + "=? and " + WebcamColumns.PUBLIC_ID + " not in (" + publicIdList + ")";
-        String[] selectionArgs = { String.valueOf(WebcamType.SERVER) };
+        String[] publicIds = insertWebcams(inputStream, contentResolver);
+        WebcamSelection where = new WebcamSelection().type(WebcamType.SERVER).and().publicIdNot(publicIds);
         // Now delete objects that exist locally but not remotely
-        contentResolver.delete(WebcamColumns.CONTENT_URI, where, selectionArgs);
+        where.delete(contentResolver);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
     }
 
     @Background({ Type.DISK, Type.NETWORK })
-    private ArrayList<String> insertWebcams(InputStream inputStream, ContentResolver contentResolver) throws IOException {
+    private String[] insertWebcams(InputStream inputStream, ContentResolver contentResolver) throws IOException {
         ArrayList<String> publicIds = new ArrayList<String>(40);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             String lastLine = "";
             boolean firstLine = true;
-            ArrayList<ContentValues> valuesList = new ArrayList<ContentValues>(60);
+            ArrayList<WebcamContentValues> valuesList = new ArrayList<WebcamContentValues>(60);
             while ((line = reader.readLine()) != null) {
                 // Check for specific first line (avoid networks that return a wifi login page)
                 if (firstLine) {
@@ -103,7 +99,7 @@ public class WebcamManager {
                 }
                 lastLine = line;
                 if (line.startsWith("#")) continue;
-                ContentValues values = new ContentValues(12);
+                WebcamContentValues values = new WebcamContentValues();
                 parseLine(line, values);
                 valuesList.add(values);
             }
@@ -112,18 +108,17 @@ public class WebcamManager {
                 throw new IOException("Last line of database file doesn't start with '#end'");
             }
 
-            for (ContentValues values : valuesList) {
+            for (WebcamContentValues values : valuesList) {
                 // Already present?
                 Long id = null;
-                String publicId = values.getAsString(WebcamColumns.PUBLIC_ID);
+                String publicId = values.values().getAsString(WebcamColumns.PUBLIC_ID);
                 publicIds.add(publicId);
                 String[] projection = { WebcamColumns._ID };
-                String selection = WebcamColumns.PUBLIC_ID + "=?";
-                String[] selectionArgs = { publicId };
-                Cursor cursor = contentResolver.query(WebcamColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+                WebcamSelection where = new WebcamSelection().publicId(publicId);
+                WebcamCursor cursor = where.query(contentResolver, projection);
                 try {
                     if (cursor.moveToNext()) {
-                        id = cursor.getLong(0);
+                        id = cursor.getId();
                     }
                 } finally {
                     if (cursor != null) cursor.close();
@@ -131,36 +126,36 @@ public class WebcamManager {
 
                 if (id == null) {
                     // Not found: new object
-                    contentResolver.insert(WebcamColumns.CONTENT_URI, values);
+                    contentResolver.insert(WebcamColumns.CONTENT_URI, values.values());
                 } else {
                     // Found: existing object
-                    contentResolver.update(WebcamColumns.CONTENT_URI, values, selection, selectionArgs);
+                    contentResolver.update(WebcamColumns.CONTENT_URI, values.values(), where.sel(), where.args());
                 }
             }
-            return publicIds;
+            return publicIds.toArray(new String[publicIds.size()]);
         } finally {
             IoUtil.closeSilently(inputStream);
         }
     }
 
-    private void parseLine(String line, ContentValues res) {
+    private void parseLine(String line, WebcamContentValues res) {
         String[] vals = line.split(";");
-        res.put(WebcamColumns.PUBLIC_ID, vals[0]);
-        res.put(WebcamColumns.NAME, vals[1]);
-        res.put(WebcamColumns.LOCATION, vals[2]);
-        res.put(WebcamColumns.SOURCE_URL, vals[3]);
-        res.put(WebcamColumns.URL, HTTP + vals[4]);
-        res.put(WebcamColumns.THUMB_URL, HTTP + vals[5]);
+        res.putPublicId(vals[0]);
+        res.putName(vals[1]);
+        res.putLocation(vals[2]);
+        res.putSourceUrl(vals[3]);
+        res.putUrl(HTTP + vals[4]);
+        res.putThumbUrl(HTTP + vals[5]);
         String[] addedDateVals = vals[6].split("-");
         long dateMillis = new GregorianCalendar(Integer.parseInt(addedDateVals[0]), Integer.parseInt(addedDateVals[1]) - 1, Integer.parseInt(addedDateVals[2]))
                 .getTimeInMillis();
-        res.put(WebcamColumns.ADDED_DATE, dateMillis);
-        res.put(WebcamColumns.TIMEZONE, vals[7]);
+        res.putAddedDate(dateMillis);
+        res.putTimezone(vals[7]);
 
         // Referer
         String referer = vals[8];
         if (!EMPTY.equals(referer)) {
-            res.put(WebcamColumns.HTTP_REFERER, HTTP + referer);
+            res.putHttpReferer(HTTP + referer);
         }
 
         // Resize
@@ -169,8 +164,8 @@ public class WebcamManager {
             String[] resizeVals = resize.split("x");
             int width = Integer.parseInt(resizeVals[0]);
             int height = Integer.parseInt(resizeVals[1]);
-            res.put(WebcamColumns.RESIZE_WIDTH, width);
-            res.put(WebcamColumns.RESIZE_HEIGHT, height);
+            res.putResizeWidth(width);
+            res.putResizeHeight(height);
         }
 
         // Visibility begin
@@ -179,8 +174,8 @@ public class WebcamManager {
             String[] visibilityBeginVals = visibilityBegin.split(":");
             int beginHour = Integer.parseInt(visibilityBeginVals[0]);
             int beginMin = Integer.parseInt(visibilityBeginVals[1]);
-            res.put(WebcamColumns.VISIBILITY_BEGIN_HOUR, beginHour);
-            res.put(WebcamColumns.VISIBILITY_BEGIN_MIN, beginMin);
+            res.putVisibilityBeginHour(beginHour);
+            res.putVisibilityBeginMin(beginMin);
         }
 
         // Visibility end
@@ -189,29 +184,29 @@ public class WebcamManager {
             String[] visibilityEndVals = visibilityEnd.split(":");
             int endHour = Integer.parseInt(visibilityEndVals[0]);
             int endMin = Integer.parseInt(visibilityEndVals[1]);
-            res.put(WebcamColumns.VISIBILITY_END_HOUR, endHour);
-            res.put(WebcamColumns.VISIBILITY_END_MIN, endMin);
+            res.putVisibilityEndHour(endHour);
+            res.putVisibilityEndMin(endMin);
         }
 
         // Coordinates
         String coordinates = vals[12];
         if (!EMPTY.equals(coordinates)) {
-            res.put(WebcamColumns.COORDINATES, coordinates);
+            res.putCoordinates(coordinates);
         }
 
-        res.put(WebcamColumns.TYPE, WebcamType.SERVER);
+        res.putType(WebcamType.SERVER);
     }
 
     @Background(Type.DISK)
     public void insertUserWebcam(Context context, String name, String url) {
-        ContentValues values = new ContentValues(12);
-        values.put(WebcamColumns.PUBLIC_ID, "user_" + System.currentTimeMillis());
-        values.put(WebcamColumns.NAME, name);
-        values.put(WebcamColumns.URL, HTTP + url);
-        values.put(WebcamColumns.ADDED_DATE, System.currentTimeMillis());
-        values.put(WebcamColumns.TYPE, WebcamType.USER);
+        WebcamContentValues values = new WebcamContentValues();
+        values.putPublicId("user_" + System.currentTimeMillis());
+        values.putName(name);
+        values.putUrl(HTTP + url);
+        values.putAddedDate(System.currentTimeMillis());
+        values.putType(WebcamType.USER);
         ContentResolver contentResolver = context.getContentResolver();
-        contentResolver.insert(WebcamColumns.CONTENT_URI, values);
+        contentResolver.insert(WebcamColumns.CONTENT_URI, values.values());
     }
 
     @Background(Type.DISK)
@@ -220,14 +215,14 @@ public class WebcamManager {
         if (webcamId == Constants.WEBCAM_ID_NONE) return "NONE"; // Should never happen
 
         String[] projection = { WebcamColumns.PUBLIC_ID };
-        Uri webcamUri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, webcamId);
-        Cursor cursor = context.getContentResolver().query(webcamUri, projection, null, null, null);
+        WebcamSelection where = new WebcamSelection().id(webcamId);
+        WebcamCursor cursor = where.query(context.getContentResolver(), projection);
         try {
             if (cursor == null || !cursor.moveToFirst()) {
                 Log.w(TAG, "getDownloadInfo Could not find webcam with webcamId=" + webcamId);
                 return "Unknown";
             }
-            return cursor.getString(0);
+            return cursor.getPublicId();
         } finally {
             if (cursor != null) cursor.close();
         }

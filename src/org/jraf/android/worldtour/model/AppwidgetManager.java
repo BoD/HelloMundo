@@ -16,13 +16,10 @@ import java.util.List;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.jraf.android.util.annotation.Background;
@@ -30,7 +27,10 @@ import org.jraf.android.util.collection.CollectionUtil;
 import org.jraf.android.worldtour.Config;
 import org.jraf.android.worldtour.Constants;
 import org.jraf.android.worldtour.app.service.WorldTourService;
-import org.jraf.android.worldtour.provider.AppwidgetColumns;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetColumns;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetContentValues;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetCursor;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetSelection;
 
 public class AppwidgetManager {
     private static String TAG = Constants.TAG + AppwidgetManager.class.getSimpleName();
@@ -47,26 +47,26 @@ public class AppwidgetManager {
     public void insertOrUpdate(Context context, int appWidgetId, long webcamId, long currentWebcamId) {
         if (Config.LOGD) Log.d(TAG, "insertOrUpdate appWidgetId=" + appWidgetId + " webcamId=" + webcamId + " currentWebcamId=" + currentWebcamId);
         String[] projection = { AppwidgetColumns._ID };
-        String selection = AppwidgetColumns.APPWIDGET_ID + "=?";
-        String[] selectionArgs = { "" + appWidgetId };
+        AppwidgetSelection where = new AppwidgetSelection().appwidgetId(appWidgetId);
         ContentResolver contentResolver = context.getContentResolver();
-        Cursor cursor = contentResolver.query(AppwidgetColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+        AppwidgetCursor cursor = where.query(contentResolver, projection);
         long appWidgetLineId = -1;
         try {
             if (cursor.moveToFirst()) {
-                appWidgetLineId = cursor.getLong(0);
+                appWidgetLineId = cursor.getId();
             }
         } finally {
             if (cursor != null) cursor.close();
         }
-        ContentValues values = new ContentValues(2);
-        values.put(AppwidgetColumns.APPWIDGET_ID, appWidgetId);
-        values.put(AppwidgetColumns.WEBCAM_ID, webcamId);
-        values.put(AppwidgetColumns.CURRENT_WEBCAM_ID, currentWebcamId);
+        AppwidgetContentValues values = new AppwidgetContentValues();
+        values.putAppwidgetId(appWidgetId);
+        values.putWebcamId(webcamId);
+        values.putCurrentWebcamId(currentWebcamId);
         if (appWidgetLineId == -1) {
-            contentResolver.insert(AppwidgetColumns.CONTENT_URI, values);
+            values.insert(contentResolver);
         } else {
-            contentResolver.update(ContentUris.withAppendedId(AppwidgetColumns.CONTENT_URI, appWidgetLineId), values, null, null);
+            AppwidgetSelection whereId = new AppwidgetSelection().id(appWidgetLineId);
+            values.update(contentResolver, whereId);
         }
 
         // Schedule alarm after insertion
@@ -81,9 +81,9 @@ public class AppwidgetManager {
     public void delete(Context context, int... appWidgetIds) {
         List<Integer> idList = CollectionUtil.asList(appWidgetIds);
         if (Config.LOGD) Log.d(TAG, "delete appWidgetIds=" + idList);
-        String selection = AppwidgetColumns.APPWIDGET_ID + " in (" + TextUtils.join(",", idList) + ")";
+        AppwidgetSelection where = new AppwidgetSelection().appwidgetId(appWidgetIds);
         ContentResolver contentResolver = context.getContentResolver();
-        contentResolver.delete(AppwidgetColumns.CONTENT_URI, selection, null);
+        where.delete(contentResolver);
 
         // Disable alarm if there are no more widgets
         int count = getWidgetCount(context);
@@ -114,12 +114,11 @@ public class AppwidgetManager {
 
     public long getCurrentWebcamId(Context context, int appwidgetId) {
         String[] projection = { AppwidgetColumns.CURRENT_WEBCAM_ID };
-        String selection = AppwidgetColumns.APPWIDGET_ID + "=?";
-        String[] selectionArgs = { "" + appwidgetId };
-        final Cursor cursor = context.getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, selection, selectionArgs, null);
+        AppwidgetSelection where = new AppwidgetSelection().appwidgetId(appwidgetId);
+        AppwidgetCursor cursor = where.query(context.getContentResolver(), projection);
         try {
             if (cursor.moveToFirst()) {
-                return cursor.getLong(0);
+                return cursor.getCurrentWebcamId();
             }
             return Constants.WEBCAM_ID_NONE;
         } finally {

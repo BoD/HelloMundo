@@ -21,7 +21,7 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.file.FileUtil;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.provider.WebcamType;
+import org.jraf.android.worldtour.provider.webcam.WebcamType;
 
 public class WebcamInfo {
     public String name;
@@ -31,7 +31,7 @@ public class WebcamInfo {
     public String url;
     public String httpReferer;
     public String localBitmapUriStr;
-    public int type;
+    public WebcamType type;
 
     public String getShareText(Context context) {
         String date = DateFormat.getDateFormat(context).format(new Date()) + ", ";

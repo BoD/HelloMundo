@@ -11,29 +11,43 @@
  */
 package org.jraf.android.worldtour.provider;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.database.DatabaseErrorHandler;
+import android.database.DefaultDatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
-import org.jraf.android.worldtour.Config;
-import org.jraf.android.worldtour.Constants;
+import org.jraf.android.latoureiffel.BuildConfig;
+import org.jraf.android.worldtour.provider.appwidget.AppwidgetColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
 
 public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
-    private static final String TAG = Constants.TAG + WorldtourSQLiteOpenHelper.class.getSimpleName();
+    private static final String TAG = WorldtourSQLiteOpenHelper.class.getSimpleName();
 
-    public static final String DATABASE_NAME = "worldtour.db";
-    private static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_FILE_NAME = "worldtour.db";
+    private static final int DATABASE_VERSION = 1;
 
     // @formatter:off
+    private static final String SQL_CREATE_TABLE_APPWIDGET = "CREATE TABLE IF NOT EXISTS "
+            + AppwidgetColumns.TABLE_NAME + " ( "
+            + AppwidgetColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + AppwidgetColumns.APPWIDGET_ID + " INTEGER NOT NULL, "
+            + AppwidgetColumns.WEBCAM_ID + " INTEGER NOT NULL, "
+            + AppwidgetColumns.CURRENT_WEBCAM_ID + " INTEGER "
+            + " );";
+
     private static final String SQL_CREATE_TABLE_WEBCAM = "CREATE TABLE IF NOT EXISTS "
             + WebcamColumns.TABLE_NAME + " ( "
             + WebcamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + WebcamColumns.TYPE + " INTEGER, "
+            + WebcamColumns.TYPE + " INTEGER NOT NULL, "
             + WebcamColumns.PUBLIC_ID + " TEXT, "
-            + WebcamColumns.NAME + " TEXT, "
+            + WebcamColumns.NAME + " TEXT NOT NULL, "
             + WebcamColumns.LOCATION + " TEXT, "
-            + WebcamColumns.URL + " TEXT, "
+            + WebcamColumns.URL + " TEXT NOT NULL, "
             + WebcamColumns.THUMB_URL + " TEXT, "
             + WebcamColumns.SOURCE_URL + " TEXT, "
             + WebcamColumns.HTTP_REFERER + " TEXT, "
@@ -44,40 +58,65 @@ public class WorldtourSQLiteOpenHelper extends SQLiteOpenHelper {
             + WebcamColumns.VISIBILITY_BEGIN_MIN + " INTEGER, "
             + WebcamColumns.VISIBILITY_END_HOUR + " INTEGER, "
             + WebcamColumns.VISIBILITY_END_MIN + " INTEGER, "
-            + WebcamColumns.ADDED_DATE + " INTEGER, "
+            + WebcamColumns.ADDED_DATE + " INTEGER NOT NULL, "
             + WebcamColumns.EXCLUDE_RANDOM + " INTEGER, "
             + WebcamColumns.COORDINATES + " TEXT "
             + " );";
 
-    private static final String SQL_CREATE_TABLE_APPWIDGET = "CREATE TABLE IF NOT EXISTS "
-            + AppwidgetColumns.TABLE_NAME + " ( "
-            + AppwidgetColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + AppwidgetColumns.APPWIDGET_ID + " INTEGER, "
-            + AppwidgetColumns.WEBCAM_ID + " TEXT, "
-            + AppwidgetColumns.CURRENT_WEBCAM_ID + " TEXT "
-            + " );";
-    
     private static final String SQL_UPDATE_TABLE_APPWIDGET_2  = "ALTER TABLE "
             + AppwidgetColumns.TABLE_NAME + " "
             + "ADD COLUMN " + AppwidgetColumns.CURRENT_WEBCAM_ID + " TEXT "
             + " ;";
-
+    
     // @formatter:on
 
-    public WorldtourSQLiteOpenHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    public static WorldtourSQLiteOpenHelper newInstance(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            return newInstancePreHoneycomb(context);
+        }
+        return newInstancePostHoneycomb(context);
     }
+
+
+    /*
+     * Pre Honeycomb.
+     */
+
+    private static WorldtourSQLiteOpenHelper newInstancePreHoneycomb(Context context) {
+        return new WorldtourSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+    }
+
+    private WorldtourSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+
+    /*
+     * Post Honeycomb.
+     */
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static WorldtourSQLiteOpenHelper newInstancePostHoneycomb(Context context) {
+        return new WorldtourSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private WorldtourSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+        super(context, name, factory, version, errorHandler);
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (Config.LOGD) Log.d(TAG, "onCreate");
-        db.execSQL(SQL_CREATE_TABLE_WEBCAM);
+        if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
         db.execSQL(SQL_CREATE_TABLE_APPWIDGET);
+        db.execSQL(SQL_CREATE_TABLE_WEBCAM);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (Config.LOGD) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        if (BuildConfig.DEBUG) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
         if (newVersion == 2) {
             db.execSQL(SQL_UPDATE_TABLE_APPWIDGET_2);
         }

@@ -2,75 +2,98 @@
 	"fields": [
 		{
 			"name": "type",
-			"type": "integer"
+			"type": "enum",
+			"enumName": "WebcamType",
+			"enumValues": [
+				"SERVER",
+				"USER",
+			],
+			"nullable": false,
 		},
 		{
 			"name": "public_id",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 		{
 			"name": "name",
-			"type": "text"
+			"type": "String",
+			"nullable": false,
 		},
 		{
 			"name": "location",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 		{
 			"name": "url",
-			"type": "text"
+			"type": "String",
+			"nullable": false,
 		},
 		{
 			"name": "thumb_url",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 		{
 			"name": "source_url",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 		{
 			"name": "http_referer",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 		{
 			"name": "timezone",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 		{
 			"name": "resize_width",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": true,
 		},
 		{
 			"name": "resize_height",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": true,
 		},
 		{
 			"name": "visibility_begin_hour",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": true,
 		},
 		{
 			"name": "visibility_begin_min",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": true,
 		},
 		{
 			"name": "visibility_end_hour",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": true,
 		},
 		{
 			"name": "visibility_end_min",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": true,
 		},
 		{
 			"name": "added_date",
-			"type": "integer"
+			"type": "Long",
+			"nullable": false,
 		},
 		{
 			"name": "exclude_random",
-			"type": "integer"
+			"type": "Boolean",
+			"nullable": true,
 		},
 		{
 			"name": "coordinates",
-			"type": "text"
+			"type": "String",
+			"nullable": true,
 		},
 	]
 }

@@ -14,11 +14,8 @@ package org.jraf.android.worldtour.app.pickwebcam;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.content.ContentUris;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +31,9 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
 import org.jraf.android.worldtour.Constants;
-import org.jraf.android.worldtour.provider.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamColumns;
+import org.jraf.android.worldtour.provider.webcam.WebcamCursor;
+import org.jraf.android.worldtour.provider.webcam.WebcamSelection;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
@@ -84,8 +83,8 @@ public class PreviewDialogFragment extends DialogFragment {
             protected Bitmap doInBackground(Void... params) {
                 if (!isAdded()) return null;
                 String[] projection = { WebcamColumns.URL, WebcamColumns.HTTP_REFERER };
-                Uri uri = ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, mWebcamId);
-                Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+                WebcamSelection where = new WebcamSelection().id(mWebcamId);
+                WebcamCursor cursor = where.query(getActivity().getContentResolver(), projection);
                 String url = null;
                 String httpReferer = null;
                 try {
@@ -93,8 +92,8 @@ public class PreviewDialogFragment extends DialogFragment {
                         Log.w(TAG, "doInBackground Could not find webcam with webcamId=" + mWebcamId);
                         return null;
                     }
-                    url = cursor.getString(0);
-                    httpReferer = cursor.getString(1);
+                    url = cursor.getUrl();
+                    httpReferer = cursor.getHttpReferer();
                 } finally {
                     if (cursor != null) cursor.close();
                 }

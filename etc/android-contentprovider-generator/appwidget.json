@@ -2,15 +2,18 @@
 	"fields": [
 		{
 			"name": "appwidget_id",
-			"type": "integer"
+			"type": "Integer",
+			"nullable": false,
 		},
 		{
 			"name": "webcam_id",
-			"type": "text"
+			"type": "Long",
+			"nullable": false,
 		},
 		{
 			"name": "current_webcam_id",
-			"type": "text"
+			"type": "Long",
+			"nullable": true,
 		},
 	]
 }

@@ -20,9 +20,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.provider.appwidget.AppwidgetColumns;
@@ -31,10 +29,9 @@ import org.jraf.android.hellomundo.provider.appwidget.AppwidgetCursor;
 import org.jraf.android.hellomundo.provider.appwidget.AppwidgetSelection;
 import org.jraf.android.util.annotation.Background;
 import org.jraf.android.util.collection.CollectionUtil;
+import org.jraf.android.util.log.wrapper.Log;
 
 public class AppwidgetManager {
-    private static String TAG = Constants.TAG + AppwidgetManager.class.getSimpleName();
-
     private static final AppwidgetManager INSTANCE = new AppwidgetManager();
 
     public static AppwidgetManager get() {
@@ -45,7 +42,7 @@ public class AppwidgetManager {
 
     @Background
     public void insertOrUpdate(Context context, int appWidgetId, long webcamId, long currentWebcamId) {
-        if (Config.LOGD) Log.d(TAG, "insertOrUpdate appWidgetId=" + appWidgetId + " webcamId=" + webcamId + " currentWebcamId=" + currentWebcamId);
+        Log.d("appWidgetId=" + appWidgetId + " webcamId=" + webcamId + " currentWebcamId=" + currentWebcamId);
         String[] projection = { AppwidgetColumns._ID };
         AppwidgetSelection where = new AppwidgetSelection().appwidgetId(appWidgetId);
         ContentResolver contentResolver = context.getContentResolver();
@@ -80,7 +77,7 @@ public class AppwidgetManager {
     @Background
     public void delete(Context context, int... appWidgetIds) {
         List<Integer> idList = CollectionUtil.asList(appWidgetIds);
-        if (Config.LOGD) Log.d(TAG, "delete appWidgetIds=" + idList);
+        Log.d("appWidgetIds=" + idList);
         AppwidgetSelection where = new AppwidgetSelection().appwidgetId(appWidgetIds);
         ContentResolver contentResolver = context.getContentResolver();
         where.delete(contentResolver);
@@ -88,7 +85,7 @@ public class AppwidgetManager {
         // Disable alarm if there are no more widgets
         int count = getWidgetCount(context);
         if (count == 0) {
-            if (Config.LOGD) Log.d(TAG, "delete Count=0, canceling alarm");
+            Log.d("Count=0, canceling alarm");
             PendingIntent widgetsPendingIntent = HelloMundoService.getWidgetsAlarmPendingIntent(context);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(widgetsPendingIntent);
@@ -101,7 +98,7 @@ public class AppwidgetManager {
         try {
             if (cursor == null) return 0;
             int res = cursor.getCount();
-            if (Config.LOGD) Log.d(TAG, "getWidgetCount res=" + res);
+            Log.d("res=" + res);
             return res;
         } finally {
             if (cursor != null) cursor.close();

@@ -20,26 +20,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.hellomundo.provider.webcam.WebcamCursor;
 import org.jraf.android.hellomundo.provider.webcam.WebcamSelection;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
+import org.jraf.android.util.log.wrapper.Log;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
 public class PreviewDialogFragment extends DialogFragment {
-    private static final String TAG = Constants.TAG + PreviewDialogFragment.class.getSimpleName();
-
     private long mWebcamId;
 
     private View mPgbLoading;
@@ -89,7 +86,7 @@ public class PreviewDialogFragment extends DialogFragment {
                 String httpReferer = null;
                 try {
                     if (cursor == null || !cursor.moveToFirst()) {
-                        Log.w(TAG, "doInBackground Could not find webcam with webcamId=" + mWebcamId);
+                        Log.d("Could not find webcam with webcamId=" + mWebcamId);
                         return null;
                     }
                     url = cursor.getUrl();
@@ -104,14 +101,14 @@ public class PreviewDialogFragment extends DialogFragment {
                     if (httpReferer != null) httpRequest.referer(httpReferer);
                     inputStream = httpRequest.stream();
                 } catch (IOException e) {
-                    Log.w(TAG, "doInBackground Could not download webcam with webcamId=" + mWebcamId, e);
+                    Log.w("Could not download webcam with webcamId=" + mWebcamId, e);
                     return null;
                 }
 
                 try {
                     return BitmapFactory.decodeStream(inputStream);
                 } catch (Throwable t) {
-                    Log.w(TAG, "doInBackground Could not decode stream", t);
+                    Log.w("Could not decode stream", t);
                     return null;
                 } finally {
                     IoUtil.closeSilently(inputStream);

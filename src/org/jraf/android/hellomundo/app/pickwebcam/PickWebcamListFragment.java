@@ -26,7 +26,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,16 +35,14 @@ import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.hellomundo.provider.webcam.WebcamCursor;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.dialog.AlertDialogFragment;
+import org.jraf.android.util.log.wrapper.Log;
 
 public class PickWebcamListFragment extends ListFragment implements LoaderCallbacks<Cursor>, WebcamCallbacks {
-    private static final String TAG = Constants.TAG + PickWebcamListFragment.class.getSimpleName();
-
     private WebcamAdapter mAdapter;
     private boolean mHasAnimated;
 
@@ -106,7 +103,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if (Config.LOGD) Log.d(TAG, "onListItemClick position=" + position + " id=" + id);
+        Log.d("position=" + position + " id=" + id);
         long res;
         if (position == 0) {
             // Random webcam
@@ -114,7 +111,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
         } else {
             res = id;
         }
-        if (Config.LOGD) Log.d(TAG, "onListItemClick res=" + res);
+        Log.d("res=" + res);
         getActivity().setResult(Activity.RESULT_OK, new Intent().setData(ContentUris.withAppendedId(WebcamColumns.CONTENT_URI, res)));
         getActivity().finish();
     }
@@ -156,7 +153,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public void setExcludedFromRandom(final long id, final boolean excluded) {
-        if (Config.LOGD) Log.d(TAG, "setExcludedFromRandom id=" + id + " excluded=" + excluded);
+        Log.d("id=" + id + " excluded=" + excluded);
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -177,7 +174,7 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public void showOnMap(String coordinates, String label) {
-        if (Config.LOGD) Log.d(TAG, "showOnMap coordinates=" + coordinates + " label=" + label);
+        Log.d("coordinates=" + coordinates + " label=" + label);
         String uri;
         try {
             uri = "geo:" + coordinates + "?z=5&q=" + coordinates + "(" + URLEncoder.encode(label, "utf-8") + ")";
@@ -190,13 +187,13 @@ public class PickWebcamListFragment extends ListFragment implements LoaderCallba
 
     @Override
     public void showPreview(long id) {
-        if (Config.LOGD) Log.d(TAG, "showPreview id=" + id);
+        Log.d("id=" + id);
         PreviewDialogFragment.newInstance(id).show(getFragmentManager(), "dialog");
     }
 
     @Override
     public void delete(long id) {
-        if (Config.LOGD) Log.d(TAG, "delete id=" + id);
+        Log.d("id=" + id);
         AlertDialogFragment.newInstance(0, R.string.common_confirmation, R.string.pickWebcam_deleteConfirmDialog_message, 0, android.R.string.yes,
                 android.R.string.no, id).show(getFragmentManager());
 

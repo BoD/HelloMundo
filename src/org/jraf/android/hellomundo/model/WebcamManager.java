@@ -22,9 +22,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.hellomundo.provider.webcam.WebcamContentValues;
@@ -36,10 +34,9 @@ import org.jraf.android.util.annotation.Background;
 import org.jraf.android.util.annotation.Background.Type;
 import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
+import org.jraf.android.util.log.wrapper.Log;
 
 public class WebcamManager {
-    private static String TAG = Constants.TAG + WebcamManager.class.getSimpleName();
-
     private static String URL_DATABASE = "http://lubek.b.free.fr/data7.csv";
 
     private static String HTTP = "http://";
@@ -55,13 +52,13 @@ public class WebcamManager {
 
     @Background
     public void insertWebcamsFromBundledFile(Context context) {
-        if (Config.LOGD) Log.d(TAG, "insertWebcamsFromBundledFile");
+        Log.d();
         InputStream inputStream = context.getResources().openRawResource(R.raw.data7);
         ContentResolver contentResolver = context.getContentResolver();
         try {
             insertWebcams(inputStream, contentResolver);
         } catch (IOException e) {
-            Log.e(TAG, "Could not insert webcams from bundled file", e);
+            Log.e("Could not insert webcams from bundled file", e);
         }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         preferences.edit().putLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, System.currentTimeMillis()).commit();
@@ -219,7 +216,7 @@ public class WebcamManager {
         WebcamCursor cursor = where.query(context.getContentResolver(), projection);
         try {
             if (cursor == null || !cursor.moveToFirst()) {
-                Log.w(TAG, "getDownloadInfo Could not find webcam with webcamId=" + webcamId);
+                Log.d("Could not find webcam with webcamId=" + webcamId);
                 return "Unknown";
             }
             return cursor.getPublicId();

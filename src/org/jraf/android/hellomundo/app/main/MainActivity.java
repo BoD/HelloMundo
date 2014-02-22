@@ -27,7 +27,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -38,7 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jraf.android.backport.switchwidget.Switch;
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.about.AboutActivity;
 import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentActivity;
@@ -58,6 +56,8 @@ import org.jraf.android.util.async.Task;
 import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.bitmap.BitmapUtil;
 import org.jraf.android.util.datetime.DateTimeUtil;
+import org.jraf.android.util.log.wrapper.Log;
+import org.jraf.android.util.string.StringUtil;
 import org.jraf.android.util.ui.UiUtil;
 
 import com.actionbarsherlock.view.Menu;
@@ -65,8 +65,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
-    private static String TAG = Constants.TAG + MainActivity.class.getSimpleName();
-
     private static final int REQUEST_PICK_WEBCAM = 0;
     private static final int REQUEST_SETTINGS = 1;
 
@@ -161,7 +159,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
         switch (requestCode) {
             case REQUEST_PICK_WEBCAM:
                 long selectedWebcamId = ContentUris.parseId(data.getData());
-                if (Config.LOGD) Log.d(TAG, "onActivityResult selectedWebcamId=" + selectedWebcamId);
+                Log.d("selectedWebcamId=" + selectedWebcamId);
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putLong(Constants.PREF_SELECTED_WEBCAM_ID, selectedWebcamId).commit();
                 updateWebcamRandom();
                 HelloMundoService.updateWallpaperNow(this);
@@ -181,7 +179,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
 
     @Background
     private void handleFirstRun() {
-        if (Config.LOGD) Log.d(TAG, "handleFirstRun");
+        Log.d();
         WebcamManager.get().insertWebcamsFromBundledFile(this);
     }
 
@@ -254,7 +252,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Config.LOGD) Log.d(TAG, "onReceive context=" + context + " intent=" + intent);
+            Log.d("intent=" + StringUtil.toString(intent));
             String action = intent.getAction();
             if (HelloMundoService.ACTION_UPDATE_WALLPAPER_START.equals(action)) {
                 updateWebcamName();
@@ -483,7 +481,7 @@ public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
     }
 
     private void showWelcomeScreen(Rect rectPick, Rect rectSwiOnOff) {
-        if (Config.LOGD) Log.d(TAG, "showWelcomeScreen rectPick=" + rectPick + " rectSwiOnOff=" + rectSwiOnOff);
+        Log.d("rectPick=" + rectPick + " rectSwiOnOff=" + rectSwiOnOff);
         startActivity(new Intent(this, WelcomeActivity.class).putExtra(WelcomeActivity.EXTRA_RECT_PICK, rectPick).putExtra(WelcomeActivity.EXTRA_RECT_SWITCH,
                 rectSwiOnOff));
     }

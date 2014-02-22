@@ -21,7 +21,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -31,10 +30,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
+import org.jraf.android.util.log.wrapper.Log;
 
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
@@ -42,8 +41,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 
 public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
-    private static final String TAG = Constants.TAG + WelcomeActivity.class.getSimpleName();
-
     private static final String PREFIX = WelcomeActivity.class.getName() + ".";
     public static final String EXTRA_RECT_PICK = PREFIX + "EXTRA_RECT_PICK";
     public static final String EXTRA_RECT_SWITCH = PREFIX + "EXTRA_RECT_SWITCH";
@@ -89,7 +86,7 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
     }
 
     private void setShowCasePosition(View view, Rect r) {
-        if (Config.LOGD) Log.d(TAG, "setShowCasePosition r=" + r);
+        Log.d("r=" + r);
         Rect rect = new Rect(r);
         if (rect.top > 0) {
             int margin = getResources().getDimensionPixelSize(R.dimen.welcome_showCase_margin);
@@ -307,7 +304,7 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
                     Rect rectPick = getIntent().getParcelableExtra(EXTRA_RECT_PICK);
                     if (rectPick == null) {
                         // This should never happen, but for some reason ACRA reports show this happening
-                        Log.w(TAG, "instantiateItem rectPick=null");
+                        Log.w("rectPick=null");
                         break;
                     }
                     LayoutParams layoutParams = imgArrowUp.getLayoutParams();
@@ -325,7 +322,7 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
                     Rect rectSwitch = getIntent().getParcelableExtra(EXTRA_RECT_SWITCH);
                     if (rectSwitch == null) {
                         // This should never happen, but for some reason ACRA reports show this happening
-                        Log.w(TAG, "instantiateItem rectSwitch=null");
+                        Log.w("ectSwitch=null");
                         break;
                     }
                     setShowCasePosition(view, rectSwitch);
@@ -384,7 +381,7 @@ public class WelcomeActivity extends LifecycleDispatchFragmentActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (Config.LOGD) Log.d(TAG, "onConfigurationChanged");
+        Log.d();
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(Constants.PREF_WELCOME_RESUME_INDEX, mViewPager.getCurrentItem()).commit();
         finish();
     }

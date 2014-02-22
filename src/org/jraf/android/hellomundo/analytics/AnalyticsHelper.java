@@ -12,15 +12,12 @@
 package org.jraf.android.hellomundo.analytics;
 
 import android.app.Activity;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Constants;
+import org.jraf.android.util.log.wrapper.Log;
 
 import com.google.analytics.tracking.android.EasyTracker;
 
 public class AnalyticsHelper {
-    private static final String TAG = Constants.TAG + AnalyticsHelper.class.getSimpleName();
-
     private static final AnalyticsHelper INSTANCE = new AnalyticsHelper();
 
     public static AnalyticsHelper get() {
@@ -33,7 +30,7 @@ public class AnalyticsHelper {
         try {
             EasyTracker.getInstance().activityStart(activity);
         } catch (Exception e) {
-            Log.w(TAG, "An exception occured while calling Google Analytics", e);
+            Log.w("An exception occured while calling Google Analytics", e);
         }
     }
 
@@ -41,7 +38,7 @@ public class AnalyticsHelper {
         try {
             EasyTracker.getInstance().activityStop(activity);
         } catch (Exception e) {
-            Log.w(TAG, "An exception occured while calling Google Analytics", e);
+            Log.w("An exception occured while calling Google Analytics", e);
         }
     }
 
@@ -49,7 +46,7 @@ public class AnalyticsHelper {
         try {
             EasyTracker.getTracker().sendEvent(category, action, label, null);
         } catch (Exception e) {
-            Log.w(TAG, "An exception occured while calling Google Analytics", e);
+            Log.w("An exception occured while calling Google Analytics", e);
         }
     }
 }

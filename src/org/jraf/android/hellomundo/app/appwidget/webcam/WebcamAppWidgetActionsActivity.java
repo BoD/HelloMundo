@@ -20,25 +20,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.jraf.android.hellomundo.Config;
-import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareListener;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
+import org.jraf.android.util.log.wrapper.Log;
 import org.jraf.android.util.string.StringUtil;
 
 public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentActivity implements OnClickListener, SaveShareListener {
-    private static final String TAG = Constants.TAG + WebcamAppWidgetActionsActivity.class.getSimpleName();
-
     private static final String PREFIX = WebcamAppWidgetActionsActivity.class.getName() + ".";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
 
@@ -49,7 +45,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Config.LOGD) Log.d(TAG, "onCreate intent=" + StringUtil.toString(getIntent()));
+        Log.d("intent=" + StringUtil.toString(getIntent()));
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -129,7 +125,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
 
         @Override
         public void onDismiss(DialogInterface dialog) {
-            if (Config.LOGD) Log.d(TAG, "onDismiss");
+            Log.d();
             FragmentActivity activity = getActivity();
             if (activity != null) activity.finish();
         }
@@ -146,7 +142,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if (Config.LOGD) Log.d(TAG, "onClick which=" + which);
+        Log.d("which=" + which);
         // We don't finish the activity right now, so remove the OnDismissListener
         ((Dialog) dialog).setOnDismissListener(null);
         dialog.dismiss();

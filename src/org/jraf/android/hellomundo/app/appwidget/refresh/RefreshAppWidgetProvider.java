@@ -17,23 +17,19 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.util.Log;
 import android.widget.RemoteViews;
 
-import org.jraf.android.hellomundo.Config;
-import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.log.wrapper.Log;
 import org.jraf.android.util.string.StringUtil;
 
 public class RefreshAppWidgetProvider extends AppWidgetProvider {
-    private static String TAG = Constants.TAG + RefreshAppWidgetProvider.class.getSimpleName();
-
     private static volatile boolean sAnimate;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Config.LOGD) Log.d(TAG, "onReceive intent=" + StringUtil.toString(intent));
+        Log.d("intent=" + StringUtil.toString(intent));
 
         String action = intent.getAction();
         if (HelloMundoService.ACTION_UPDATE_START.equals(action)) {
@@ -52,14 +48,14 @@ public class RefreshAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        if (Config.LOGD) Log.d(TAG, "onUpdate");
+        Log.d();
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
     public void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        if (Config.LOGD) Log.d(TAG, "updateAppWidget appWidgetId=" + appWidgetId);
+        Log.d("appWidgetId=" + appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget_refresh);
         views.setOnClickPendingIntent(R.id.image, HelloMundoService.getUpdateAllPendingIntent(context));
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -80,22 +76,22 @@ public class RefreshAppWidgetProvider extends AppWidgetProvider {
 
                         switch (anim % 4) {
                             case 0:
-                                if (Config.LOGD) Log.d(TAG, "run0");
+                                Log.d("run0");
                                 views.setImageViewResource(R.id.image, R.drawable.widget_refresh_0);
                                 appWidgetManager.updateAppWidget(appWidgetId, views);
                                 break;
                             case 1:
-                                if (Config.LOGD) Log.d(TAG, "run1");
+                                Log.d("run1");
                                 views.setImageViewResource(R.id.image, R.drawable.widget_refresh_1);
                                 appWidgetManager.updateAppWidget(appWidgetId, views);
                                 break;
                             case 2:
-                                if (Config.LOGD) Log.d(TAG, "run2");
+                                Log.d("run2");
                                 views.setImageViewResource(R.id.image, R.drawable.widget_refresh_2);
                                 appWidgetManager.updateAppWidget(appWidgetId, views);
                                 break;
                             case 3:
-                                if (Config.LOGD) Log.d(TAG, "run3");
+                                Log.d("run3");
                                 views.setImageViewResource(R.id.image, R.drawable.widget_refresh_3);
                                 appWidgetManager.updateAppWidget(appWidgetId, views);
                                 break;

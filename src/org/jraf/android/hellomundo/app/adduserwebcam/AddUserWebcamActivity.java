@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentActivity;
 import org.jraf.android.hellomundo.model.WebcamManager;
 import org.jraf.android.latoureiffel.R;
@@ -31,9 +30,6 @@ import org.jraf.android.util.validation.Validators;
 import com.actionbarsherlock.app.ActionBar;
 
 public class AddUserWebcamActivity extends LifecycleDispatchSherlockFragmentActivity {
-
-    private static String TAG = Constants.TAG + AddUserWebcamActivity.class.getSimpleName();
-
     private EditText mEdtName;
     private EditText mEdtUrl;
 

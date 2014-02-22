@@ -13,9 +13,8 @@ package org.jraf.android.hellomundo;
 
 public class Config {
 
-    // TODO: put this to false for this config!
-    public static final boolean LOGD = true;
-    public static final boolean LOGD_HTTP = true;
-    public static final boolean LOGD_PROVIDER = false;
+    public static final boolean STRICT_MODE = false;
+    public static final boolean ACRA = true;
+
 
 }

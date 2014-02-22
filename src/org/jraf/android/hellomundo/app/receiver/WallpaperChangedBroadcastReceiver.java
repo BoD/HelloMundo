@@ -18,27 +18,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
+import org.jraf.android.util.log.wrapper.Log;
+import org.jraf.android.util.string.StringUtil;
 
 public class WallpaperChangedBroadcastReceiver extends BroadcastReceiver {
-    private static final String TAG = Constants.TAG + WallpaperChangedBroadcastReceiver.class.getSimpleName();
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Config.LOGD) Log.d(TAG, "onReceive context=" + context + " intent=" + intent);
+        Log.d("intent=" + StringUtil.toString(intent));
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean wallpaperChangedInternal = sharedPreferences.getBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL,
                 Constants.PREF_WALLPAPER_CHANGED_INTERNAL_DEFAULT);
         if (wallpaperChangedInternal) {
-            if (Config.LOGD) Log.d(TAG, "onReceive Wallpaper changed internally");
+            Log.d("Wallpaper changed internally");
             // Update flag
             sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, false).commit();
         } else {
-            if (Config.LOGD) Log.d(TAG, "onReceive Wallpaper changed by external app: disabling service and alarm");
+            Log.d("Wallpaper changed by external app: disabling service and alarm");
             // Disable setting
             sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
 

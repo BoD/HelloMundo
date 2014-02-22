@@ -13,19 +13,15 @@ package org.jraf.android.hellomundo.app.appwidget.webcam;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Config;
-import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.model.AppwidgetManager;
 import org.jraf.android.util.collection.CollectionUtil;
+import org.jraf.android.util.log.wrapper.Log;
 
 public class WebcamAppWidgetProvider extends AppWidgetProvider {
-    private static final String TAG = Constants.TAG + WebcamAppWidgetProvider.class.getSimpleName();
-
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        if (Config.LOGD) Log.d(TAG, "onDeleted context=" + context + " appWidgetIds=" + CollectionUtil.asList(appWidgetIds));
+        Log.d("context=" + context + " appWidgetIds=" + CollectionUtil.asList(appWidgetIds));
         AppwidgetManager.get().delete(context, appWidgetIds);
     }
 }

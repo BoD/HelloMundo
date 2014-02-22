@@ -18,22 +18,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.model.AppwidgetManager;
+import org.jraf.android.util.log.wrapper.Log;
+import org.jraf.android.util.string.StringUtil;
 
 public class BootCompletedBroadcastReceiver extends BroadcastReceiver {
-    private static final String TAG = Constants.TAG + BootCompletedBroadcastReceiver.class.getSimpleName();
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Config.LOGD) Log.d(TAG, "onReceive context=" + context + " intent=" + intent);
+        Log.d("intent=" + StringUtil.toString(intent));
         boolean wallpaperEnabled = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER,
                 Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
-        if (Config.LOGD) Log.d(TAG, "onReceive wallpaperEnabled=" + wallpaperEnabled);
+        Log.d("wallpaperEnabled=" + wallpaperEnabled);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long interval = Long.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(Constants.PREF_UPDATE_INTERVAL,
                 Constants.PREF_UPDATE_INTERVAL_DEFAULT));

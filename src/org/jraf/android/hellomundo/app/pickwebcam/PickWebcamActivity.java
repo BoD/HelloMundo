@@ -20,10 +20,8 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.adduserwebcam.AddUserWebcamActivity;
 import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentActivity;
@@ -33,14 +31,13 @@ import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.async.Task;
 import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.dialog.AlertDialogListener;
+import org.jraf.android.util.log.wrapper.Log;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivity implements AlertDialogListener {
-    private static final String TAG = Constants.TAG + PickWebcamActivity.class.getSimpleName();
-
     private static final int REQUEST_NEW_WEBCAM = 0;
     private static final String PREFIX = PickWebcamActivity.class.getName() + ".";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
@@ -95,7 +92,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
                     @Override
                     public void run() {
                         int position = pickWebcamListFragment.getListAdapter().getCount() - 1;
-                        if (Config.LOGD) Log.d(TAG, "position=" + position);
+                        Log.d("position=" + position);
                         pickWebcamListFragment.getListView().setSelection(position);
                     }
                 }, 200);
@@ -123,7 +120,7 @@ public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivit
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(PickWebcamActivity.this);
                 long selectedWebcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
                 if (id == selectedWebcamId) {
-                    if (Config.LOGD) Log.d(TAG, "onClickPositive User deleted currently selected webcam: reset to defaults");
+                    Log.d("User deleted currently selected webcam: reset to defaults");
                     Editor editor = sharedPreferences.edit();
                     editor.putLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
                     editor.putLong(Constants.PREF_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);

@@ -27,9 +27,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.model.AppwidgetManager;
 import org.jraf.android.hellomundo.model.WebcamInfo;
@@ -44,12 +42,11 @@ import org.jraf.android.util.async.TaskFragment;
 import org.jraf.android.util.dialog.AlertDialogFragment;
 import org.jraf.android.util.environment.EnvironmentUtil;
 import org.jraf.android.util.io.IoUtil;
+import org.jraf.android.util.log.wrapper.Log;
 import org.jraf.android.util.mediascanner.MediaScannerUtil;
 import org.jraf.android.util.mediascanner.MediaScannerUtil.OnScanCompletedListener;
 
 public class SaveShareHelper {
-    private static final String TAG = Constants.TAG + SaveShareHelper.class.getSimpleName();
-
     public static final int WALLPAPER = -1;
 
     private static final SaveShareHelper INSTANCE = new SaveShareHelper();
@@ -69,7 +66,7 @@ public class SaveShareHelper {
     }
 
     public void saveImage(FragmentManager fragmentManager, final int appwidgetId) {
-        if (Config.LOGD) Log.d(TAG, "saveImage appwidgetId=" + appwidgetId);
+        Log.d("appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
             AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, (Serializable) null).show(fragmentManager);
             return;
@@ -93,7 +90,7 @@ public class SaveShareHelper {
 
 
     public void shareImage(FragmentManager fragmentManager, final int appwidgetId) {
-        if (Config.LOGD) Log.d(TAG, "shareImage appwidgetId=" + appwidgetId);
+        Log.d("appwidgetId=" + appwidgetId);
         if (!EnvironmentUtil.isExternalStorageMountedReadWrite()) {
             AlertDialogFragment.newInstance(0, 0, R.string.main_dialog_noSdCard, 0, android.R.string.ok, 0, (Serializable) null).show(fragmentManager);
             return;
@@ -164,7 +161,7 @@ public class SaveShareHelper {
         MediaScannerUtil.scanFile(context, new String[] { file.getPath() }, null, new OnScanCompletedListener() {
             @Override
             public void onScanCompleted(String p, Uri uri) {
-                if (Config.LOGD) Log.d(TAG, "onScanCompleted path=" + p + " uri=" + uri);
+                Log.d("path=" + p + " uri=" + uri);
                 scannedImageUri.set(uri);
             }
         });
@@ -172,7 +169,7 @@ public class SaveShareHelper {
         // Wait until the media scanner has found our file
         long start = System.currentTimeMillis();
         while (scannedImageUri.get() == null) {
-            if (Config.LOGD) Log.d(TAG, "saveAndInsertImage Waiting 250ms for media scanner...");
+            Log.d("Waiting 250ms for media scanner...");
             SystemClock.sleep(250);
             if (System.currentTimeMillis() - start > 5000) {
                 throw new Exception("MediaScanner did not scan the file " + file + " after 5000ms");
@@ -189,7 +186,7 @@ public class SaveShareHelper {
         WebcamCursor cursor = where.query(context.getContentResolver(), projection);
         try {
             if (cursor == null || !cursor.moveToFirst()) {
-                Log.e(TAG, "Could not find webcam with id=" + webcamId);
+                Log.w("Could not find webcam with id=" + webcamId);
                 return null;
             }
             WebcamInfo res = new WebcamInfo();

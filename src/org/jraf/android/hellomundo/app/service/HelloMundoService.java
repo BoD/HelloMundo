@@ -43,11 +43,9 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import org.jraf.android.hellomundo.Config;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.analytics.AnalyticsHelper;
 import org.jraf.android.hellomundo.app.appwidget.webcam.WebcamAppWidgetActionsActivity;
@@ -62,13 +60,15 @@ import org.jraf.android.hellomundo.provider.webcam.WebcamSelection;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.http.HttpUtil;
 import org.jraf.android.util.io.IoUtil;
+import org.jraf.android.util.log.wrapper.Log;
+import org.jraf.android.util.string.StringUtil;
 
 import ca.rmen.sunrisesunset.SunriseSunset;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
 public class HelloMundoService extends IntentService {
-    private static final String TAG = Constants.TAG + HelloMundoService.class.getSimpleName();
+    private static final String TAG = HelloMundoService.class.getSimpleName();
 
     private static final String PREFIX = HelloMundoService.class.getName() + ".";
 
@@ -96,7 +96,7 @@ public class HelloMundoService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (Config.LOGD) Log.d(TAG, "onHandleIntent intent=" + intent);
+        Log.d("intent=" + StringUtil.toString(intent));
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         refreshDatabaseFromNetworkIfNeeded(sharedPreferences);
@@ -127,7 +127,7 @@ public class HelloMundoService extends IntentService {
      */
 
     private void updateWallpaper(Intent intent, SharedPreferences sharedPreferences, boolean avoidNight) {
-        if (Config.LOGD) Log.d(TAG, "updateWallpaper");
+        Log.d();
         long webcamId = sharedPreferences.getLong(Constants.PREF_SELECTED_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
 
         // Analytics
@@ -138,12 +138,12 @@ public class HelloMundoService extends IntentService {
             isRandom = true;
             Long randomWebcamId = getRandomWebcamId(avoidNight);
             if (randomWebcamId == null) {
-                Log.w(TAG, "updateWallpaper Could not get random webcam id");
+                Log.w("Could not get random webcam id");
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             }
             webcamId = randomWebcamId;
-            if (Config.LOGD) Log.d(TAG, "updateWallpaper Random cam: " + webcamId);
+            Log.d("Random cam: " + webcamId);
         }
 
         sharedPreferences.edit().putLong(Constants.PREF_CURRENT_WEBCAM_ID, webcamId).commit();
@@ -168,13 +168,13 @@ public class HelloMundoService extends IntentService {
 
         // If enabled, update the wallpaper with the contents of the file
         boolean enabled = sharedPreferences.getBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, Constants.PREF_AUTO_UPDATE_WALLPAPER_DEFAULT);
-        if (Config.LOGD) Log.d(TAG, "updateWallpaper enabled=" + enabled);
+        Log.d("enabled=" + enabled);
         if (enabled) {
             // If this is triggered by an alarm, we first check if the current wallpaper is a live wallpaper.
             // This would mean the current wallpaper has been manually changed by the user, and so we should disable ourself.
             if (intent.getBooleanExtra(HelloMundoService.EXTRA_FROM_ALARM, false)) {
                 if (WallpaperManager.getInstance(this).getWallpaperInfo() != null) {
-                    if (Config.LOGD) Log.d(TAG, "updateWallpaper Current wallpaper is a live wallpaper: disabling service and alarm");
+                    Log.d("Current wallpaper is a live wallpaper: disabling service and alarm");
                     // Disable setting
                     sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
 
@@ -196,12 +196,12 @@ public class HelloMundoService extends IntentService {
                 imageInputStream = openFileInput(wantDimmed || wantShowInfo ? Constants.FILE_IMAGE_WALLPAPER_EDITED : Constants.FILE_IMAGE_WALLPAPER);
                 WallpaperManager.getInstance(this).setStream(imageInputStream);
             } catch (IOException e) {
-                Log.w(TAG, "updateWallpaper Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
+                Log.w("Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             } catch (SecurityException e) {
                 // This happens, for instance, on a ALCATEL ONE TOUCH 997D
-                Log.w(TAG, "updateWallpaper Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
+                Log.w("Problem while calling WallpaperManager.setStream with webcamId=" + webcamId, e);
                 sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
                 return;
             } finally {
@@ -218,14 +218,14 @@ public class HelloMundoService extends IntentService {
      */
 
     private void updateWidgets(Intent intent, final SharedPreferences sharedPreferences, final boolean avoidNight) {
-        if (Config.LOGD) Log.d(TAG, "updateWidgets");
+        Log.d();
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         String[] projection = { AppwidgetColumns.APPWIDGET_ID, AppwidgetColumns.WEBCAM_ID };
         final Cursor c = getContentResolver().query(AppwidgetColumns.CONTENT_URI, projection, null, null, null);
         final AppwidgetCursor cursor = new AppwidgetCursor(c);
         try {
             int count = cursor.getCount();
-            if (Config.LOGD) Log.d(TAG, "updateWidgets count=" + count);
+            Log.d("count=" + count);
             if (count == 0) {
                 // Inform listeners that all the widgets have been updated
                 sendBroadcast(new Intent(ACTION_UPDATE_END));
@@ -236,12 +236,12 @@ public class HelloMundoService extends IntentService {
             while (cursor.moveToNext()) {
                 final int appwidgetId = cursor.getAppwidgetId();
                 final long finalWebcamId = cursor.getWebcamId();
-                if (Config.LOGD) Log.d(TAG, "updateWidgets Submitting runnable");
+                Log.d("Submitting runnable");
                 Future<?> future = threadPool.submit(new Runnable() {
                     @Override
                     public void run() {
                         long webcamId = finalWebcamId;
-                        if (Config.LOGD) Log.d(TAG, "updateWidgets appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
+                        Log.d("appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
 
                         AppWidgetProviderInfo info = appWidgetManager.getAppWidgetInfo(appwidgetId);
                         if (info == null) {
@@ -256,11 +256,11 @@ public class HelloMundoService extends IntentService {
                         if (webcamId == Constants.WEBCAM_ID_RANDOM) {
                             Long randomWebcamId = getRandomWebcamId(avoidNight);
                             if (randomWebcamId == null) {
-                                Log.w(TAG, "updateWidgets Could not get random webcam id");
+                                Log.d("Could not get random webcam id");
                                 return;
                             }
                             webcamId = randomWebcamId;
-                            if (Config.LOGD) Log.d(TAG, "updateWidgets Random cam: " + webcamId);
+                            Log.d("Random cam: " + webcamId);
                         }
 
                         WebcamInfo webcamInfo = getWebcamInfo(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
@@ -268,7 +268,7 @@ public class HelloMundoService extends IntentService {
 
                         // Download the wallpaper into a file
                         boolean ok = downloadImage(webcamId, webcamInfo, sharedPreferences, Mode.APPWIDGET, appwidgetId);
-                        if (Config.LOGD) Log.d(TAG, "updateWidgets ok=" + ok);
+                        Log.d("ok=" + ok);
                         if (!ok) return;
 
                         // Save current image to db
@@ -300,7 +300,7 @@ public class HelloMundoService extends IntentService {
                         remoteViews.setOnClickPendingIntent(R.id.imgPreviewFrame, pendingIntent);
 
                         appWidgetManager.updateAppWidget(new int[] { appwidgetId }, remoteViews);
-                        if (Config.LOGD) Log.d(TAG, "updateWidgets updateAppWidget has been called");
+                        Log.d("updateAppWidget has been called");
                     }
                 });
 
@@ -311,7 +311,7 @@ public class HelloMundoService extends IntentService {
                 try {
                     future.get();
                 } catch (Exception e) {
-                    Log.w(TAG, "updateWidgets future.get() threw an exception", e);
+                    Log.w("future.get() threw an exception", e);
                 }
             }
             threadPool.shutdown();
@@ -326,7 +326,7 @@ public class HelloMundoService extends IntentService {
     private void logBitmapSize(Bitmap bitmap) {
         if (bitmap == null) return;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR1) return;
-        if (Config.LOGD) Log.d(TAG, "updateWidgets bitmap.getByteCount()=" + bitmap.getByteCount());
+        Log.d("bitmap.getByteCount()=" + bitmap.getByteCount());
     }
 
     private WebcamInfo getWebcamInfo(long webcamId, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
@@ -336,7 +336,7 @@ public class HelloMundoService extends IntentService {
         WebcamInfo res = new WebcamInfo();
         try {
             if (cursor == null || !cursor.moveToFirst()) {
-                Log.w(TAG, "getDownloadInfo Could not find webcam with webcamId=" + webcamId);
+                Log.w("Could not find webcam with webcamId=" + webcamId);
 
                 // The currently selected webcam doesn't exist.
                 // This could happen after a database refresh from network (a non-working cam has been deleted).
@@ -361,7 +361,7 @@ public class HelloMundoService extends IntentService {
     }
 
     private boolean downloadImage(long webcamId, WebcamInfo webcamInfo, SharedPreferences sharedPreferences, Mode mode, int appWidgetId) {
-        if (Config.LOGD) Log.d(TAG, "downloadImage webcamId=" + webcamId);
+        Log.d("webcamId=" + webcamId);
 
         InputStream inputStream;
         try {
@@ -369,7 +369,7 @@ public class HelloMundoService extends IntentService {
             if (webcamInfo.httpReferer != null) httpRequest.referer(webcamInfo.httpReferer);
             inputStream = httpRequest.stream();
         } catch (IOException e) {
-            Log.w(TAG, "downloadImage Could not download webcam with webcamId=" + webcamId, e);
+            Log.w("Could not download webcam with webcamId=" + webcamId, e);
             if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
@@ -383,14 +383,14 @@ public class HelloMundoService extends IntentService {
             }
         } catch (FileNotFoundException e) {
             // Should never happen
-            Log.e(TAG, "downloadImage Could not open a file", e);
+            Log.e("Could not open a file", e);
             if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         try {
             IoUtil.copy(inputStream, outputStream);
         } catch (IOException e) {
-            Log.w(TAG, "downloadImage Could not download webcam with webcamId=" + webcamId, e);
+            Log.w("Could not download webcam with webcamId=" + webcamId, e);
             if (mode == Mode.WALLPAPER) sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
@@ -400,18 +400,18 @@ public class HelloMundoService extends IntentService {
     }
 
     private boolean saveEditedVersion(boolean dimmed, boolean showInfo, WebcamInfo webcamInfo) {
-        if (Config.LOGD) Log.d(TAG, "saveEditedVersion dimmed=" + dimmed + " showInfo=" + showInfo);
+        Log.d("dimmed=" + dimmed + " showInfo=" + showInfo);
         Bitmap bitmap;
         FileInputStream input = null;
         try {
             input = openFileInput(Constants.FILE_IMAGE_WALLPAPER);
             bitmap = BitmapFactory.decodeStream(input);
         } catch (FileNotFoundException e) {
-            Log.w(TAG, "saveEditedVersion Could not read saved image", e);
+            Log.w("Could not read saved image", e);
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } catch (OutOfMemoryError e) {
-            Log.w(TAG, "saveEditedVersion Could not decode saved image", e);
+            Log.w("Could not decode saved image", e);
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         } finally {
@@ -419,7 +419,7 @@ public class HelloMundoService extends IntentService {
         }
 
         if (bitmap == null) {
-            Log.w(TAG, "saveEditedVersion Could not decode saved image as a bitmap");
+            Log.w("Could not decode saved image as a bitmap");
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
@@ -433,7 +433,7 @@ public class HelloMundoService extends IntentService {
         try {
             bitmap = bitmap.copy(config, true);
         } catch (OutOfMemoryError e) {
-            Log.w(TAG, "saveEditedVersion Could not copy bitmap");
+            Log.w("Could not copy bitmap");
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
@@ -460,14 +460,14 @@ public class HelloMundoService extends IntentService {
             outputStream = openFileOutput(Constants.FILE_IMAGE_WALLPAPER_EDITED, MODE_PRIVATE);
         } catch (FileNotFoundException e) {
             // Should never happen
-            Log.e(TAG, "saveEditedVersion Could not open a file", e);
+            Log.e("Could not open a file", e);
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
         boolean ok = bitmap.compress(CompressFormat.JPEG, 90, outputStream);
         IoUtil.closeSilently(outputStream);
         if (!ok) {
-            Log.w(TAG, "saveEditedVersion Could not encode dimmed image");
+            Log.w("Could not encode dimmed image");
             sendBroadcast(new Intent(ACTION_UPDATE_WALLPAPER_END_FAILURE));
             return false;
         }
@@ -477,24 +477,24 @@ public class HelloMundoService extends IntentService {
     private void refreshDatabaseFromNetworkIfNeeded(SharedPreferences sharedPreferences) {
         long lastDatabaseUpdate = sharedPreferences.getLong(Constants.PREF_DATABASE_LAST_DOWNLOAD, 0);
         if (System.currentTimeMillis() - lastDatabaseUpdate > THREE_DAYS) {
-            if (Config.LOGD) Log.d(TAG, "refreshDatabaseFromNetworkIfNeeded Last update was more than 3 days ago: refreshing database from network");
+            Log.d("Last update was more than 3 days ago: refreshing database from network");
             try {
                 WebcamManager.get().refreshDatabaseFromNetwork(this);
             } catch (IOException e) {
-                Log.w(TAG, "refreshDatabaseFromNetworkIfNeeded Could not refresh database from network.  Will try next time.", e);
+                Log.w("Could not refresh database from network.  Will try next time.", e);
             }
         }
     }
 
     private Long getRandomWebcamId(boolean avoidNight) {
-        if (Config.LOGD) Log.d(TAG, "getRandomWebcamId avoidNight=" + avoidNight);
+        Log.d("avoidNight=" + avoidNight);
         return getRandomWebcamId(avoidNight, 0);
     }
 
     private Long getRandomWebcamId(boolean avoidNight, int recursion) {
-        if (Config.LOGD) Log.d(TAG, "getRandomWebcamId avoidNight=" + avoidNight + " recursion=" + recursion);
+        Log.d("avoidNight=" + avoidNight + " recursion=" + recursion);
         if (recursion > 20) {
-            Log.w(TAG, "getRandomWebcamId Could not find random webcamId after " + recursion + " trials");
+            Log.w("Could not find random webcamId after " + recursion + " trials");
             return null;
         }
         String[] projection = { WebcamColumns._ID, WebcamColumns.COORDINATES, WebcamColumns.PUBLIC_ID, WebcamColumns.VISIBILITY_BEGIN_HOUR,
@@ -505,7 +505,7 @@ public class HelloMundoService extends IntentService {
         WebcamCursor cursor = where.query(getContentResolver(), projection);
         try {
             if (cursor == null) {
-                Log.w(TAG, "getRandomWebcamId Could not find random webcamId");
+                Log.w("Could not find random webcamId");
                 return null;
             }
             int count = cursor.getCount();
@@ -513,12 +513,12 @@ public class HelloMundoService extends IntentService {
             cursor.moveToPosition(randomIndex);
             long res = cursor.getId();
             String publicId = cursor.getPublicId();
-            if (Config.LOGD) Log.d(TAG, "getRandomWebcamId res=" + res + " publicId=" + publicId);
+            Log.d("res=" + res + " publicId=" + publicId);
             if (avoidNight) {
                 if (cursor.getVisibilityBeginHour() != null) {
                     boolean isNight = isNight(cursor.getVisibilityBeginHour(), cursor.getVisibilityBeginMin(), cursor.getVisibilityEndHour(),
                             cursor.getVisibilityEndMin());
-                    if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
+                    Log.d("isNight=" + isNight);
                     if (isNight) {
                         // Recurse
                         return getRandomWebcamId(avoidNight, recursion + 1);
@@ -534,7 +534,7 @@ public class HelloMundoService extends IntentService {
                         double lon = Double.valueOf(split[1]);
                         isNight = SunriseSunset.isNight(lat, lon);
                     }
-                    if (Config.LOGD) Log.d(TAG, "getRandomWebcamId isNight=" + isNight);
+                    Log.d("isNight=" + isNight);
                     if (isNight) {
                         // Recurse
                         return getRandomWebcamId(avoidNight, recursion + 1);
@@ -549,7 +549,7 @@ public class HelloMundoService extends IntentService {
     }
 
     private boolean isNight(int startHour, int startMinute, int endHour, int endMinute) {
-        if (Config.LOGD) Log.d(TAG, "isNight startHour=" + startHour + " startMinute=" + startMinute + " endHour=" + endHour + " endMinute=" + endMinute);
+        Log.d("startHour=" + startHour + " startMinute=" + startMinute + " endHour=" + endHour + " endMinute=" + endMinute);
         Calendar now = Calendar.getInstance();
         TimeZone gmtTimeZone = TimeZone.getTimeZone("GMT");
         Calendar start = Calendar.getInstance(gmtTimeZone);

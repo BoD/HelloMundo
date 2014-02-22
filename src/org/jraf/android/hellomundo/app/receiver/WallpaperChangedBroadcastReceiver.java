@@ -17,6 +17,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import org.jraf.android.hellomundo.Constants;
@@ -28,17 +29,29 @@ public class WallpaperChangedBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("intent=" + StringUtil.toString(intent));
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean wallpaperChangedInternal = sharedPreferences.getBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL,
                 Constants.PREF_WALLPAPER_CHANGED_INTERNAL_DEFAULT);
         if (wallpaperChangedInternal) {
             Log.d("Wallpaper changed internally");
-            // Update flag
-            sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, false).commit();
+            // Update flag (in a background thread to avoid ANRs)
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    sharedPreferences.edit().putBoolean(Constants.PREF_WALLPAPER_CHANGED_INTERNAL, false).commit();
+                    return null;
+                }
+            }.execute();
         } else {
             Log.d("Wallpaper changed by external app: disabling service and alarm");
-            // Disable setting
-            sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
+            // Disable setting (in a background thread to avoid ANRs)
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    sharedPreferences.edit().putBoolean(Constants.PREF_AUTO_UPDATE_WALLPAPER, false).commit();
+                    return null;
+                }
+            }.execute();
 
             // Disable alarm
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

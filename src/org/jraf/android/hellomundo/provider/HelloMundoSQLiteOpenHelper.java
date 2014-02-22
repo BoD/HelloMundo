@@ -29,7 +29,7 @@ public class HelloMundoSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = HelloMundoSQLiteOpenHelper.class.getSimpleName();
 
     public static final String DATABASE_FILE_NAME = "worldtour.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // @formatter:off
     private static final String SQL_CREATE_TABLE_APPWIDGET = "CREATE TABLE IF NOT EXISTS "

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="Theme" parent="Theme.Sherlock.Light">
         <item name="switchStyle">@style/Widget.Holo.Light.CompoundButton.Switch</item>
         <item name="switchPreferenceStyle">@style/Preference.SwitchPreference</item>
-        <item name="@android:panelFullBackground">@drawable/menu_background_fill_parent_width</item>
+        <item name="android:panelFullBackground">@drawable/menu_background_fill_parent_width</item>
         <item name="android:textColorSecondaryInverse">@android:color/secondary_text_light</item>
+        <item name="actionBarStyle">@style/Widget.ActionBar</item>
+        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="Theme.Dialog.Preview" parent="@android:Theme.Panel">

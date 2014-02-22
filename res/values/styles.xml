@@ -6,4 +6,9 @@
         <item name="android:windowExitAnimation">@anim/welcome_exit</item>
     </style>
 
+    <style name="Widget.ActionBar" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="background">#4833b5e5</item>
+        <item name="android:background">#4833b5e5</item>
+    </style>
+
 </resources>

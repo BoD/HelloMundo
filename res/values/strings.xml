@@ -113,7 +113,7 @@
      *
     -->
     <string name="about_txtInfo1"><![CDATA[<b>BoD HelloMundo</b> v${versionName}<br/>Built on ${buildDate}<font color="#808080"> – ${gitSha1}</font>]]></string>
-    <string name="about_txtInfo2">Copyright 2009–2013 Benoit \'BoD\' Lubek.\nAdditional code by Carmen Alvarez (c@rmen.ca).\nAll Rights Reserved.</string>
+    <string name="about_txtInfo2">Copyright 2009–2014 Benoit \'BoD\' Lubek.\nAdditional code by Carmen Alvarez (c@rmen.ca).\nAll Rights Reserved.</string>
     <string name="about_email">→ BoD@JRAF.org</string>
     <string name="about_web">→ JRAF.org/android</string>
     <string name="about_btnShare">Share app</string>

@@ -41,7 +41,7 @@
             android:autoLink="all"
             android:text="@string/about_email"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColorLink="#33b5e5" />
+            android:textColorLink="@color/darkBlue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
             android:autoLink="all"
             android:text="@string/about_web"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColorLink="#33b5e5" />
+            android:textColorLink="@color/darkBlue" />
 
         <View
             android:layout_width="0dp"
@@ -69,7 +69,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/about_btnEula"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#33b5e5" />
+            android:textColor="@color/darkBlue" />
     </LinearLayout>
 
     <LinearLayout

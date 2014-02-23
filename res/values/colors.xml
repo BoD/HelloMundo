@@ -9,5 +9,6 @@
     <color name="welcome_showCaseHide_bg">#CC000001</color>
     <color name="wallpaper_showInfo_text">#FFF</color>
     <color name="darkBlue">#000080</color>
+    <color name="cyan">#00c0ff</color>
 
 </resources>

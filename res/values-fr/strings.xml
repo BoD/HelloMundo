@@ -78,7 +78,7 @@
     <string name="eula_title">License d\'utilisation</string>
 
     <!-- Welcome -->
-    <string name="welcome_0_txtTitle">Bienvenue dans HelloMundo !</string>
+    <string name="welcome_0_txtTitle">Bienvenue !</string>
     <string name="welcome_0_txtText">1. Pressez ce bouton pour choisir une webcam de la liste…</string>
     <string name="welcome_1_txtText">2. Activez pour mettre à jour automatiquement le papier-peint toutes les 30 minutes…</string>
     <string name="welcome_2_txtText">3. Vous pouvez aussi ajouter une widget sur le bureau.</string>

@@ -37,4 +37,8 @@
         <item name="android:background">@drawable/app_edit_text_holo_light</item>
     </style>
 
+    <style name="Widget.ActionButton.OverFlow" parent="@style/Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+
 </resources>

@@ -8,12 +8,15 @@
         <item name="android:textColorSecondaryInverse">@android:color/secondary_text_light</item>
         <item name="actionBarStyle">@style/Widget.ActionBar</item>
         <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.ActionBar</item>
+        <item name="windowContentOverlay">@drawable/ab_solid_shadow_holo</item>
         <item name="android:windowContentOverlay">@drawable/ab_solid_shadow_holo</item>
         <item name="actionMenuTextColor">@color/darkBlue</item>
         <item name="android:actionMenuTextColor" tools:ignore="NewApi">@color/darkBlue</item>
         <item name="actionBarTabTextStyle">@style/Widget.ActionBar.TabText</item>
         <item name="android:actionBarTabTextStyle" tools:ignore="NewApi">@style/Widget.ActionBar.TabText</item>
         <item name="android:editTextStyle">@style/Widget.EditText</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.ActionButton.OverFlow</item>
+        <item name="android:actionOverflowButtonStyle" tools:ignore="NewApi">@style/Widget.ActionButton.OverFlow</item>
     </style>
 
     <style name="Theme.ActionBarLogo">

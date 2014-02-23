@@ -11,9 +11,12 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="25dp"
+        android:layout_height="0px"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/txtText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
         android:orientation="vertical"
         tools:ignore="UseCompoundDrawables" >
 
@@ -21,8 +24,7 @@
             android:id="@+id/imgLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="4dp"
             android:src="@drawable/welcome_logo" />
 
         <TextView
@@ -30,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#a4e0ff" />
+            android:textColor="@color/cyan" />
     </LinearLayout>
 
     <ImageView

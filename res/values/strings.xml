@@ -138,7 +138,7 @@
      * Welcome screen
      *
     -->
-    <string name="welcome_0_txtTitle">Welcome to HelloMundo!</string>
+    <string name="welcome_0_txtTitle">Welcome!</string>
     <string name="welcome_0_txtText">1. Press this button to pick a webcam from the list…</string>
     <string name="welcome_1_txtText">2. Switch ON to automatically refresh your wallpaper every 30 minutes…</string>
     <string name="welcome_2_txtText">3. You can also add a widget to your home screen.</string>

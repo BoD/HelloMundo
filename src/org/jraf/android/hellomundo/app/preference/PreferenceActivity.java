@@ -17,10 +17,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import org.jraf.android.hellomundo.Constants;
-import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockPreferenceActivity;
+import org.jraf.android.hellomundo.app.common.BasePreferenceActivity;
 import org.jraf.android.latoureiffel.R;
 
-public class PreferenceActivity extends LifecycleDispatchSherlockPreferenceActivity {
+public class PreferenceActivity extends BasePreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

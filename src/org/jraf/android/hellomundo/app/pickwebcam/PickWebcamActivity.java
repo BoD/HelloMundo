@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.adduserwebcam.AddUserWebcamActivity;
-import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentActivity;
+import org.jraf.android.hellomundo.app.common.BaseActivity;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.hellomundo.provider.webcam.WebcamColumns;
 import org.jraf.android.latoureiffel.R;
@@ -37,7 +37,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class PickWebcamActivity extends LifecycleDispatchSherlockFragmentActivity implements AlertDialogListener {
+public class PickWebcamActivity extends BaseActivity implements AlertDialogListener {
     private static final int REQUEST_NEW_WEBCAM = 0;
     private static final String PREFIX = PickWebcamActivity.class.getName() + ".";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Animation.Activity.Welcome" parent="@android:style/Animation.Activity">
         <item name="android:activityCloseExitAnimation">@anim/welcome_exit</item>
@@ -7,8 +7,34 @@
     </style>
 
     <style name="Widget.ActionBar" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
-        <item name="background">#4833b5e5</item>
-        <item name="android:background">#4833b5e5</item>
+        <item name="background">@null</item>
+        <item name="android:background">@null</item>
+        <item name="titleTextStyle">@style/TextAppearance.Widget.ActionBar.Title</item>
+        <item name="android:titleTextStyle" tools:ignore="NewApi">@style/TextAppearance.Widget.ActionBar.Title</item>
+    </style>
+
+    <style name="Widget.ActionBar.Logo">
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="android:displayOptions" tools:ignore="NewApi">useLogo|showHome</item>
+        <item name="logo">@drawable/ic_home</item>
+        <item name="android:logo" tools:ignore="NewApi">@drawable/ic_home</item>
+    </style>
+
+    <style name="TextAppearance.Widget.ActionBar.Title" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/darkBlue</item>
+    </style>
+
+    <style name="Widget.ActionBar.TabText" parent="@style/Widget.Sherlock.ActionBar.TabText">
+        <item name="android:textColor">@color/darkBlue</item>
+    </style>
+
+    <style name="Widget.CompoundButton.Switch" parent="Widget.Holo.Light.CompoundButton.Switch">
+        <item name="track">@drawable/switch_track_holo_light</item>
+        <item name="thumb">@drawable/switch_inner_holo_light</item>
+    </style>
+
+    <style name="Widget.EditText" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/app_edit_text_holo_light</item>
     </style>
 
 </resources>

@@ -21,14 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.acra.ACRA;
-import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockActivity;
+import org.jraf.android.hellomundo.app.common.BaseActivity;
 import org.jraf.android.latoureiffel.R;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 
-public class AboutActivity extends LifecycleDispatchSherlockActivity {
+public class AboutActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

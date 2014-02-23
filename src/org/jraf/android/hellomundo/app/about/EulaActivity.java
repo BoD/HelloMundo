@@ -16,12 +16,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 
-import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockActivity;
+import org.jraf.android.hellomundo.app.common.BaseActivity;
 import org.jraf.android.latoureiffel.R;
 import org.jraf.android.util.webview.WebViewUtil;
 
 
-public class EulaActivity extends LifecycleDispatchSherlockActivity {
+public class EulaActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

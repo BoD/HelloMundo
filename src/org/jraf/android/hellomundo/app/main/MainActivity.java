@@ -39,7 +39,7 @@ import android.widget.Toast;
 import org.jraf.android.backport.switchwidget.Switch;
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.about.AboutActivity;
-import org.jraf.android.hellomundo.app.common.LifecycleDispatchSherlockFragmentActivity;
+import org.jraf.android.hellomundo.app.common.BaseActivity;
 import org.jraf.android.hellomundo.app.pickwebcam.PickWebcamActivity;
 import org.jraf.android.hellomundo.app.preference.PreferenceActivity;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
@@ -64,7 +64,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-public class MainActivity extends LifecycleDispatchSherlockFragmentActivity {
+public class MainActivity extends BaseActivity {
     private static final int REQUEST_PICK_WEBCAM = 0;
     private static final int REQUEST_SETTINGS = 1;
 

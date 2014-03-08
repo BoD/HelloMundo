@@ -37,7 +37,6 @@ public class AboutActivity extends BaseActivity {
         findViewById(R.id.btnShare).setOnClickListener(mShareOnClickListener);
         findViewById(R.id.btnRate).setOnClickListener(mRateOnClickListener);
         findViewById(R.id.btnOtherApps).setOnClickListener(mOtherAppsOnClickListener);
-        findViewById(R.id.btnEula).setOnClickListener(mEulaOnClickListener);
         findViewById(R.id.btnDonate).setOnClickListener(mDonateOnClickListener);
     }
 
@@ -92,13 +91,6 @@ public class AboutActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("market://search?q=pub:BoD"));
             startActivity(Intent.createChooser(intent, null));
-        }
-    };
-
-    private final OnClickListener mEulaOnClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(AboutActivity.this, EulaActivity.class));
         }
     };
 

@@ -37,7 +37,21 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/about_txtInfo3"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#888" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:autoLink="all"
             android:text="@string/about_email"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -52,30 +66,30 @@
             android:autoLink="all"
             android:text="@string/about_web"
             android:textAppearance="?android:attr/textAppearanceMedium"
-         android:textColorLink="@color/darkBlue" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:textColorLink="@color/darkBlue" />
 
         <TextView
-            android:id="@+id/btnEula"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:text="@string/about_btnEula"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/darkBlue" />
+            android:autoLink="all"
+            android:text="@string/about_sources"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColorLink="@color/darkBlue" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="4dp" >
+            android:layout_marginTop="8dp" >
 
             <Button
                 android:id="@+id/btnShare"

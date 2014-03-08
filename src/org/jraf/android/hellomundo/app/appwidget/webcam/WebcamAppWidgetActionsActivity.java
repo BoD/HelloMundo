@@ -26,15 +26,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.jraf.android.hellomundo.app.common.BaseActivity;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareListener;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
 import org.jraf.android.latoureiffel.R;
-import org.jraf.android.util.activitylifecyclecallbackscompat.app.LifecycleDispatchFragmentActivity;
 import org.jraf.android.util.log.wrapper.Log;
 import org.jraf.android.util.string.StringUtil;
 
-public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentActivity implements OnClickListener, SaveShareListener {
+public class WebcamAppWidgetActionsActivity extends BaseActivity implements OnClickListener, SaveShareListener {
     private static final String PREFIX = WebcamAppWidgetActionsActivity.class.getName() + ".";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
 
@@ -64,7 +64,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), com.actionbarsherlock.R.style.Theme_Sherlock);
+            final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), R.style.Theme_WebcamAppWidgetActions);
             //            final ContextThemeWrapper contextWithTheme = new ContextThemeWrapper(getActivity(), android.R.style.Theme_Light);
 
 
@@ -119,7 +119,7 @@ public class WebcamAppWidgetActionsActivity extends LifecycleDispatchFragmentAct
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.getListView().setBackgroundResource(R.drawable.abs__ab_solid_dark_holo);
+            //            dialog.getListView().setBackgroundResource(R.drawable.abs__ab_solid_light_holo);
             return dialog;
         }
 

@@ -32,4 +32,8 @@
         <item name="android:windowAnimationStyle">@style/Animation.Activity.Welcome</item>
     </style>
 
+    <style name="Theme.WebcamAppWidgetActions" parent="Theme.Sherlock.Light">
+        <item name="android:textColorPrimary">@color/darkBlue</item>
+    </style>
+
 </resources>

@@ -41,4 +41,8 @@
         <item name="android:src">@drawable/ic_action_overflow</item>
     </style>
 
+    <style name="TextAppearance.Medium" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@color/darkBlue</item>
+    </style>
+
 </resources>

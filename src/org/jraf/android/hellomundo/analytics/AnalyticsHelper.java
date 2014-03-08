@@ -29,24 +29,24 @@ public class AnalyticsHelper {
     public void activityStart(Activity activity) {
         try {
             EasyTracker.getInstance().activityStart(activity);
-        } catch (Exception e) {
-            Log.w("An exception occured while calling Google Analytics", e);
+        } catch (Throwable t) {
+            Log.w("An exception occured while calling Google Analytics", t);
         }
     }
 
     public void activityStop(Activity activity) {
         try {
             EasyTracker.getInstance().activityStop(activity);
-        } catch (Exception e) {
-            Log.w("An exception occured while calling Google Analytics", e);
+        } catch (Throwable t) {
+            Log.w("An exception occured while calling Google Analytics", t);
         }
     }
 
     public void sendEvent(String category, String action, String label) {
         try {
             EasyTracker.getTracker().sendEvent(category, action, label, null);
-        } catch (Exception e) {
-            Log.w("An exception occured while calling Google Analytics", e);
+        } catch (Throwable t) {
+            Log.w("An exception occured while calling Google Analytics", t);
         }
     }
 }

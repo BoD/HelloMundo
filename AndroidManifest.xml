@@ -126,12 +126,22 @@
         <!-- Settings -->
         <activity
             android:name="org.jraf.android.hellomundo.app.preference.PreferenceActivity"
-            android:label="@string/main_menu_settings" />
+            android:label="@string/main_menu_settings"
+            android:parentActivityName="org.jraf.android.hellomundo.app.main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.jraf.android.hellomundo.app.main.MainActivity" />
+        </activity>
 
         <!-- About -->
         <activity
             android:name="org.jraf.android.hellomundo.app.about.AboutActivity"
-            android:label="@string/main_menu_about" />
+            android:label="@string/main_menu_about"
+            android:parentActivityName="org.jraf.android.hellomundo.app.main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.jraf.android.hellomundo.app.main.MainActivity" />
+        </activity>
 
         <!-- Eula -->
         <activity

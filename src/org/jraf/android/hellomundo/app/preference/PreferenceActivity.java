@@ -28,10 +28,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 
 import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.common.BasePreferenceActivity;
 import org.jraf.android.latoureiffel.R;
+
+import com.actionbarsherlock.view.MenuItem;
 
 public class PreferenceActivity extends BasePreferenceActivity {
 
@@ -41,6 +44,8 @@ public class PreferenceActivity extends BasePreferenceActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         addPreferencesFromResource(R.xml.preferences);
         updateSummary();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -53,6 +58,21 @@ public class PreferenceActivity extends BasePreferenceActivity {
     protected void onStop() {
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
         super.onStop();
+    }
+
+
+    /*
+     * Action bar.
+     */
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private final OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener = new OnSharedPreferenceChangeListener() {

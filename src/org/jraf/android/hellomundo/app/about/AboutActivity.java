@@ -27,6 +27,7 @@ package org.jraf.android.hellomundo.app.about;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,6 +52,8 @@ public class AboutActivity extends BaseActivity {
         findViewById(R.id.btnRate).setOnClickListener(mRateOnClickListener);
         findViewById(R.id.btnOtherApps).setOnClickListener(mOtherAppsOnClickListener);
         findViewById(R.id.btnDonate).setOnClickListener(mDonateOnClickListener);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -70,6 +73,10 @@ public class AboutActivity extends BaseActivity {
             case R.id.menu_sendLogs:
                 ACRA.getErrorReporter().handleSilentException(new Exception("User clicked on 'Send logs'"));
                 Toast.makeText(this, R.string.about_toast_sendLogs, Toast.LENGTH_SHORT).show();
+                return true;
+
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);

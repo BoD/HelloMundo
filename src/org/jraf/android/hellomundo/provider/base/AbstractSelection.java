@@ -7,7 +7,20 @@
  *                              /___/
  * repository.
  *
- * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ * Copyright (C) 2009-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jraf.android.hellomundo.provider.base;
 
@@ -18,7 +31,7 @@ import java.util.List;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-public abstract class AbstractSelection <T extends AbstractSelection<?>> {
+public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String EQ = "=?";
     private static final String PAREN_OPEN = "(";
     private static final String PAREN_CLOSE = ")";
@@ -156,8 +169,8 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelection.append(OR);
         return (T) this;
     }
-    
-    
+
+
     protected Object[] toObjectArray(int... array) {
         Object[] res = new Object[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -206,13 +219,13 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         if (size == 0) return null;
         return mSelectionArgs.toArray(new String[size]);
     }
-    
-    
+
+
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
     public abstract Uri uri();
-    
+
     /**
      * Deletes row(s) specified by this selection.
      * 

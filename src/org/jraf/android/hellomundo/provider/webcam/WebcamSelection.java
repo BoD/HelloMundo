@@ -7,11 +7,22 @@
  *                              /___/
  * repository.
  *
- * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ * Copyright (C) 2009-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jraf.android.hellomundo.provider.webcam;
-
-import java.util.Date;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -27,7 +38,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
     public Uri uri() {
         return WebcamColumns.CONTENT_URI;
     }
-    
+
     /**
      * Query the given content resolver using this selection.
      * 
@@ -56,8 +67,8 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
     public WebcamCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
     }
-    
-    
+
+
     public WebcamSelection id(long... value) {
         addEquals(WebcamColumns._ID, toObjectArray(value));
         return this;
@@ -67,7 +78,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.TYPE, value);
         return this;
     }
-    
+
     public WebcamSelection typeNot(WebcamType... value) {
         addNotEquals(WebcamColumns.TYPE, value);
         return this;
@@ -78,7 +89,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.PUBLIC_ID, value);
         return this;
     }
-    
+
     public WebcamSelection publicIdNot(String... value) {
         addNotEquals(WebcamColumns.PUBLIC_ID, value);
         return this;
@@ -89,7 +100,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.NAME, value);
         return this;
     }
-    
+
     public WebcamSelection nameNot(String... value) {
         addNotEquals(WebcamColumns.NAME, value);
         return this;
@@ -100,7 +111,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.LOCATION, value);
         return this;
     }
-    
+
     public WebcamSelection locationNot(String... value) {
         addNotEquals(WebcamColumns.LOCATION, value);
         return this;
@@ -111,7 +122,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.URL, value);
         return this;
     }
-    
+
     public WebcamSelection urlNot(String... value) {
         addNotEquals(WebcamColumns.URL, value);
         return this;
@@ -122,7 +133,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.THUMB_URL, value);
         return this;
     }
-    
+
     public WebcamSelection thumbUrlNot(String... value) {
         addNotEquals(WebcamColumns.THUMB_URL, value);
         return this;
@@ -133,7 +144,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.SOURCE_URL, value);
         return this;
     }
-    
+
     public WebcamSelection sourceUrlNot(String... value) {
         addNotEquals(WebcamColumns.SOURCE_URL, value);
         return this;
@@ -144,7 +155,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.HTTP_REFERER, value);
         return this;
     }
-    
+
     public WebcamSelection httpRefererNot(String... value) {
         addNotEquals(WebcamColumns.HTTP_REFERER, value);
         return this;
@@ -155,7 +166,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.TIMEZONE, value);
         return this;
     }
-    
+
     public WebcamSelection timezoneNot(String... value) {
         addNotEquals(WebcamColumns.TIMEZONE, value);
         return this;
@@ -166,7 +177,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.RESIZE_WIDTH, value);
         return this;
     }
-    
+
     public WebcamSelection resizeWidthNot(Integer... value) {
         addNotEquals(WebcamColumns.RESIZE_WIDTH, value);
         return this;
@@ -196,7 +207,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.RESIZE_HEIGHT, value);
         return this;
     }
-    
+
     public WebcamSelection resizeHeightNot(Integer... value) {
         addNotEquals(WebcamColumns.RESIZE_HEIGHT, value);
         return this;
@@ -226,7 +237,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.VISIBILITY_BEGIN_HOUR, value);
         return this;
     }
-    
+
     public WebcamSelection visibilityBeginHourNot(Integer... value) {
         addNotEquals(WebcamColumns.VISIBILITY_BEGIN_HOUR, value);
         return this;
@@ -256,7 +267,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.VISIBILITY_BEGIN_MIN, value);
         return this;
     }
-    
+
     public WebcamSelection visibilityBeginMinNot(Integer... value) {
         addNotEquals(WebcamColumns.VISIBILITY_BEGIN_MIN, value);
         return this;
@@ -286,7 +297,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.VISIBILITY_END_HOUR, value);
         return this;
     }
-    
+
     public WebcamSelection visibilityEndHourNot(Integer... value) {
         addNotEquals(WebcamColumns.VISIBILITY_END_HOUR, value);
         return this;
@@ -316,7 +327,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.VISIBILITY_END_MIN, value);
         return this;
     }
-    
+
     public WebcamSelection visibilityEndMinNot(Integer... value) {
         addNotEquals(WebcamColumns.VISIBILITY_END_MIN, value);
         return this;
@@ -346,7 +357,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.ADDED_DATE, toObjectArray(value));
         return this;
     }
-    
+
     public WebcamSelection addedDateNot(long... value) {
         addNotEquals(WebcamColumns.ADDED_DATE, toObjectArray(value));
         return this;
@@ -376,7 +387,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.EXCLUDE_RANDOM, value);
         return this;
     }
-    
+
     public WebcamSelection excludeRandomNot(Boolean... value) {
         addNotEquals(WebcamColumns.EXCLUDE_RANDOM, value);
         return this;
@@ -387,7 +398,7 @@ public class WebcamSelection extends AbstractSelection<WebcamSelection> {
         addEquals(WebcamColumns.COORDINATES, value);
         return this;
     }
-    
+
     public WebcamSelection coordinatesNot(String... value) {
         addNotEquals(WebcamColumns.COORDINATES, value);
         return this;

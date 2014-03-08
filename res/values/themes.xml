@@ -10,8 +10,8 @@
         <item name="android:actionBarStyle" tools:ignore="NewApi">@style/Widget.ActionBar</item>
         <item name="windowContentOverlay">@drawable/ab_solid_shadow_holo</item>
         <item name="android:windowContentOverlay">@drawable/ab_solid_shadow_holo</item>
-        <item name="actionMenuTextColor">@color/darkBlue</item>
-        <item name="android:actionMenuTextColor" tools:ignore="NewApi">@color/darkBlue</item>
+        <item name="actionMenuTextColor">@color/dark_blue</item>
+        <item name="android:actionMenuTextColor" tools:ignore="NewApi">@color/dark_blue</item>
         <item name="actionBarTabTextStyle">@style/Widget.ActionBar.TabText</item>
         <item name="android:actionBarTabTextStyle" tools:ignore="NewApi">@style/Widget.ActionBar.TabText</item>
         <item name="android:editTextStyle">@style/Widget.EditText</item>
@@ -33,7 +33,7 @@
     </style>
 
     <style name="Theme.WebcamAppWidgetActions" parent="Theme.Sherlock.Light">
-        <item name="android:textColorPrimary">@color/darkBlue</item>
+        <item name="android:textColorPrimary">@color/dark_blue</item>
     </style>
 
 </resources>

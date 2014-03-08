@@ -8,7 +8,8 @@
     <color name="welcome_bg">#C000</color>
     <color name="welcome_showCaseHide_bg">#CC000001</color>
     <color name="wallpaper_showInfo_text">#FFF</color>
-    <color name="darkBlue">#000080</color>
+    <color name="dark_blue_default">#000080</color>
+    <color name="dark_blue_disabled">#70000080</color>
     <color name="cyan">#00c0ff</color>
 
 </resources>

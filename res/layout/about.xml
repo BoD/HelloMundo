@@ -55,7 +55,7 @@
             android:autoLink="all"
             android:text="@string/about_email"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColorLink="@color/darkBlue" />
+            android:textColorLink="@color/dark_blue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
             android:autoLink="all"
             android:text="@string/about_web"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColorLink="@color/darkBlue" />
+            android:textColorLink="@color/dark_blue" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -77,7 +77,7 @@
             android:autoLink="all"
             android:text="@string/about_sources"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColorLink="@color/darkBlue" />
+            android:textColorLink="@color/dark_blue" />
 
         <View
             android:layout_width="1px"

@@ -21,11 +21,11 @@
     </style>
 
     <style name="TextAppearance.Widget.ActionBar.Title" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/darkBlue</item>
+        <item name="android:textColor">@color/dark_blue</item>
     </style>
 
     <style name="Widget.ActionBar.TabText" parent="@style/Widget.Sherlock.ActionBar.TabText">
-        <item name="android:textColor">@color/darkBlue</item>
+        <item name="android:textColor">@color/dark_blue</item>
     </style>
 
     <style name="Widget.CompoundButton.Switch" parent="Widget.Holo.Light.CompoundButton.Switch">
@@ -42,7 +42,7 @@
     </style>
 
     <style name="TextAppearance.Medium" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textColor">@color/darkBlue</item>
+        <item name="android:textColor">@color/dark_blue</item>
     </style>
 
 </resources>

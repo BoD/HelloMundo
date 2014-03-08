@@ -1,1 +1,0 @@
-curl -u lubek.b:ivsxf07d -T res/raw/data4.txt ftp://ftpperso.free.fr

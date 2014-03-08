@@ -4,3 +4,6 @@ build-bod.properties
 local.properties
 .DS_Store
 res/raw/data7.csv
+etc/apk
+etc/ftp.txt
+etc/proguard

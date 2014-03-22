@@ -40,7 +40,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.jraf.android.hellomundo.Constants;
-import org.jraf.android.hellomundo.app.common.BaseActivity;
 import org.jraf.android.hellomundo.app.main.MainActivity;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareListener;
@@ -55,7 +54,7 @@ import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.log.wrapper.Log;
 import org.jraf.android.util.string.StringUtil;
 
-public class WebcamAppWidgetActionsActivity extends BaseActivity implements OnClickListener, SaveShareListener {
+public class WebcamAppWidgetActionsActivity extends FragmentActivity implements OnClickListener, SaveShareListener {
     private static final String PREFIX = WebcamAppWidgetActionsActivity.class.getName() + ".";
     public static final String EXTRA_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";

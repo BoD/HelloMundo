@@ -113,8 +113,8 @@
      *
     -->
     <string name="about_txtInfo1"><![CDATA[<b>BoD HelloMundo</b> v${versionName}<br/>Built on ${buildDate}<font color="#808080"> – ${gitSha1}</font>]]></string>
-    <string name="about_txtInfo2" tools:ignore="TypographyOther">Copyright (C) 2009-2014 Benoit \'BoD\' Lubek.\nAdditional code by Carmen Alvarez (c@rmen.ca).</string>
-    <string name="about_txtInfo3">Licensed under the terms of the GNU General Public License.</string>
+    <string name="about_txtInfo2" tools:ignore="TypographyOther,TypographyDashes">Copyright (C) 2009-2014 Benoit \'BoD\' Lubek.\nAdditional code by Carmen Alvarez (c@rmen.ca).</string>
+    <string name="about_txtInfo3" translatable="false">Licensed under the terms of the GNU General Public License.</string>
     <string name="about_email" translatable="false">→ BoD@JRAF.org</string>
     <string name="about_web" translatable="false">→ JRAF.org/android</string>
     <string name="about_sources" translatable="false">→ github.com/BoD/HelloMundo</string>

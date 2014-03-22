@@ -39,21 +39,32 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.jraf.android.hellomundo.Constants;
 import org.jraf.android.hellomundo.app.common.BaseActivity;
+import org.jraf.android.hellomundo.app.main.MainActivity;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareHelper;
 import org.jraf.android.hellomundo.app.saveshare.SaveShareListener;
 import org.jraf.android.hellomundo.app.service.HelloMundoService;
+import org.jraf.android.hellomundo.provider.webcam.WebcamCursor;
+import org.jraf.android.hellomundo.provider.webcam.WebcamSelection;
+import org.jraf.android.hellomundo.provider.webcam.WebcamType;
 import org.jraf.android.latoureiffel.R;
+import org.jraf.android.util.async.Task;
+import org.jraf.android.util.async.TaskFragment;
+import org.jraf.android.util.datetime.DateTimeUtil;
 import org.jraf.android.util.log.wrapper.Log;
 import org.jraf.android.util.string.StringUtil;
 
 public class WebcamAppWidgetActionsActivity extends BaseActivity implements OnClickListener, SaveShareListener {
     private static final String PREFIX = WebcamAppWidgetActionsActivity.class.getName() + ".";
+    public static final String EXTRA_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
     public static final String EXTRA_CURRENT_WEBCAM_ID = PREFIX + "EXTRA_CURRENT_WEBCAM_ID";
 
     private static final String FRAGMENT_DIALOG = "FRAGMENT_DIALOG";
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private long mWebcamId;
+    private long mCurrentWebcamId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +73,72 @@ public class WebcamAppWidgetActionsActivity extends BaseActivity implements OnCl
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            mWebcamId = extras.getLong(EXTRA_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
+            mCurrentWebcamId = extras.getLong(EXTRA_CURRENT_WEBCAM_ID, Constants.PREF_SELECTED_WEBCAM_ID_DEFAULT);
         }
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return;
+        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            Log.d("Received an invalid appwidget id: abort");
+            finish();
+            return;
+        }
 
-        ActionsDialogFragment actionsDialogFragment = ActionsDialogFragment.newInstance();
-        actionsDialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG);
+        new TaskFragment(new Task<MainActivity>() {
+            private String mName;
+            private String mLocation;
+            private String mTimeZone;
+            private String mPublicId;
+            private WebcamType mType;
+
+            @Override
+            protected void doInBackground() throws Throwable {
+                WebcamCursor cursor = new WebcamSelection().id(mCurrentWebcamId).query(getContentResolver());
+                try {
+                    if (cursor == null || !cursor.moveToFirst()) {
+                        throw new Exception("Could not find webcam with id=" + mCurrentWebcamId);
+                    }
+                    mName = cursor.getName();
+                    mLocation = cursor.getLocation();
+                    mTimeZone = cursor.getTimezone();
+                    mPublicId = cursor.getPublicId();
+                    mType = cursor.getType();
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
+            }
+
+            @Override
+            protected void onPostExecuteOk() {
+                String title = mName;
+                if (mType != WebcamType.USER) {
+                    String location = mLocation;
+                    boolean specialCam = Constants.SPECIAL_CAMS.contains(mPublicId);
+                    if (!specialCam) {
+                        location += " - " + DateTimeUtil.getCurrentTimeForTimezone(WebcamAppWidgetActionsActivity.this, mTimeZone);
+                    }
+                    title += ", " + location;
+                }
+
+                ActionsDialogFragment actionsDialogFragment = ActionsDialogFragment.newInstance(title);
+                actionsDialogFragment.show(getSupportFragmentManager(), FRAGMENT_DIALOG);
+            }
+        }).execute(getSupportFragmentManager());
     }
 
     public static class ActionsDialogFragment extends DialogFragment {
-        public static ActionsDialogFragment newInstance() {
+        private String mTitle;
+
+        public static ActionsDialogFragment newInstance(String title) {
             ActionsDialogFragment res = new ActionsDialogFragment();
+            Bundle args = new Bundle(1);
+            args.putString("title", title);
+            res.setArguments(args);
             return res;
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mTitle = getArguments().getString("title");
         }
 
         @Override
@@ -82,6 +148,7 @@ public class WebcamAppWidgetActionsActivity extends BaseActivity implements OnCl
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(contextWithTheme);
+            builder.setTitle(mTitle);
             builder.setNegativeButton(android.R.string.cancel, null);
             //            builder.setItems(getResources().getStringArray(R.array.webcamAppwidget_actions_labels), new OnClickListener() {
             //                @Override
@@ -166,10 +233,7 @@ public class WebcamAppWidgetActionsActivity extends BaseActivity implements OnCl
                 // Pick another webcam
                 Intent intent = getIntent();
                 intent.setClass(this, WebcamConfigureActivity.class);
-                if (getIntent().getExtras() != null) {
-                    intent.putExtra(WebcamConfigureActivity.EXTRA_CURRENT_WEBCAM_ID,
-                            getIntent().getLongExtra(EXTRA_CURRENT_WEBCAM_ID, AppWidgetManager.INVALID_APPWIDGET_ID));
-                }
+                intent.putExtra(WebcamConfigureActivity.EXTRA_CURRENT_WEBCAM_ID, mWebcamId);
                 startActivity(intent);
                 finish();
                 break;

@@ -248,13 +248,13 @@ public class HelloMundoService extends IntentService {
             ArrayList<Future<?>> futureList = new ArrayList<Future<?>>(count);
             while (cursor.moveToNext()) {
                 final int appwidgetId = cursor.getAppwidgetId();
-                final long finalWebcamId = cursor.getWebcamId();
+                final long webcamId = cursor.getWebcamId();
                 Log.d("Submitting runnable");
                 Future<?> future = threadPool.submit(new Runnable() {
                     @Override
                     public void run() {
-                        long webcamId = finalWebcamId;
-                        Log.d("appwidgetId=" + appwidgetId + " webcamId=" + webcamId);
+                        long currentWebcamId = webcamId;
+                        Log.d("appwidgetId=" + appwidgetId + " currentWebcamId=" + currentWebcamId);
 
                         AppWidgetProviderInfo info = appWidgetManager.getAppWidgetInfo(appwidgetId);
                         if (info == null) {
@@ -264,28 +264,28 @@ public class HelloMundoService extends IntentService {
                         }
 
                         // Analytics
-                        AnalyticsHelper.get().sendEvent(TAG, "updateWidget", WebcamManager.get().getPublicId(HelloMundoService.this, webcamId));
+                        AnalyticsHelper.get().sendEvent(TAG, "updateWidget", WebcamManager.get().getPublicId(HelloMundoService.this, currentWebcamId));
 
-                        if (webcamId == Constants.WEBCAM_ID_RANDOM) {
+                        if (currentWebcamId == Constants.WEBCAM_ID_RANDOM) {
                             Long randomWebcamId = getRandomWebcamId(avoidNight);
                             if (randomWebcamId == null) {
                                 Log.d("Could not get random webcam id");
                                 return;
                             }
-                            webcamId = randomWebcamId;
-                            Log.d("Random cam: " + webcamId);
+                            currentWebcamId = randomWebcamId;
+                            Log.d("Random cam: " + currentWebcamId);
                         }
 
-                        WebcamInfo webcamInfo = getWebcamInfo(webcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                        WebcamInfo webcamInfo = getWebcamInfo(currentWebcamId, sharedPreferences, Mode.APPWIDGET, appwidgetId);
                         if (webcamInfo == null) return;
 
                         // Download the wallpaper into a file
-                        boolean ok = downloadImage(webcamId, webcamInfo, sharedPreferences, Mode.APPWIDGET, appwidgetId);
+                        boolean ok = downloadImage(currentWebcamId, webcamInfo, sharedPreferences, Mode.APPWIDGET, appwidgetId);
                         Log.d("ok=" + ok);
                         if (!ok) return;
 
                         // Save current image to db
-                        AppwidgetManager.get().insertOrUpdate(HelloMundoService.this, appwidgetId, finalWebcamId, webcamId);
+                        AppwidgetManager.get().insertOrUpdate(HelloMundoService.this, appwidgetId, webcamId, currentWebcamId);
 
                         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.appwidget_webcam);
                         BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -307,7 +307,8 @@ public class HelloMundoService extends IntentService {
                         //                        onClickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
                         onClickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId);
                         onClickIntent.setData(Uri.parse("custom:" + System.currentTimeMillis())); // Need a unique data so the system doesn't try to recycle the pending intent
-                        onClickIntent.putExtra(WebcamAppWidgetActionsActivity.EXTRA_CURRENT_WEBCAM_ID, finalWebcamId);
+                        onClickIntent.putExtra(WebcamAppWidgetActionsActivity.EXTRA_WEBCAM_ID, webcamId);
+                        onClickIntent.putExtra(WebcamAppWidgetActionsActivity.EXTRA_CURRENT_WEBCAM_ID, currentWebcamId);
                         onClickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         PendingIntent pendingIntent = PendingIntent.getActivity(HelloMundoService.this, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         remoteViews.setOnClickPendingIntent(R.id.imgPreviewFrame, pendingIntent);
@@ -512,8 +513,6 @@ public class HelloMundoService extends IntentService {
         }
         String[] projection = { WebcamColumns._ID, WebcamColumns.COORDINATES, WebcamColumns.PUBLIC_ID, WebcamColumns.VISIBILITY_BEGIN_HOUR,
                 WebcamColumns.VISIBILITY_BEGIN_MIN, WebcamColumns.VISIBILITY_END_HOUR, WebcamColumns.VISIBILITY_END_MIN };
-        String selection = WebcamColumns.EXCLUDE_RANDOM + " is null or " + WebcamColumns.EXCLUDE_RANDOM + "=0";
-
         WebcamSelection where = new WebcamSelection().excludeRandom((Boolean) null).or().excludeRandom(false);
         WebcamCursor cursor = where.query(getContentResolver(), projection);
         try {

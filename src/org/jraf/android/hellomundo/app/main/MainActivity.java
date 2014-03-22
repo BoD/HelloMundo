@@ -380,8 +380,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             protected void doInBackground() throws Throwable {
-                WebcamSelection where = new WebcamSelection().id(currentWebcamId);
-                WebcamCursor cursor = where.query(getContentResolver());
+                WebcamCursor cursor = new WebcamSelection().id(currentWebcamId).query(getContentResolver());
                 try {
                     if (cursor == null || !cursor.moveToFirst()) {
                         throw new Exception("Could not find webcam with id=" + currentWebcamId);
